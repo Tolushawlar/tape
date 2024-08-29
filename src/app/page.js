@@ -6,6 +6,34 @@ import InfoFooter from './components/InfoFooter'
 import InfoHero from './components/InfoHero'
 import ItemsCard from "./components/ItemsCard"
 import HoverTextWithArrow from './components/HoverText'
+import CollectionSection from './components/CollectionSection'
+
+const itemsData = [
+  {
+    name: "Dope Like Coke Tee",
+    defaultImage: "/cardImage/cardImage.png",
+    hoverImage: "/cardImage/cardImage2.png",
+    price: "₦35,000.00",
+  },
+  {
+    name: "Cool Summer Shirt",
+    defaultImage: "/cardImage/cardImage3.png",
+    hoverImage: "/cardImage/image5.png",
+    price: "₦40,000.00",
+  },
+  {
+    name: "Dope Like Coke Tee",
+    defaultImage: "/cardImage/image9.png",
+    hoverImage: "/cardImage/image2.png",
+    price: "₦35,000.00",
+  },
+  {
+    name: "Cool Summer Shirt",
+    defaultImage: "/cardImage/image11.png",
+    hoverImage: "/cardImage/image2.png",
+    price: "₦40,000.00",
+  },
+];
 
 function Homepage() {
   return (
@@ -17,18 +45,7 @@ function Homepage() {
         </div>
       </>
       <InfoHero />
-      <div className='flex flex-col items-center justify-between w-screen h-[418px] mt-[80px] mb-[80px]'>
-        <div className='flex flex-row items-center justify-between w-[1116px]'>
-          <p className='text-[16px] font-[600]'>MEN’S COLLECTION</p>
-          <HoverTextWithArrow text="Explore Now" textColor="text-black"/>
-        </div>
-        <div className='flex flex-row items-center justify-evenly w-[1116px] h-[368px]'>
-          <ItemsCard />
-          <ItemsCard />
-          <ItemsCard />
-          <ItemsCard />
-        </div>
-      </div>
+      <CollectionSection collectionName="MEN’S COLLECTION" itemsData={itemsData} />
       <InfoFooter />
       <Footer />
     </>
