@@ -1,12 +1,12 @@
 "use client";
+
 import React from "react";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 import "./carousel.css";
 import Navbar from "./Navbar";
-import Image from "next/image";
 
-export default () => {
+const Carousel = () => {  // Give the component a display name
 
     const images = [
         "/slide2.png",
@@ -18,6 +18,9 @@ export default () => {
 
     const [sliderRef] = useKeenSlider({
         loop: true,
+        slides: {
+            perView: 1,  // Show one image at a time
+        },
         created(slider) {
             let timeout;
 
@@ -35,17 +38,18 @@ export default () => {
     });
 
     return (
-        <div ref={sliderRef} className="keen-slider h-screen">
+        <div ref={sliderRef} className="keen-slider h-screen overflow-hidden">
             {images.map((image, index) => (
                 <div
                     key={index}
                     className="keen-slider__slide relative flex items-center justify-center h-screen bg-cover bg-center"
                     style={{ backgroundImage: `url(${image})` }}
                 >
-                    <p className="text-center text-[36px] text-white ">A Permanent Collection. Endless variation.</p>
+                    <p className="text-center text-[36px] text-white">A Permanent Collection. Endless variation.</p>
                 </div>
             ))}
         </div>
-
     );
 };
+
+export default Carousel;
