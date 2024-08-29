@@ -3,17 +3,17 @@ import React from "react";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 import "./carousel.css";
-import Navbar from "./Navabar";
+import Navbar from "./Navbar";
 import Image from "next/image";
 
 export default () => {
 
     const images = [
-        "/slide1.png",
         "/slide2.png",
-        "/slide3.png",
         "/slide4.png",
-        "/slide5.png",
+        "/slide3.png",
+        "/slide1.png",
+        "/slide3.png",
     ];
 
     const [sliderRef] = useKeenSlider({
@@ -35,21 +35,17 @@ export default () => {
     });
 
     return (
-        <>
-            <div ref={sliderRef} className="keen-slider h-screen">
-                {images.map((image, index) => (
-                    <div
-                        key={index}
-                        className="keen-slider__slide relative flex items-center justify-center h-screen bg-cover bg-center"
-                        style={{ backgroundImage: `url(${image})` }}
-                    >
-                        <p className="text-red-800 text-3xl">Slide {index + 1}</p>
-                    </div>
-                ))}
-            </div>
-            <div className="absolute top-0 left-0 right-0 z-20">
-                <Navbar />
-            </div>
-        </>
+        <div ref={sliderRef} className="keen-slider h-screen">
+            {images.map((image, index) => (
+                <div
+                    key={index}
+                    className="keen-slider__slide relative flex items-center justify-center h-screen bg-cover bg-center"
+                    style={{ backgroundImage: `url(${image})` }}
+                >
+                    <p className="text-center text-[36px] text-white ">A Permanent Collection. Endless variation.</p>
+                </div>
+            ))}
+        </div>
+
     );
 };
