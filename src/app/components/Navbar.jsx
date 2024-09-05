@@ -10,26 +10,26 @@ import CollectionSection from "./CollectionSection";
 const itemsData = [
     {
         name: "Dope Like Coke Tee",
-        defaultImage: "/cardImage/cardImage.png",
-        hoverImage: "/cardImage/cardImage2.png",
+        defaultImage: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545543/cardImage_dgxddb.png",
+        hoverImage: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545535/image2_a9jjmi.png",
         price: "₦35,000.00",
     },
     {
         name: "Cool Summer Shirt",
-        defaultImage: "/cardImage/cardImage3.png",
-        hoverImage: "/cardImage/image5.png",
+        defaultImage: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545533/cardImage3_j4z4fg.png",
+        hoverImage: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545535/image5_aa1sje.png",
         price: "₦40,000.00",
     },
     {
         name: "Dope Like Coke Tee",
-        defaultImage: "/cardImage/image9.png",
-        hoverImage: "/cardImage/image2.png",
+        defaultImage: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545538/image9_kdgq90.png",
+        hoverImage: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545535/image2_a9jjmi.png",
         price: "₦35,000.00",
     },
     {
         name: "Cool Summer Shirt",
-        defaultImage: "/cardImage/image11.png",
-        hoverImage: "/cardImage/image2.png",
+        defaultImage: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545539/image11_a1lhru.png",
+        hoverImage: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545535/image2_a9jjmi.png",
         price: "₦40,000.00",
     },
 ];
@@ -48,8 +48,8 @@ const Navbar = () => {
     };
 
     const [activeSection, setActiveSection] = useState(null);
-        const router = useRouter();
-        const pathName = usePathname();
+    const router = useRouter();
+    const pathName = usePathname();
     console.log(pathName)
 
     const handleNavClick = (section) => {
@@ -194,19 +194,19 @@ const Overlay = ({ section, onClose }) => {
     // Placeholder data for each section (replace with actual data)
     const sectionData = {
         Men: {
-            image: "/modal/modal0.png",
+            image: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725546252/modal1_tdwpgr.png",
             categories: ["Shirts", "Pants", "Shoes", "Accessories"],
         },
         Women: {
-            image: "/modal/modal3.png",
+            image: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725546251/modal3_mwkwaf.png",
             categories: ["Dresses", "Tops", "Shoes", "Handbags"],
         },
         Kids: {
-            image: "/modal/modal3.png",
+            image: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725546251/modal3_mwkwaf.png",
             categories: ["Dresses", "Tops", "Shoes", "Handbags"],
         },
         Accessories: {
-            image: "/modal/modal2.png",
+            image: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725546254/modal2_txynj6.png",
             categories: ["Hats", "Belts", "Watches", "Bags"],
         },
     };

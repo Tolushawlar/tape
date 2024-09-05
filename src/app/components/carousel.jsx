@@ -9,11 +9,11 @@ import Navbar from "./Navbar";
 const Carousel = () => {  // Give the component a display name
 
     const images = [
-        "/slide2.png",
-        "/slide4.png",
-        "/slide3.png",
-        "/slide1.png",
-        "/slide3.png",
+        "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545084/slide2_iji1kd.png",
+        "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545088/slide4_dkdulg.png",
+        "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545099/slide3_dtcv4j.png",
+        "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545088/slide1_yuubmf.png",
+        "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545099/slide3_dtcv4j.png",
     ];
 
     const [sliderRef] = useKeenSlider({

@@ -18,25 +18,25 @@ function TapeBlog() {
             <p className='text-[14px] font-normal text-black font-Sweet-Regular py-8'>Lorem ipsum dolor sit amet consectetur. Odio velit placerat sit nulla pretium lectus </p>
             <div className='flex justify-center items-center flex-wrap gap-8 my-10'>
                 <BlogCard
-                    imageSrc="/image (1).png"
+                    imageSrc="https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545892/image_1_vhyzms.png"
                     title="Classic Knit Box Shirt"
                     date="September 15, 2024"
                     description="Vitae dictumst augue egestas dolor. Commodo aliquam proin posuere massa et. Posuere dui vulputate semper ac. Odio enim egestas molestie netus massa morbi a. Viverra augue id in in consectetur ac vestibulum pellentesque facilisis."
                 />
                 <BlogCard
-                    imageSrc="/image.png"
+                    imageSrc="https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545953/image_ag4vjq.png"
                     title="New Season Jacket"
                     date="October 1, 2024"
                     description="Aliquam posuere massa et dui vulputate semper ac odio. Vitae dictumst augue egestas dolor. Viverra augue id in in consectetur ac vestibulum pellentesque facilisis."
                 />
                 <BlogCard
-                    imageSrc="/image (1).png"
+                    imageSrc="https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545892/image_1_vhyzms.png"
                     title="Classic Knit Box Shirt"
                     date="September 15, 2024"
                     description="Vitae dictumst augue egestas dolor. Commodo aliquam proin posuere massa et. Posuere dui vulputate semper ac. Odio enim egestas molestie netus massa morbi a. Viverra augue id in in consectetur ac vestibulum pellentesque facilisis."
                 />
                 <BlogCard
-                    imageSrc="/image.png"
+                    imageSrc="https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545953/image_ag4vjq.png"
                     title="New Season Jacket"
                     date="October 1, 2024"
                     description="Aliquam posuere massa et dui vulputate semper ac odio. Vitae dictumst augue egestas dolor. Viverra augue id in in consectetur ac vestibulum pellentesque facilisis."

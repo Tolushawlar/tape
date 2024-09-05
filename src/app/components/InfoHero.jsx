@@ -12,7 +12,7 @@ function InfoHero() {
     }
 
     return (
-        <div className='bg-cover bg-center h-[645px] flex flex-row items-center justify-center ' style={{ backgroundImage: `url("/image (1).png")` }}>
+        <div className='bg-cover bg-center h-[645px] flex flex-row items-center justify-center ' style={{ backgroundImage: `url("https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545892/image_1_vhyzms.png")` }}>
             <div className=" w-1/3  h-[645px]"></div>
             <div className="bg-[#CF0028] w-1/3  h-[645px] flex flex-col justify-between items-center text-white p-10">
                 <div>
