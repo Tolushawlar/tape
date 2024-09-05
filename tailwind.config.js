@@ -14,6 +14,11 @@ module.exports = {
       },
       fontFamily: {
         'Sweet-Bold': ['Sweet-Bold'],
+        'Sweet-RegulExlightar': ['Sweet-Exlight'],
+        'Sweet-Regular': ['Sweet-Regular'],
+        'CLash-Bold': ['Clash-Bold'],
+        'CLash-Regular': ['Clash-Regular'],
+        'CLash-Medium': ['Clash-Medium'],
       }
     },
   },

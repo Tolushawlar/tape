@@ -13,6 +13,31 @@
   src: url("./fonts/SweetSansProBold.otf");
 }
 
+@font-face {
+  font-family: "Sweet-Regular";
+  src: url("./fonts/SweetSansProExLight.otf");
+}
+
+@font-face {
+  font-family: "Sweet-Regular";
+  src: url("./fonts/SweetSansProRegular.otf");
+}
+
+@font-face {
+  font-family: "Clash-Bold";
+  src: url("./fonts/ClashDisplay-Bold.otf");
+}
+
+@font-face {
+  font-family: "Clash-Medium";
+  src: url("./fonts/ClashDisplay-Medium.otf");
+}
+
+@font-face {
+  font-family: "Clash-Regular";
+  src: url("./fonts/ClashDisplay-Regular.otf");
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
@@ -25,12 +50,8 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden !important;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
-.sweet-sans {
-  font-family: url("./fonts/SweetSansProBold.otf");
-}
 
 @layer utilities {
   .text-balance {

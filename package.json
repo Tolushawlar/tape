@@ -20,6 +20,8 @@
     "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
+    "@types/node": "22.5.1",
+    "@types/react": "18.3.4",
     "eslint": "^8",
     "eslint-config-next": "14.2.6",
     "postcss": "^8",

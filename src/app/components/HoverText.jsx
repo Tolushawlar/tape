@@ -8,7 +8,7 @@ const HoverTextWithArrow = ({ text, textColor = "white" }) => {
         <div className="relative group inline-block">
             {/* Text that transitions on hover */}
             <span
-                className={`cursor-pointer font-[400] text-[14px] transition-all duration-300 ease-in-out transform group-hover:underline group-hover:translate-y-2 hover:translate-x-2 group-hover:translate-x-1`}
+                className={`transform group-hover:translate-x-20 group-hover:translate-y-20 transition duration-500 ease-in-out cursor-pointer font-[400] text-[14px] group-hover:underline `}
                 style={{ color: textColor }}  // Dynamically apply the text color
             >
                 {text}

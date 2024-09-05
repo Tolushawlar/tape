@@ -1,7 +1,16 @@
+"use client"
 import React from 'react'
 import HoverTextWithArrow from './HoverText'
+import { usePathname, useRouter } from 'next/navigation';
 
 function InfoHero() {
+    const router = useRouter();
+    const pathName = usePathname();
+
+    const toAbout = () => {
+        router.push("/About")
+    }
+
     return (
         <div className='bg-cover bg-center h-[645px] flex flex-row items-center justify-center ' style={{ backgroundImage: `url("/image (1).png")` }}>
             <div className=" w-1/3  h-[645px]"></div>
@@ -11,7 +20,7 @@ function InfoHero() {
                     <p className='text-center text-[14px] font-[400] w-[194px] h-[407px] my-10'>Lorem ipsum dolor sit amet consectetur. Odio velit placerat sit nulla pretium lectus phasellus. Magna tellus porta sem viverra at ornare enim ante sit. Diam tellus tellus odio donec varius hendrerit facilisis vitae massa.</p>
                 </div>
                 <div>
-                    <div className="mb-[80px]"><HoverTextWithArrow text="About TAPE WEARS" /></div>
+                    <div onClick={toAbout} className="mb-[80px]"><HoverTextWithArrow text="About TAPE WEARS" /></div>
                 </div>
             </div>
             <div className=" w-1/3  h-[645px]"></div>

@@ -3,7 +3,7 @@
 import React from "react";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
-import "./carousel.css";
+// import "./carousel.css";
 import Navbar from "./Navbar";
 
 const Carousel = () => {  // Give the component a display name
@@ -45,7 +45,7 @@ const Carousel = () => {  // Give the component a display name
                     className="keen-slider__slide relative flex items-center justify-center h-screen bg-cover bg-center"
                     style={{ backgroundImage: `url(${image})` }}
                 >
-                    <p className="text-center text-[36px] text-white">A Permanent Collection. Endless variation.</p>
+                    <p className="text-center text-[40px] text-white font-[500] font-CLash-Regular leading-[36px]">A Permanent Collection. Endless variation.</p>
                 </div>
             ))}
         </div>

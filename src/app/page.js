@@ -40,14 +40,13 @@ function Homepage() {
     <>
       <>
         <Carousel />
-        <div className="absolute top-0 left-0 right-0 z-20">
+        {/* <div className="absolute top-0 left-0 right-0 z-20">
           <Navbar />
-        </div>
+        </div> */}
       </>
       <InfoHero />
       <CollectionSection collectionName="MEN’S COLLECTION" itemsData={itemsData} />
       <InfoFooter />
-      <Footer />
     </>
   )
 }
