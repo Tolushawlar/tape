@@ -35,7 +35,7 @@ const itemsData = [
     },
 ];
 
-function page() {
+const page = () => {
 
     const { itemName } = useParams();
     const decodedItemName = decodeURIComponent(itemName);
