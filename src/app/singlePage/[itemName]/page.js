@@ -35,7 +35,7 @@ const itemsData = [
     },
 ];
 
-const page = () => {
+const Page = () => {
 
     const { itemName } = useParams();
     const decodedItemName = decodeURIComponent(itemName);
@@ -141,4 +141,4 @@ const page = () => {
     )
 }
 
-export default page
+export default Page
