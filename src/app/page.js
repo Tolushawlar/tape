@@ -46,6 +46,7 @@ function Homepage() {
       </>
       <InfoHero />
       <CollectionSection collectionName="MEN’S COLLECTION" itemsData={itemsData} />
+      <CollectionSection collectionName="WOMEN’S COLLECTION" itemsData={itemsData} />
       <InfoFooter />
     </>
   )

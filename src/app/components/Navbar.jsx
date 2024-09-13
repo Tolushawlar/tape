@@ -1,11 +1,11 @@
 "use client";
-
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter, usePathname } from 'next/navigation';
 import { FaSearch, FaShoppingCart } from "react-icons/fa";
 import Footer from "./Footer";
 import CollectionSection from "./CollectionSection";
+import CartItem from "./CartItem";
 
 const itemsData = [
     {
@@ -36,15 +36,26 @@ const itemsData = [
 
 const Navbar = () => {
     const [isSearchOpen, setIsSearchOpen] = useState(false); // State for search overlay
+    const [isCartOpen, setIsCartOpen] = useState(false); // State for cart overlay
 
     // Toggle the search overlay
     const toggleSearch = () => {
         setIsSearchOpen((prev) => !prev);
     };
 
+    // Toggle the cart overlay display
+    const toggleCart = () => {
+        setIsCartOpen((prev) => !prev);
+    }
+
     // Close the search overlay
     const closeSearch = () => {
         setIsSearchOpen(false);
+    };
+
+    // Close cart overlay
+    const closeCart = () => {
+        setIsCartOpen(false);
     };
 
     const [activeSection, setActiveSection] = useState(null);
@@ -98,7 +109,7 @@ const Navbar = () => {
         <>
             {/* Navbar with dynamic background */}
             <nav
-                className={` flex justify-between items-center px-[120px] py-[20px] bg-transparent  ${activeSection || pathName != "/" ? "bg-white text-black fixed w-screen z-50 py-[30px]" : " text-white"
+                className={` flex justify-between items-center px-[120px] py-[20px] bg-transparent  ${activeSection || pathName != "/" ? "bg-red-500 text-black  w-screen z-50 py-[30px] relative" : " text-white"
                     } transition-all duration-300 absolute top-0 left-0 right-0 z-20`}
             >
                 <div className="flex space-x-4 font-Sweet-Regular cursor-pointer">
@@ -145,7 +156,7 @@ const Navbar = () => {
                         <Image src={activeSection || pathName != "/" ? "/navbarIcons/searchBlack.svg" : "/navbarIcons/searchWhite.svg"}
                             width={19} height={19} alt="logo" />Search
                     </div>
-                    <Image src={activeSection || pathName != "/" ? "/navbarIcons/cartBlack.svg" : "/navbarIcons/cartWhite.svg"}
+                    <Image onClick={toggleCart} src={activeSection || pathName != "/" ? "/navbarIcons/cartBlack.svg" : "/navbarIcons/cartWhite.svg"}
                         width={22} height={22} alt="logo" className="cursor-pointer" />
                 </div>
             </nav>
@@ -153,7 +164,7 @@ const Navbar = () => {
             {/* Search Overlay */}
             {isSearchOpen && (
                 <div
-                    ref={divRef} className="fixed top-0 left-0 bg-black bg-opacity-70 flex flex-col justify-center items-start w-screen h-screen z-50"
+                    ref={divRef} className="fixed top-0 left-0 bg-black bg-opacity-70 flex flex-col justify-center items-start w-screen z-50 overflow-y-hidden overscroll-none"
                     onClick={closeSearch} // Close overlay when clicking outside input box
                 >
                     <div
@@ -182,6 +193,41 @@ const Navbar = () => {
 
                 </div>
             )}
+
+            {/* Cart Overlay */}
+            {isCartOpen && (
+                <div
+                    className="fixed top-0 right-0 bg-white w-[546px] h-[597.09px] shadow-lg z-50 p-4"
+                    onClick={closeCart}
+                >
+                    <div
+                        className="flex flex-col justify-start h-full p-5"
+                        onClick={(e) => e.stopPropagation()} // Prevent overlay close when clicking inside
+                    >
+                        <div className="flex flex-row items-center justify-between">
+                            <h2 className="text-[18px] font-[500] font-CLash-Regular ">YOUR CART</h2>
+                            <button className="w-[17.88px] h-[13.9px] text-black font-bold" onClick={closeCart}>✕</button>
+                        </div>
+                        <div className="flex flex-row items-center justify-start gap-5 mt-10 ">
+                            <Image src="https://res.cloudinary.com/dtlxunbzr/image/upload/v1726134723/Frame_1000004497_a0djka.svg" width={28.98} height={26.69} alt="logo" />
+                            <p className="font-Sweet-Regular text-[10px] font-normal">Item added to your cart</p>
+                        </div>
+                        <div className="">
+                            <CartItem />
+                        </div>
+                        {/* Add your cart items here */}
+                        <div className="flex flex-col items-center absolute bottom-5 left-0 right-0 gap-3">
+                            <button className="mt-auto bg-[#CF0028] w-[444.58px] h-[61.01px] text-white py-2 px-4 font-[500] text-[14px] font-CLash-Regular" onClick={closeCart}>
+                                CHECKOUT
+                            </button>
+                            <button className="mt-auto bg-white text-black font-[400] font-CLash-Regular w-[444.58px] h-[61.01px] text-[14px] py-2 px-4 border-[1px] border-black " onClick={closeCart}>
+                                CONTINUE SHOPPING
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Overlay Section */}
             {activeSection && (
                 <Overlay section={activeSection} onClose={handleCloseOverlay} />
@@ -195,23 +241,27 @@ const Overlay = ({ section, onClose }) => {
     const sectionData = {
         Men: {
             image: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725546252/modal1_tdwpgr.png",
-            categories: ["Shirts", "Pants", "Shoes", "Accessories"],
+            categories: ["Branded T-shirts", "Street Wears"],
+            sectionMapping: "VIEW ALL MEN'S PRODUCT",
         },
         Women: {
             image: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725546251/modal3_mwkwaf.png",
-            categories: ["Dresses", "Tops", "Shoes", "Handbags"],
+            categories: ["Branded T-shirts", "Street Wears"],
+            sectionMapping: "VIEW ALL WOMEN'S PRODUCT",
         },
         Kids: {
             image: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725546251/modal3_mwkwaf.png",
-            categories: ["Dresses", "Tops", "Shoes", "Handbags"],
+            categories: ["Branded T-shirts", "Street Wears"],
+            sectionMapping: "VIEW ALL KID'S PRODUCT",
         },
         Accessories: {
             image: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725546254/modal2_txynj6.png",
-            categories: ["Hats", "Belts", "Watches", "Bags"],
+            categories: ["Branded T-shirts", "Street Wears", "Caps", "Belts"],
+            sectionMapping: "VIEW ALL ACCESSORIES",
         },
     };
 
-    const { image, categories } = sectionData[section];
+    const { image, categories, sectionMapping } = sectionData[section];
 
     // Close overlay when clicking outside content
     const handleOverlayClick = (e) => {
@@ -226,7 +276,7 @@ const Overlay = ({ section, onClose }) => {
             onClick={handleOverlayClick} // Close overlay on outside click
         >
             <div
-                className="flex flex-row item justify-between relative bg-white text-black w-screen h-[480px] bottom-[50px]"
+                className="flex flex-row item justify-between relative bg-white text-black w-screen h-[480px] top-[-10rem] "
                 onClick={(e) => e.stopPropagation()} // Prevent close on content click
             >
                 {/* Close Button */}
@@ -238,8 +288,13 @@ const Overlay = ({ section, onClose }) => {
                 </button> */}
 
                 {/* Section Title */}
-                <div className="m-10">
-                    <h2 className="text-3xl font-bold text-center">VIEW ALL {section} PRODUCTS</h2>
+                <div className="w-1/2 m-10">
+                    <h2 className="text-3xl font-bold text-center">{sectionMapping}</h2>
+                    <ul className="list-disc list-inside">
+                        {categories.map((category, index) => (
+                            <li key={index}>{category}</li>
+                        ))}
+                    </ul>
                 </div>
 
                 {/* Content: Image and Categories */}
@@ -268,7 +323,7 @@ const Overlay = ({ section, onClose }) => {
                     </div> */}
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

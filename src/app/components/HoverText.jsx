@@ -3,12 +3,13 @@
 import { AiOutlineArrowRight } from "react-icons/ai";
 import React from "react";
 
-const HoverTextWithArrow = ({ text, textColor = "white" }) => {
+const HoverTextWithArrow = ({ text, textColor = "white", onClick }) => {
     return (
         <div className="relative group inline-block">
             {/* Text that transitions on hover */}
             <span
-                className={`transform group-hover:translate-x-20 group-hover:translate-y-20 transition duration-500 ease-in-out cursor-pointer font-[400] text-[14px] group-hover:underline `}
+                onClick={onClick} // Add onClick event
+                className={`transform group-hover:translate-x-20 group-hover:translate-y-20 duration-500 ease-in-out cursor-pointer font-[400] text-[14px] group-hover:underline hover:origin-top-right  group-hover:transition`}
                 style={{ color: textColor }}  // Dynamically apply the text color
             >
                 {text}
