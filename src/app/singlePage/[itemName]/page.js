@@ -1,9 +1,12 @@
+"use client"
 import Image from 'next/image'
 import React from 'react'
-import { Description, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import HoverTextWithArrow from '../../components/HoverText'
 import CollectionSection from '../../components/CollectionSection'
+import Description from '../../components/Description'
+import { useParams } from 'next/navigation'
 
 const itemsData = [
     {
@@ -33,24 +36,28 @@ const itemsData = [
 ];
 
 function page() {
+
+    const { itemName } = useParams();
+    const decodedItemName = decodeURIComponent(itemName);
+
     return (
         <div className='flex flex-col items-center justify-center'>
-            <div className='flex flex-row items-start gap-10 mt-10'>
+            <div className='flex flex-row items-start gap-8 mt-10'>
                 <div className='w-[489px] h-[651px] '>
                     <Image src="https://res.cloudinary.com/dtlxunbzr/image/upload/v1725546254/modal2_txynj6.png" width={489} height={851} alt="logo" />
                 </div>
-                <div className='flex flex-col items-start justify-start'>
-                    <p className='font-[500] font-Sweet-Regular text-[32px]'>THE CHARCOAL T-SHIRT</p>
-                    <p>#41,000</p>
+                <div className='flex flex-col items-start justify-start gap-10'>
+                    <p className='font-[500] font-Sweet-Regular text-[32px]'>{decodedItemName}</p>
+                    <p className='text-[32px] font-CLash-Regular font-[500]'>₦41,000.00</p>
                     <div className='flex flex-row items-center gap-5'>
                         <p className='font-[400] font-Sweet-Regular text-[14px]'>Colors</p>
                         <div className='w-[23px] h-[21px] bg-[#000000]'></div>
-                        <div className='w-[23px] h-[21px] bg-white'></div>
+                        <div className='w-[23px] h-[21px] border-[1px] border-black bg-white'></div>
                         <div className='w-[23px] h-[21px] bg-[#CF0028]'></div>
                         <div className='w-[23px] h-[21px] bg-[#082A63]'></div>
                     </div>
 
-                    <Menu as="div" className="z-50 border-[1px] border-black relative inline-block text-center w-[620px] h-[46px]">
+                    <Menu as="div" className="z-20 border-[0.5px] border-gray-200 relative inline-block text-center w-[620px] h-[46px]">
                         <div>
                             <MenuButton className="flex flex-row w-full items-center justify-between  bg-white px-3 py-2 ">
                                 <p className='font-[400] font-CLash-Regular text-[12px] mt-1'>SIZE</p>
@@ -124,7 +131,7 @@ function page() {
                         </button>
                     </div>
 
-                    <Descrition/>
+                    <Description />
                 </div>
             </div>
             <div className='flex flex-col items-center w-[1161px]'>
