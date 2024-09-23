@@ -9,7 +9,7 @@ const TapeBlog = () => {
     const { globalState, setGlobalState } = useGlobalState();
     const [currentPage, setCurrentPage] = useState(1);
     const totalPages = 10; // Example total pages
-    console.log(globalState)
+    // console.log(globalState)
     const handlePageChange = (page) => {
         setCurrentPage(page);
         // Add your logic to fetch or display data based on the page

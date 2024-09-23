@@ -6,14 +6,15 @@ import BlogCard from '../../components/BlogCard'
 import { useGlobalState } from '../../../../GlobalStateContext';
 
 
-const singleBlog = () => {
+const Page = () => {
     const { globalState, setGlobalState } = useGlobalState();
     const { title } = useParams();
+    console.log(title)
     const decodedItemName = decodeURIComponent(title);
 
     return (
         <div className={`${globalState ? 'fixed' : ''}  flex flex-col items-center justify-center w-full`}>
-            <Image src="https://res.cloudinary.com/dtlxunbzr/image/upload/v1726832087/Rectangle_34624648_f9mxzj.png" width={1101} height={520} className='mt-10' />
+            <Image src="https://res.cloudinary.com/dtlxunbzr/image/upload/v1726832087/Rectangle_34624648_f9mxzj.png" alt="titel" width={1101} height={520} className='mt-10' />
             <div className='mt-10 w-[543px]'>
                 <p className='text-[24px] font-Clash-Display font-500'>{decodedItemName}</p>
                 <p className='text-[12px] text-gray-400 mt-3 font-Sweet-Regular font-400'>September 15, 2024</p>
@@ -58,4 +59,4 @@ const singleBlog = () => {
     )
 }
 
-export default singleBlog
+export default Page
