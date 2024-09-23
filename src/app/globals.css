@@ -38,6 +38,11 @@
   src: url("./fonts/ClashDisplay-Regular.otf");
 }
 
+@font-face {
+  font-family: "Clash-Semibold";
+  src: url("./fonts/ClashDisplay-Semibold.otf");
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;

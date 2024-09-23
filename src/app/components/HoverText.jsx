@@ -9,7 +9,7 @@ const HoverTextWithArrow = ({ text, textColor = "white", onClick }) => {
             {/* Text that transitions on hover */}
             <span
                 onClick={onClick} // Add onClick event
-                className={`transform group-hover:translate-x-20 group-hover:translate-y-20 duration-500 ease-in-out cursor-pointer font-[400] text-[14px] group-hover:underline hover:origin-top-right  group-hover:transition`}
+                className={`hover:ml-3 hover:mt-[80px] transform group-hover:translate-x-20 group-hover:translate-y-20 duration-500 ease-in-out cursor-pointer font-[400] text-[14px] group-hover:underline hover:origin-top-right  group-hover:transition`}
                 style={{ color: textColor }}  // Dynamically apply the text color
             >
                 {text}

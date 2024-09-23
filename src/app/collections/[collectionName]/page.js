@@ -1,8 +1,8 @@
 "use client";
-
 import { useParams } from 'next/navigation';
 import React from 'react';
 import ImageCard from '../../components/ItemsCard';
+import { useGlobalState } from '../../../../GlobalStateContext';
 
 
 const itemsData = [
@@ -33,6 +33,7 @@ const itemsData = [
 ];
 
 const CollectionPage = () => {
+    const { globalState, setGlobalState } = useGlobalState();
     const { collectionName } = useParams(); // Correctly access the collection name using useParams
     // Decode the URL-encoded collection name to a readable format
     const decodedCollectionName = decodeURIComponent(collectionName);
@@ -41,8 +42,8 @@ const CollectionPage = () => {
     // const filteredItems = itemsData.filter(item => item.collection === decodedCollectionName);
 
     return (
-        <div>
-            <div className='flex flex-col items-center justify-center gap-5'>
+        <div className={`${globalState ? "fixed" : ""} `}>
+            <div className="flex flex-col items-center justify-center gap-5">
                 <p className='font-[600] text-[32px] font-CLash-Regular'>{decodedCollectionName}</p>
                 <p className='font-[400] text-[14px] font-Sweet-Regular text-center w-[692px] h-[59px]'>
                     Lorem ipsum dolor sit amet consectetur. Odio velit placerat sit nulla pretium lectus phasellus.
@@ -52,7 +53,17 @@ const CollectionPage = () => {
             </div>
 
             {/* Render specific collection items here */}
-            <div className='flex flex-wrap justify-center gap-6 mt-10'>
+            <div className='flex flex-wrap justify-center gap-6 mt-10 mb-10'>
+                {itemsData.map((item, index) => (
+                    <ImageCard
+                        key={index}
+                        name={item.name}
+                        defaultImage={item.defaultImage}
+                        hoverImage={item.hoverImage}
+                        price={item.price}
+                        itemName={item.name}
+                    />
+                ))}
                 {itemsData.map((item, index) => (
                     <ImageCard
                         key={index}

@@ -20,6 +20,7 @@ module.exports = {
         'CLash-Bold': ['Clash-Bold'],
         'CLash-Regular': ['Clash-Regular'],
         'CLash-Medium': ['Clash-Medium'],
+        'CLash-Semibold': ['Clash-Semibold'],
       }
     },
   },

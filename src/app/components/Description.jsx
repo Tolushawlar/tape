@@ -20,20 +20,19 @@ const FiveColumnSection = () => {
     const currentSection = sections.find(section => section.id === selectedSection);
 
     return (
-        <div className="w-full max-w-7xl mx-auto p-6">
-            <div className="grid grid-cols-5 gap-4">
+        <div className="w-full  p-6">
+            <div className="grid grid-cols-5 ">
                 {sections.map((section) => (
-                    <button
+                    <button 
                         key={section.id}
                         onClick={() => handleSectionClick(section.id)}
-                        className={`py-2 px-4 text-center border-b-2 ${selectedSection === section.id ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-600'} hover:border-indigo-300 transition`}
+                        className={`py-[-10px]  px-0 text-center border-b-[1px] ${selectedSection === section.id ? 'border-black text-black text-[14px] font-400 font-Sweet-Regular' : 'text-[14px] font-400 font-Sweet-Regular border-transparent text-black'} hover:border-indigo-300 transition`}
                     >
                         {section.title}
                     </button>
                 ))}
             </div>
-            <div className="mt-6 p-4 border rounded-md border-gray-200 shadow-sm">
-                <h2 className="text-xl font-semibold mb-2">{currentSection.title}</h2>
+            <div className="mt-1 p-4 font-normal text-[14px] font-Sweet-Regular ">
                 <p>{currentSection.content}</p>
             </div>
         </div>

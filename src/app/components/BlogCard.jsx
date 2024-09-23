@@ -1,9 +1,16 @@
 import Image from 'next/image';
 import React from 'react';
+import { useRouter } from 'next/navigation';
 
 function BlogCard({ imageSrc, title, description, date }) {
+
+    const router = useRouter();
+    const navigateToSingleBlog = () => {
+        router.push(`/singleBlog/${encodeURIComponent(title)}`)
+    } 
+    
     return (
-        <div className='flex flex-col items-start justify-start w-[547px] h-[413px] max-h-[413px] cursor-pointer'>
+        <div onClick={navigateToSingleBlog} className='flex flex-col items-start justify-start w-[547px] h-[413px] max-h-[413px] cursor-pointer'>
             <Image src={imageSrc} width={547} height={242} className='h-[242px] max-h-[242px]' alt='BlogImage' />
             <p className='font-[500] font-CLash-Regular text-[16px] text-black mt-6'>{title}</p>
             <p className='text-[12px] font-normal text-black font-Sweet-Regular opacity-50 mt-4'>{date}</p>

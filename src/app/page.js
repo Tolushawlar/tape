@@ -1,3 +1,4 @@
+"use client"
 import React from 'react'
 import Carousel from './components/carousel'
 import Navbar from './components/Navbar'
@@ -5,8 +6,8 @@ import Footer from './components/Footer'
 import InfoFooter from './components/InfoFooter'
 import InfoHero from './components/InfoHero'
 import ItemsCard from "./components/ItemsCard"
-import HoverTextWithArrow from './components/HoverText'
 import CollectionSection from './components/CollectionSection'
+import { useGlobalState } from '../../GlobalStateContext'
 
 const itemsData = [
   {
@@ -35,21 +36,24 @@ const itemsData = [
   },
 ];
 
-function Homepage() {
+const Homepage = () => {
+  const { globalState, setGlobalState } = useGlobalState();
   return (
-    <>
-      <>
+    <div className={globalState ? 'fixed' : ''}>
+      <div >
         <Carousel />
         {/* <div className="absolute top-0 left-0 right-0 z-20">
           <Navbar />
         </div> */}
-      </>
+      </div>
       <InfoHero />
       <CollectionSection collectionName="MEN’S COLLECTION" itemsData={itemsData} />
       <CollectionSection collectionName="WOMEN’S COLLECTION" itemsData={itemsData} />
+      <CollectionSection collectionName="KID'S COLLECTION" itemsData={itemsData} />
+      <CollectionSection collectionName="ACCESSORIES" itemsData={itemsData} />
       <InfoFooter />
-    </>
+    </div>
   )
 }
 
-export default Homepage
+export default Homepage;

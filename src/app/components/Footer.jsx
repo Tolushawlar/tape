@@ -1,10 +1,14 @@
+"use client"
 import { FaLinkedin, FaInstagram, FaTwitter, FaFacebook } from "react-icons/fa";
 import React from 'react';
 import Image from "next/image";
+import { useGlobalState } from "../../../GlobalStateContext";
 
-function Footer() {
+const Footer = () => {
+    const { globalState, setGlobalState } = useGlobalState();
+
     return (
-        <div className="flex flex-col items-center justify-center bg-[#000000] h-[414px] w-screen text-white">
+        <div className={` ${globalState ? "hidden" : "" } flex flex-col items-center justify-center bg-[#000000] h-[414px] w-screen text-white`}>
             <div className="flex flex-row items-center justify-between w-[1148px] mb-4">
                 <div className='flex flex-row items-center justify-between w-[723px] text-[12px] font-normal'>
                     <p>Shipping to Nigeria</p>

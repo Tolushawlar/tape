@@ -3,8 +3,10 @@ import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation';
 import React from 'react'
 import HoverTextWithArrow from '../components/HoverText';
+import { useGlobalState } from '../../../GlobalStateContext';
 
-function About() {
+const About = () => {
+    const { globalState, setGlobalState } = useGlobalState();
     const router = useRouter();
     const pathName = usePathname();
 
@@ -12,7 +14,7 @@ function About() {
         router.push("/About")
     }
     return (
-        <div>
+        <div className={`${globalState ? 'fixed' : ''}  overflow-x-hidden`}>
             <div className='bg-cover bg-center w-screen h-[484px] flex flex-row items-center justify-center text-center' style={{ backgroundImage: `url("https://res.cloudinary.com/dtlxunbzr/image/upload/v1725546069/top_hq8zhb.png")` }}>
                 <p className="text-[36px] font-Bold font-CLash-Regular text-white mt-10">ABOUT TAPE</p>
             </ div>

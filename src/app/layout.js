@@ -1,20 +1,31 @@
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import "./globals.css";
+import { CartProvider } from "../../cartContext";
+import { GlobalStateProvider, useGlobalState } from "../../GlobalStateContext";
+
 
 export const metadata = {
   title: "Tape Wears👕 ",
   description: "Tape Wears Website👕 ",
 };
 
-export default function RootLayout({ children }) {
+const RootLayout = ({ children }) => {
+  // const { globalState, setGlobalState } = useGlobalState();
   return (
     <html lang="en">
-      <body >
-        <Navbar />
-        {children}
-        <Footer />
-      </body>
+      <GlobalStateProvider>
+        <CartProvider>
+          <body >
+            <Navbar />
+            {children}
+            <Footer />
+          </body>
+        </CartProvider>
+      </GlobalStateProvider>
     </html>
   );
 }
+
+
+export default RootLayout;
