@@ -20,8 +20,8 @@ const FiveColumnSection = () => {
     const currentSection = sections.find(section => section.id === selectedSection);
 
     return (
-        <div className="w-full  p-6">
-            <div className="grid grid-cols-5 ">
+        <div className="w-full">
+            <div className="flex flex-row items-center gap-10 ">
                 {sections.map((section) => (
                     <button 
                         key={section.id}
@@ -32,7 +32,7 @@ const FiveColumnSection = () => {
                     </button>
                 ))}
             </div>
-            <div className="mt-1 p-4 font-normal text-[14px] font-Sweet-Regular ">
+            <div className="max-w-[500px] mt-1 p-4 font-normal text-[14px] font-Sweet-Regular ">
                 <p>{currentSection.content}</p>
             </div>
         </div>

@@ -50,13 +50,13 @@ const CartItem = ({ item, removeFromCart }) => {
                         <p className='font-normal font-Sweet-Regular text-[14px]'>{item.quantity}</p>
                         <p className='font-normal font-Sweet-Regular text-[14px] cursor-pointer'>+</p>
                     </div>
-                    
+
                     {/* Render item price */}
                     <p className='font-CLash-Regular font-[600] text-[14px] ml-[100px]'>
-                        ₦{item.price}
+                        €{item.price}
                     </p>
                 </div>
-                
+
                 {/* Remove button */}
                 <button
                     className="mt-4 text-red-500 text-sm"

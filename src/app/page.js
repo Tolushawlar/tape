@@ -14,25 +14,25 @@ const itemsData = [
     name: "Dope Like Coke Tee",
     defaultImage: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545543/cardImage_dgxddb.png",
     hoverImage: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545535/image2_a9jjmi.png",
-    price: "₦35,000.00",
+    price: "€35,000.00",
   },
   {
     name: "Cool Summer Shirt",
     defaultImage: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545533/cardImage3_j4z4fg.png",
     hoverImage: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545535/image5_aa1sje.png",
-    price: "₦40,000.00",
+    price: "€40,000.00",
   },
   {
     name: "Dope Like Coke Tee",
     defaultImage: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545538/image9_kdgq90.png",
     hoverImage: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545535/image2_a9jjmi.png",
-    price: "₦35,000.00",
+    price: "€35,000.00",
   },
   {
     name: "Cool Summer Shirt",
     defaultImage: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545539/image11_a1lhru.png",
     hoverImage: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545535/image2_a9jjmi.png",
-    price: "₦40,000.00",
+    price: "€40,000.00",
   },
 ];
 

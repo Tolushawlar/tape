@@ -14,25 +14,25 @@ const itemsData = [
         name: "Dope Like Coke Tee",
         defaultImage: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545543/cardImage_dgxddb.png",
         hoverImage: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545535/image2_a9jjmi.png",
-        price: "₦35,000.00",
+        price: "£35,000.00",
     },
     {
         name: "Cool Summer Shirt",
         defaultImage: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545533/cardImage3_j4z4fg.png",
         hoverImage: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545535/image5_aa1sje.png",
-        price: "₦40,000.00",
+        price: "£40,000.00",
     },
     {
         name: "Dope Like Coke Tee",
         defaultImage: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545538/image9_kdgq90.png",
         hoverImage: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545535/image2_a9jjmi.png",
-        price: "₦35,000.00",
+        price: "£35,000.00",
     },
     {
         name: "Cool Summer Shirt",
         defaultImage: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545539/image11_a1lhru.png",
         hoverImage: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545535/image2_a9jjmi.png",
-        price: "₦40,000.00",
+        price: "£40,000.00",
     },
 ];
 
@@ -139,28 +139,28 @@ const Navbar = () => {
                 <div className="flex space-x-4 font-Sweet-Regular cursor-pointer gap-[25px]">
                     <a
                         href="#"
-                        onClick={() => handleNavClick("Men")}
+                        onMouseEnter={() => handleNavClick("Men")}
                         className="font-Sweet-Regular text-[16px] font-normal"
                     >
                         Men
                     </a>
                     <a
                         href="#"
-                        onClick={() => handleNavClick("Women")}
+                        onMouseEnter={() => handleNavClick("Women")}
                         className="font-Sweet-Regular text-[16px] font-normal"
                     >
                         Women
                     </a>
                     <a
                         href="#"
-                        onClick={() => handleNavClick("Kids")}
+                        onMouseEnter={() => handleNavClick("Kids")}
                         className="font-Sweet-Regular text-[16px] font-normal"
                     >
                         Kids
                     </a>
                     <a
                         href="#"
-                        onClick={() => handleNavClick("Accessories")}
+                        onMouseEnter={() => handleNavClick("Accessories")}
                         className="font-Sweet-Regular text-[16px] font-normal"
                     >
                         Accessories
@@ -256,8 +256,8 @@ const Navbar = () => {
 
                                                 </div>
                                                 <div>
-                                                    <p>₦{item.price}</p>
-                                                    <p>₦{item.size}</p>
+                                                    <p>£{item.price}</p>
+                                                    <p>£{item.size}</p>
                                                     <button
                                                         className="ml-4 text-red-500"
                                                         onClick={() => removeFromCart(item.id)}
@@ -310,6 +310,8 @@ const Navbar = () => {
 };
 
 const Overlay = ({ section, onClose }) => {
+    const router = useRouter();
+
     // Placeholder data for each section (replace with actual data)
     const sectionData = {
         Men: {
@@ -343,13 +345,19 @@ const Overlay = ({ section, onClose }) => {
         }
     };
 
+    // Function to handle navigation to the specific collection page
+    const navigateToCollection = () => {
+        // Navigate to the collection page using the collection name
+        router.push(`/collections/${encodeURIComponent(section)}`);
+    };
+
     return (
         <div
             className="fixed bg-black bg-opacity-70 z-40 h-screen flex items-center justify-center"
             onClick={handleOverlayClick} // Close overlay on outside click
         >
             <div
-                className="flex flex-row item justify-between relative bg-white text-black w-screen h-[480px] top-[-10rem] "
+                className="flex flex-row item justify-between relative bg-white text-black w-screen h-[400px] top-[-7rem]"
                 onClick={(e) => e.stopPropagation()} // Prevent close on content click
             >
                 {/* Close Button */}
@@ -362,10 +370,13 @@ const Overlay = ({ section, onClose }) => {
 
                 {/* Section Title */}
                 <div className="w-1/2 m-10 flex flex-col gap-[50px]  items-start">
-                    <h2 className="text-[28px] font-[400px] font-CLash-Semibold text-center ml-[10rem]">{sectionMapping}</h2>
+                    <h2 className="cursor-pointer text-[28px] font-[400px] font-CLash-Semibold text-center ml-[10rem]"
+                        onClick={navigateToCollection} // Pass the navigation function as onClick prop
+                    >{sectionMapping}</h2>
                     <ul className="gap-8 flex flex-col list-none ml-[10rem]">
                         {categories.map((category, index) => (
-                            <li key={index} className="font-Sweet-Regular text-[16px]">{category}</li>
+                            <li
+                                key={index} className=" font-Sweet-Regular text-[16px]">{category}</li>
                         ))}
                     </ul>
                 </div>
@@ -373,13 +384,13 @@ const Overlay = ({ section, onClose }) => {
                 {/* Content: Image and Categories */}
                 <div className="flex">
                     {/* Image */}
-                    <div className="w-[716px]">
+                    <div className="w-[700px]">
                         <Image
                             src={image}
-                            width={716}
-                            height={480}
+                            width={700}
+                            height={400}
                             alt={`${section} section`}
-                            className="w-full h-auto"
+                            className="w-full h-[400px]"
                         />
                     </div>
 
