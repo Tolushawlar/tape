@@ -15,7 +15,7 @@ const Page = () => {
     return (
         <div className={`${globalState ? 'fixed' : ''}  flex flex-col items-center justify-center w-full`}>
             <Image src="https://res.cloudinary.com/dtlxunbzr/image/upload/v1726832087/Rectangle_34624648_f9mxzj.png" alt="titel" width={1101} height={520} className='mt-10' />
-            <div className='mt-10 w-[543px]'>
+            <div className='mt-10 md:w-[543px] w-[320px]'>
                 <p className='text-[24px] font-Clash-Display font-500'>{decodedItemName}</p>
                 <p className='text-[12px] text-gray-400 mt-3 font-Sweet-Regular font-400'>September 15, 2024</p>
                 <p className='text-[12px] mt-5 text-left leading-[27.84px] text-black font-Sweet-Regular font-400'>

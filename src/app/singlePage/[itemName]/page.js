@@ -117,13 +117,13 @@ const Page = () => {
     return (
         <div className='overflow-x-hidden'>
             <div className={`${globalState ? "fixed ml-[14rem]" : ""} flex flex-col items-center justify-center}`}>
-                <div className='flex flex-row items-start gap-8 mt-10'>
-                    <div className='w-[489px] h-[651px] bg-[#f2f2f2] items-center justify-center'>
+                <div className='flex md:flex-row flex-col md:items-start items-center gap-8 mt-10'>
+                    <div className='md:w-[489px] w-[320px] md:h-[651px] h-[400px] bg-[#f2f2f2] items-center justify-center'>
                         {/* <Image src="https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545543/cardImage_dgxddb.png" width={489} height={851} alt="logo" /> */}
                         <ImageCarousel />
                     </div>
-                    <div className='flex flex-col items-start justify-start gap-8'>
-                        <p className='font-[300] text-gray-400 font-Sweet-Regular text-[14px] mb-10'>Men’s Collection &gt; {decodedItemName} &gt; </p>
+                    <div className='flex flex-col md:items-start items-center md:justify-start justify-center gap-8'>
+                        <p className='font-[300] text-gray-400 font-Sweet-Regular text-[14px] mb-10 md:block hidden'>Men’s Collection &gt; {decodedItemName} &gt; </p>
                         <p className='font-[600] font-CLash-Regular text-[34px] tracking-wide'>{decodedItemName}</p>
                         <p className='text-[34px] font-CLash-Regular font-[500] mt-[-20px]'>€41,000.00</p>
                         <div className='flex flex-row items-center gap-3  mt-[-10px]'>
@@ -135,7 +135,7 @@ const Page = () => {
                         </div>
 
                         {/* Size Selection Menu */}
-                        <Menu as="div" className="z-20 border-[0.76px] border-black relative inline-block text-center w-[620px] h-[46px] mt-[-1">
+                        <Menu as="div" className="z-20 border-[0.76px] border-black relative inline-block text-center md:w-[620px] w-[300px] h-[46px] mt-[-1">
                             <MenuButton className="flex flex-row w-full items-center justify-between bg-white px-3 py-2">
                                 <p className='font-[400] font-CLash-Regular text-[14px] mt-1'>
                                     {selectedSize ? `SIZE : ${selectedSize}` : "SELECT SIZE"}
@@ -157,10 +157,10 @@ const Page = () => {
                         </Menu>
 
                         <div className="flex flex-col items-center gap-5 mt-5">
-                            <button onClick={handleAddToCart} className="mt-auto bg-[#CF0028] w-[620px] h-[46px] text-white py-2 px-4 font-[500] text-[14px] font-CLash-Regular">
+                            <button onClick={handleAddToCart} className="mt-auto bg-[#CF0028] md:w-[620px] w-[300px] h-[46px] text-white py-2 px-4 font-[500] text-[14px] font-CLash-Regular">
                                 ADD TO CART
                             </button>
-                            <button onClick={toCheckout} className="mt-auto bg-black text-white font-[400] font-CLash-Regular w-[620px] h-[46px] text-[14px] py-2 px-4 border-[0.76px] border-black">
+                            <button onClick={toCheckout} className="mt-auto bg-black text-white font-[400] font-CLash-Regular md:w-[620px] w-[300px] h-[46px] text-[14px] py-2 px-4 border-[0.76px] border-black">
                                 GO TO CHECKOUT
                             </button>
                         </div>

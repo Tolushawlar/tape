@@ -14,7 +14,7 @@
 //                         <p className='font-normal font-Sweet-Regular text-[14px] cursor-pointer '>1</p>
 //                         <p className='font-normal font-Sweet-Regular text-[14px] cursor-pointer'>+</p>
 //                     </div>
-//                     <p className='font-CLash-Regular font-[600] text-[14px] ml-[100px]'> ₦38,500.00</p>
+//                     <p className='font-CLash-Regular font-[600] text-[14px] ml-[100px]'> £38,500.00</p>
 //                 </div>
 //             </div>
 //         </div>

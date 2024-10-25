@@ -20,7 +20,7 @@ const TapeBlog = () => {
         <div className={`${globalState ? 'fixed' : ''}  overflow-x-hidden`}>
             <div className={`${globalState ? '' : ''} flex flex-col items-center justify-center relative pt-[50px]`}>
                 <p className='text-[32px] font-[500] text-black font-CLash-Medium'>TAPE BLOG</p>
-                <p className='text-[14px] font-normal text-black font-Sweet-Regular py-8'>Lorem ipsum dolor sit amet consectetur. Odio velit placerat sit nulla pretium lectus </p>
+                <p className='text-[14px] font-normal text-black font-Sweet-Regular py-8 md:w-auto w-[300px]'>Lorem ipsum dolor sit amet consectetur. Odio velit placerat sit nulla pretium lectus </p>
                 <div className='flex justify-center items-center flex-wrap gap-8 my-10'>
                     <BlogCard
                         imageSrc="https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545892/image_1_vhyzms.png"

@@ -44,8 +44,8 @@ const CollectionPage = () => {
     return (
         <div className={`${globalState ? "fixed" : ""} `}>
             <div className="flex flex-col items-center justify-center gap-5">
-                <p className='font-[600] text-[32px] font-CLash-Regular'>{decodedCollectionName}</p>
-                <p className='font-[400] text-[14px] font-Sweet-Regular text-center w-[692px] h-[59px]'>
+                <p className='font-[600] md:text-[32px] text-[30px] font-CLash-Regular'>{decodedCollectionName}</p>
+                <p className='font-[400] text-[14px] font-Sweet-Regular text-center md:w-[692px] w-[300px] h-[59px] md:mb-0 mb-10'>
                     Lorem ipsum dolor sit amet consectetur. Odio velit placerat sit nulla pretium lectus phasellus.
                     Magna tellus porta sem viverra at ornare enim ante sit. Diam tellus tellus odio donec varius
                     hendrerit facilisis vitae massa.

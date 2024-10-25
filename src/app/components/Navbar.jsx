@@ -316,22 +316,22 @@ const Overlay = ({ section, onClose }) => {
     const sectionData = {
         Men: {
             image: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725546252/modal1_tdwpgr.png",
-            categories: ["Branded T-shirts", "Street Wears"],
+            categories: ["All Tops", "T-shirts", "Sweaters & Hoodies"],
             sectionMapping: "VIEW ALL MEN'S PRODUCT",
         },
         Women: {
             image: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1726482624/image_15_ujfj1n.png",
-            categories: ["Branded T-shirts", "Street Wears"],
+            categories: ["All Tops", "T-shirts", "Sweaters & Hoodies"],
             sectionMapping: "VIEW ALL WOMEN'S PRODUCT",
         },
         Kids: {
             image: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725546251/modal3_mwkwaf.png",
-            categories: ["Branded T-shirts", "Street Wears"],
+            categories: ["All Tops", "T-shirts", "Sweaters & Hoodies"],
             sectionMapping: "VIEW ALL KID'S PRODUCT",
         },
         Accessories: {
             image: "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725546254/modal2_txynj6.png",
-            categories: ["Branded T-shirts", "Street Wears", "Caps", "Belts"],
+            categories: [" Headwear", "Socks", "Other"],
             sectionMapping: "VIEW ALL ACCESSORIES",
         },
     };
@@ -370,9 +370,9 @@ const Overlay = ({ section, onClose }) => {
 
                 {/* Section Title */}
                 <div className="w-1/2 m-10 flex flex-col gap-[50px]  items-start">
-                    <h2 className="cursor-pointer text-[28px] font-[400px] font-CLash-Semibold text-center ml-[10rem]"
-                        onClick={navigateToCollection} // Pass the navigation function as onClick prop
-                    >{sectionMapping}</h2>
+                    {/* <h2 className="cursor-pointer text-[28px] font-[400px] font-CLash-Semibold text-center ml-[10rem]"
+                        onClick={navigateToCollection}
+                    >{sectionMapping}</h2> */}
                     <ul className="gap-8 flex flex-col list-none ml-[10rem]">
                         {categories.map((category, index) => (
                             <li

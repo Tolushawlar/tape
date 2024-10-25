@@ -9,8 +9,8 @@ const Footer = () => {
 
     return (
         <div className={` ${globalState ? "hidden" : "" } flex flex-col items-center justify-center bg-[#000000] h-[414px] w-screen text-white`}>
-            <div className="flex flex-row items-center justify-between w-[1148px] mb-4">
-                <div className='flex flex-row items-center justify-between w-[723px] text-[12px] font-normal'>
+            <div className="flex md:flex-row flex-col items-center justify-between w-[1148px] mb-4">
+                <div className='flex flex-row items-center justify-between md:w-[723px] w-[360px] text-[12px] font-normal'>
                     <p>Shipping to Nigeria</p>
                     <p>About Us</p>
                     <p>Tape Blog</p>
@@ -38,7 +38,7 @@ const Footer = () => {
                 </div>
             </div>
             <hr className='w-[1148px]' />
-            <div className="flex flex-row items-center justify-between w-[1148px] my-[60px]">
+            <div className="flex md:flex-row flex-col items-center justify-between w-[1148px] my-[60px]">
                 <div className='flex flex-row items-center justify-between w-[614px] h-[47.72px]'>
                     <div className="text-[12px] font-normal">Payment Methods - </div>
                     <Image src="/footerIcons/image 2.png" width={54.88} height={16.7} alt="footer icon" />
@@ -48,7 +48,7 @@ const Footer = () => {
                     <Image src="/footerIcons/image 5.png" width={71.59} height={18.42} alt="footer icon" />
                     <Image src="/footerIcons/image 6.png" width={109.9} height={23.67} alt="footer icon" />
                 </div>
-                <div className="flex flex-row items-center justify-between w-[362px] h-[40px]">
+                <div className="flex flex-row items-center justify-between md:w-[362px] w-[300px] h-[40px]">
                     <p className="text-[12px] text-normal">
                         Subscribe
                     </p>

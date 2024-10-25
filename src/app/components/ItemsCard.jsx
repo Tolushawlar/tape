@@ -58,7 +58,7 @@ const ImageCard = ({ id, name, defaultImage, hoverImage, price, itemName, size }
 
 
     return (
-        <div className="flex flex-col justify-center items-start w-[275px] h-[368px] mx-5 my-8 cursor-pointer">
+        <div className="flex flex-col justify-center items-start w-[275px] h-[368px] mx-5 md:my-8 my-5 cursor-pointer">
             <div
                 className="w-[275px] h-[317px] relative overflow-hidden"
                 onMouseEnter={() => setIsHovered(true)}

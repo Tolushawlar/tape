@@ -20,13 +20,13 @@ const FiveColumnSection = () => {
     const currentSection = sections.find(section => section.id === selectedSection);
 
     return (
-        <div className="w-full">
+        <div className="md:w-full w-[320px]">
             <div className="flex flex-row items-center gap-10 ">
                 {sections.map((section) => (
                     <button 
                         key={section.id}
                         onClick={() => handleSectionClick(section.id)}
-                        className={`py-[-10px]  px-0 text-center border-b-[1px] ${selectedSection === section.id ? 'border-black text-black text-[14px] font-400 font-Sweet-Regular' : 'text-[14px] font-400 font-Sweet-Regular border-transparent text-black'} hover:border-indigo-300 transition`}
+                        className={`py-[-10px]  px-0 text-center border-b-[1px] ${selectedSection === section.id ? 'border-black text-black md:text-[14px] text-[10px] font-400 font-Sweet-Regular' : 'md:text-[14px] text-[10px] font-400 font-Sweet-Regular border-transparent text-black'} hover:border-indigo-300 transition`}
                     >
                         {section.title}
                     </button>

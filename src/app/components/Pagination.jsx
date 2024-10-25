@@ -54,7 +54,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
     const pageNumbers = getPageNumbers();
 
     return (
-        <div className="flex justify-center items-center space-x-4 mt-6">
+        <div className="flex justify-center items-center md:space-x-4 space-x-1 mt-6">
             {/* Left arrow for previous page */}
             <button
                 className={`px-3 py-1 ${currentPage === 1 ? "text-gray-400 cursor-not-allowed" : "text-black"
