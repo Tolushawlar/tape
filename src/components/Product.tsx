@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { useCart } from "@/context/cartContext";
 import FiveColumnSection from "./FiveColumnSection";
+import { itemsData } from "@/constants";
 
 interface ProductProps {
   productName: string;
@@ -33,6 +34,8 @@ export default function Product({ productName }: ProductProps) {
     { name: "Blue", value: "blue" },
   ];
 
+  const product = itemsData.find((item) => item.name === productName);
+
   const handleSizeSelect = (size: string) => {
     setSelectedSize(size);
   };
@@ -49,7 +52,7 @@ export default function Product({ productName }: ProductProps) {
       name: productName,
       price: "41,000.00",
       size: selectedSize,
-      defaultImage: defaultImage,
+      defaultImage: product?.defaultImage || defaultImage,
       color: selectedColor,
     };
     addToCart(item);
@@ -74,8 +77,8 @@ export default function Product({ productName }: ProductProps) {
           </div>
 
           <div className="md:w-1/2">
-            <h1 className="text-3xl font-bold mb-4">Skate Day T-Shirt</h1>
-            <p className="text-4xl font-bold mb-6">€41,000.00</p>
+            <h1 className="text-3xl font-bold mb-4">{productName}</h1>
+            <p className="text-4xl font-bold mb-6">£41,000.00</p>
 
             <div className="mb-6">
               <h2 className="text-lg font-semibold mb-2">Colors</h2>
