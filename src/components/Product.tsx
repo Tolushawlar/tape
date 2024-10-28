@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { ShoppingCart, Heart } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,8 @@ import {
 import { useCart } from "@/context/cartContext";
 import FiveColumnSection from "./FiveColumnSection";
 import { itemsData } from "@/constants";
+import { useRouter } from "next/navigation";
+import { useCartStore } from "@/lib/store/cart-store";
 
 interface ProductProps {
   productName: string;
@@ -24,6 +26,8 @@ interface ProductProps {
 export default function Product({ productName }: ProductProps) {
   const [selectedColor, setSelectedColor] = useState("white");
   const [selectedSize, setSelectedSize] = useState("");
+
+  const { push } = useRouter();
 
   const { addToCart } = useCart();
 
@@ -40,22 +44,27 @@ export default function Product({ productName }: ProductProps) {
     setSelectedSize(size);
   };
 
+  const { openCartSheet } = useCartStore();
+
+  const defaultImage =
+    "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545543/cardImage_dgxddb.png";
+
   const handleAddToCart = () => {
     if (!selectedSize) {
       alert("Please select a size before adding to cart.");
       return;
     }
-    const defaultImage =
-      "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545543/cardImage_dgxddb.png";
+
     const item = {
       id: "1",
       name: productName,
-      price: "41,000.00",
+      price: product?.price || "41000.00",
       size: selectedSize,
       defaultImage: product?.defaultImage || defaultImage,
       color: selectedColor,
     };
     addToCart(item);
+    openCartSheet();
   };
 
   return (
@@ -66,7 +75,9 @@ export default function Product({ productName }: ProductProps) {
             <Card>
               <CardContent className="p-6">
                 <Image
-                  src="/placeholder.svg?height=600&width=600"
+                  src={`${
+                    product?.defaultImage || defaultImage
+                  }?height=600&width=600`}
                   width={200}
                   height={200}
                   alt={`${productName}-image"`}
@@ -78,7 +89,7 @@ export default function Product({ productName }: ProductProps) {
 
           <div className="md:w-1/2">
             <h1 className="text-3xl font-bold mb-4">{productName}</h1>
-            <p className="text-4xl font-bold mb-6">£41,000.00</p>
+            <p className="text-4xl font-bold mb-6">£{product?.price}</p>
 
             <div className="mb-6">
               <h2 className="text-lg font-semibold mb-2">Colors</h2>
@@ -116,13 +127,19 @@ export default function Product({ productName }: ProductProps) {
 
             <div className="flex space-x-4 mb-6">
               <Button
-                className="flex-1 bg-primary hover:bg-primary/90"
+                className="flex-1 bg-blue-600 hover:bg-blue-500/90"
                 onClick={handleAddToCart}
               >
                 <ShoppingCart className="mr-2 h-4 w-4" /> Add to Cart
               </Button>
-              <Button variant="outline" className="flex-1">
-                <Heart className="mr-2 h-4 w-4" /> Wishlist
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={() => {
+                  push("/checkout");
+                }}
+              >
+                Checkout
               </Button>
             </div>
 
