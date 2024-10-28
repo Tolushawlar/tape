@@ -25,8 +25,8 @@ const CollectionSection = ({
   };
 
   return (
-    <div className="flex flex-col items-center justify-between w-screen md:h-[418px] h-full mt-[80px] md:mb-[80px] ">
-      <div className="flex md:flex-row flex-col items-center justify-between w-[1116px]">
+    <div className="flex flex-col items-center justify-between w-screen h-full mt-[80px] md:mb-[80px] px-8 xl:px-0">
+      <div className="flex md:flex-row flex-col items-center justify-between w-full max-w-[1280px]">
         <p className="text-[18px] font-[700] tracking-wider">
           {collectionName}
         </p>
@@ -38,7 +38,7 @@ const CollectionSection = ({
           />
         )}
       </div>
-      <div className="flex md:flex-row flex-col items-center justify-evenly w-[1116px] md:h-[368px] h-full">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 justify-center w-full max-w-[1280px]">
         {itemsData.map((item, index) => (
           <ImageCard
             id={item.id}

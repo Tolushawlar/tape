@@ -92,7 +92,7 @@ export const CustomFormField = ({
             type={type}
             min={0}
             {...fieldProps}
-            className="dark:bg-transparent dark:border-gray-950"
+            className="dark:bg-transparent dark:border-gray-950 placeholder:uppercase placeholder:text-[12px]"
             placeholder={placeholder}
           />
         );

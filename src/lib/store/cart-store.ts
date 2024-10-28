@@ -2,14 +2,14 @@ import { create } from "zustand";
 
 interface CartStore {
   isOpen: boolean;
-  openSheet: () => void;
-  closeSheet: () => void;
-  toggelSheet: () => void;
+  openCartSheet: () => void;
+  closeCartSheet: () => void;
+  toggleCartSheet: () => void;
 }
 
 export const useCartStore = create<CartStore>((set) => ({
   isOpen: false,
-  openSheet: () => set({ isOpen: true }),
-  closeSheet: () => set({ isOpen: false }),
-  toggelSheet: () => set((state) => ({ isOpen: !state.isOpen })),
+  openCartSheet: () => set({ isOpen: true }),
+  closeCartSheet: () => set({ isOpen: false }),
+  toggleCartSheet: () => set((state) => ({ isOpen: !state.isOpen })),
 }));

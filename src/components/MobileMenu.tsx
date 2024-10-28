@@ -24,7 +24,7 @@ const MobileMenu = () => {
 
   return (
     <>
-      <div className="md:hidden flex justify-between">
+      <div className="md:hidden flex justify-between items-center">
         <Sheet open={openMenu} onOpenChange={setOpenMenu}>
           <SheetTrigger asChild>
             <Button variant="outline">
@@ -34,6 +34,12 @@ const MobileMenu = () => {
           </SheetTrigger>
           <SheetContent side={"left"} className="w-[300px]">
             <AccordionMenu setOpenMenu={setOpenMenu} />
+            <Link
+              href="/blogs"
+              className="block mt-4 hover:scale-[1.02] transition-transform duration-300"
+            >
+              Tape Blog
+            </Link>
           </SheetContent>
         </Sheet>
 

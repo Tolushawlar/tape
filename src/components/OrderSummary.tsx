@@ -40,7 +40,7 @@ const OrderSummary = () => {
               </div>
             </div>
             <div className="text-right">
-              <p className="font-semibold">€41,000.00</p>
+              <p className="font-semibold">£41,000.00</p>
               <button className="text-sm text-red-500">Remove</button>
             </div>
           </div>
@@ -48,25 +48,27 @@ const OrderSummary = () => {
           <div className="space-y-2">
             <div className="flex justify-between">
               <span>Subtotal (2 items)</span>
-              <span className="font-semibold">€77,000.00</span>
+              <span className="font-semibold">£77,000.00</span>
             </div>
             <div className="flex justify-between">
               <span>Shipping</span>
-              <span className="font-semibold">€7,000.00</span>
+              <span className="font-semibold">£7,000.00</span>
             </div>
             <Separator />
             <div className="flex justify-between text-lg font-semibold">
               <span>Total</span>
-              <span>€7,000.00</span>
+              <span>£7,000.00</span>
             </div>
             <p className="text-sm text-gray-500  text-right">
-              Including €4,918.60 in taxes
+              Including £4,918.60 in taxes
             </p>
           </div>
 
           <div className="pt-4 flex gap-3">
             <Input placeholder="Enter discount code" />
-            <Button type="button" className="bg-blue-600">Apply</Button>
+            <Button type="button" className="bg-blue-600 uppercase">
+              Apply
+            </Button>
           </div>
         </div>
       </CardContent>
