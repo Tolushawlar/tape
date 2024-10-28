@@ -96,10 +96,10 @@ const ImageCard = ({
       {/* Item info */}
       <div
         className="mt-5 w-[275px] cursor-pointer"
-        onClick={() => router.push(`/singlePage/${encodeURIComponent(name)}`)} // Navigate on click
+        onClick={() => router.push(`/product/${encodeURIComponent(name)}`)} // Navigate on click
       >
         <p className="text-[12px] font-normal">{name}</p>
-        <p className="text-[12px] font-normal">{price}</p>
+        <p className="text-[12px] font-normal">£ {price}</p>
       </div>
     </div>
   );
