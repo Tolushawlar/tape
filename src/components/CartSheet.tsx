@@ -53,7 +53,7 @@ const CartSheet = () => {
                   <div>
                     <div className="flex justify-between text-base font-medium text-gray-900">
                       <h3>{item.name}</h3>
-                      <p className="ml-4">${item.price.toFixed(2)}</p>
+                      <p className="ml-4">£{item.price.toFixed(2)}</p>
                     </div>
                     <p className="mt-1 text-sm text-gray-500">
                       {item.description}
@@ -90,7 +90,7 @@ const CartSheet = () => {
           <div className="flex justify-between text-base font-medium text-gray-900">
             <p>Subtotal</p>
             <p>
-              $
+              £
               {cartItems
                 .reduce((total, item) => total + item.price * item.quantity, 0)
                 .toFixed(2)}

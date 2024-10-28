@@ -66,7 +66,7 @@ const OrderSummary = () => {
 
           <div className="pt-4 flex gap-3">
             <Input placeholder="Enter discount code" />
-            <Button type="button">Apply</Button>
+            <Button type="button" className="bg-blue-600">Apply</Button>
           </div>
         </div>
       </CardContent>

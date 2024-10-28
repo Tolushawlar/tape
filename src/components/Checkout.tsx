@@ -72,7 +72,7 @@ export default function CheckoutForm() {
       city: "",
       state: "",
       postalCode: "",
-      shippingMethod: "lagos",
+      shippingMethod: "uk",
       paymentMethod: "paystack",
       billingAddress: "same",
     },
@@ -114,7 +114,6 @@ export default function CheckoutForm() {
                       name="country"
                       render={({ field }) => (
                         <FormItem className="flex flex-col">
-                          <FormLabel>Country</FormLabel>
                           <Popover
                             open={popoverOpen.country}
                             onOpenChange={(isOpen) =>
@@ -136,7 +135,7 @@ export default function CheckoutForm() {
                                         (country) =>
                                           country.isoCode === field.value
                                       )?.name
-                                    : "Select country"}
+                                    : "COUNTRY"}
                                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                 </Button>
                               </FormControl>
@@ -198,49 +197,43 @@ export default function CheckoutForm() {
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <CustomFormField
                         name="firstName"
-                        label="First Name"
+                        placeholder="FIRST NAME"
                         form={methods}
-                        placeholder="John"
                       />
 
                       <CustomFormField
                         name="lastName"
-                        label="Last Name"
+                        placeholder="LAST NAME"
                         form={methods}
-                        placeholder="Doe"
                       />
                     </div>
 
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <CustomFormField
                         name="email"
-                        label="Email"
+                        placeholder="EMAIL"
                         form={methods}
-                        placeholder="john.doe@example.com"
                         type="email"
                       />
 
                       <CustomFormField
                         name="phone"
-                        label="Phone number"
+                        placeholder="PHONE NUMBER"
                         form={methods}
-                        placeholder="+234 123 456 7890"
                         type="tel"
                       />
                     </div>
 
                     <CustomFormField
                       name="address"
-                      label="Address"
+                      placeholder="ADDRESS"
                       form={methods}
-                      placeholder="123 Main St"
                     />
 
                     <CustomFormField
                       name="apartment"
-                      label="Apartment, suite, etc. (optional)"
+                      placeholder="Apartment, suite, etc. (optional)"
                       form={methods}
-                      placeholder="Apt 4B"
                     />
 
                     <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 items-center">
@@ -275,7 +268,7 @@ export default function CheckoutForm() {
                                           (state) =>
                                             state.isoCode === field.value
                                         )?.name
-                                      : "Select state"}
+                                      : "STATE"}
                                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                   </Button>
                                 </FormControl>
@@ -338,7 +331,6 @@ export default function CheckoutForm() {
                         name="city"
                         render={({ field }) => (
                           <FormItem className="flex flex-col">
-                            <FormLabel>City</FormLabel>
                             <Popover
                               open={popoverOpen.city}
                               onOpenChange={(isOpen) =>
@@ -352,13 +344,14 @@ export default function CheckoutForm() {
                                     role="combobox"
                                     className={cn(
                                       "w-full justify-between",
-                                      !field.value && "text-muted-foreground"
+                                      !field.value &&
+                                        "text-muted-foreground uppercase"
                                     )}
                                     onClick={() =>
                                       handlePopoverChange("city", true)
                                     }
                                   >
-                                    {field.value || "Select city"}
+                                    {field.value || "CITY"}
                                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                   </Button>
                                 </FormControl>
@@ -425,9 +418,8 @@ export default function CheckoutForm() {
 
                       <CustomFormField
                         name="postalCode"
-                        label="Postal code"
+                        placeholder="POSTAL CODE"
                         form={methods}
-                        placeholder="100001"
                       />
                     </div>
 
@@ -438,7 +430,9 @@ export default function CheckoutForm() {
                       name="shippingMethod"
                       render={({ field }) => (
                         <FormItem className="space-y-3">
-                          <FormLabel>Shipping method</FormLabel>
+                          <FormLabel className="uppercase">
+                            Shipping method
+                          </FormLabel>
                           <FormControl>
                             <RadioGroup
                               onValueChange={field.onChange}
@@ -447,10 +441,10 @@ export default function CheckoutForm() {
                             >
                               <FormItem className="flex items-center space-x-3 space-y-0">
                                 <FormControl>
-                                  <RadioGroupItem value="lagos" />
+                                  <RadioGroupItem value="uk" />
                                 </FormControl>
-                                <FormLabel className="font-normal">
-                                  Lagos State, Nigeria only - DHL
+                                <FormLabel className="font-normal uppercase">
+                                  Delivery within the UK
                                 </FormLabel>
                               </FormItem>
                               <FormItem className="flex items-center space-x-3 space-y-0">
@@ -458,7 +452,7 @@ export default function CheckoutForm() {
                                   <RadioGroupItem value="other" />
                                 </FormControl>
                                 <FormLabel className="font-normal">
-                                  Other states - DHL
+                                  International Delivery
                                 </FormLabel>
                               </FormItem>
                             </RadioGroup>
@@ -524,7 +518,7 @@ export default function CheckoutForm() {
                                 <FormControl>
                                   <RadioGroupItem value="same" />
                                 </FormControl>
-                                <FormLabel className="font-normal">
+                                <FormLabel className="font-normal uppercase">
                                   Same as shipping address
                                 </FormLabel>
                               </FormItem>
@@ -542,7 +536,7 @@ export default function CheckoutForm() {
                         </FormItem>
                       )}
                     />
-                    <Button type="submit" className="w-full">
+                    <Button type="submit" className="w-full bg-blue-600">
                       Place order
                     </Button>
                   </form>

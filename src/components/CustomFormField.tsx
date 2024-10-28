@@ -24,7 +24,7 @@ import { PasswordInput } from "./PasswordInput";
 
 interface CustomFormFieldProps {
   name: string;
-  label: string;
+  label?: string;
   type?: string;
   form: UseFormReturn<any>;
   placeholder?: string;
