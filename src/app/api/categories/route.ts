@@ -1,17 +1,50 @@
-import { connectToDatabase } from '@/lib/mongodb';
-import Category from '@/models/Category';
+import { connectToDatabase } from "@/lib/mongodb";
+import Category from "@/models/Category";
+import { ICategory } from "@/types";
+import { NextResponse } from "next/server";
 
-export default async function handler(req, res) {
-  await connectToDatabase();
-
-  if (req.method === 'GET') {
+export async function GET(): Promise<
+  NextResponse<ICategory[] | { error: string }>
+> {
+  try {
+    await connectToDatabase();
     const categories = await Category.find();
-    res.status(200).json(categories);
-  } else if (req.method === 'POST') {
-    const { name } = req.body;
-    const category = await Category.create({ name });
-    res.status(201).json(category);
-  } else {
-    res.status(405).json({ error: 'Method Not Allowed' });
+    return NextResponse.json(categories);
+  } catch (error) {
+    return NextResponse.json(
+      {
+        error:
+          error instanceof Error ? error.message : "Unknown error occurred",
+      },
+      { status: 500 }
+    );
+  }
+}
+
+type CategoryCreateRequest = {
+  name: string;
+};
+
+export async function POST(
+  request: Request
+): Promise<NextResponse<ICategory | { error: string }>> {
+  try {
+    await connectToDatabase();
+    const body: CategoryCreateRequest = await request.json();
+
+    if (!body.name) {
+      return NextResponse.json({ error: "Name is required" }, { status: 400 });
+    }
+
+    const category = await Category.create({ name: body.name });
+    return NextResponse.json(category, { status: 201 });
+  } catch (error) {
+    return NextResponse.json(
+      {
+        error:
+          error instanceof Error ? error.message : "Unknown error occurred",
+      },
+      { status: 400 }
+    );
   }
 }

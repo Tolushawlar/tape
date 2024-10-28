@@ -12,9 +12,7 @@ export const useCountryData = (
   selectedCountry: string,
   selectedState: string
 ) => {
-  const [countries, setCountries] = useState<ICountry[]>(
-    Country.getAllCountries()
-  );
+  const [countries] = useState<ICountry[]>(Country.getAllCountries());
   const [states, setStates] = useState<IState[]>([]);
   const [cities, setCities] = useState<ICity[]>([]);
 

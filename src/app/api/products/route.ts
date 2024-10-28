@@ -1,27 +1,83 @@
 import { connectToDatabase } from "@/lib/mongodb";
-import Product from "@/models/Product";
+import Product, { IProduct } from "@/models/Product";
+import { NextResponse } from "next/server";
+import { Types } from "mongoose";
 
+export async function GET(): Promise<
+  NextResponse<IProduct[] | { error: string }>
+> {
+  try {
+    await connectToDatabase();
+    const products = await Product.find().populate("category");
+    return NextResponse.json(products);
+  } catch (error) {
+    return NextResponse.json(
+      {
+        error:
+          error instanceof Error ? error.message : "Unknown error occurred",
+      },
+      { status: 500 }
+    );
+  }
+}
 
-export default async function handler(req, res) {
-  await connectToDatabase(); // Connect to MongoDB
+type ProductCreateRequest = {
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+  category: string; // Category ID
+};
 
-  if (req.method === 'GET') {
-    try {
-      const products = await Product.find().populate('category'); // Retrieve all products
-      console.log("getting")
-      res.status(200).json(products); // Send the products in the response
-    } catch (error) {
-      res.status(500).json({ error: error.message }); // Handle errors
+export async function POST(
+  request: Request
+): Promise<NextResponse<IProduct | { error: string }>> {
+  try {
+    await connectToDatabase();
+    const body: ProductCreateRequest = await request.json();
+
+    // Validation
+    if (!body.name) {
+      return NextResponse.json({ error: "Name is required" }, { status: 400 });
     }
-  } else if (req.method === 'POST') {
-    try {
-      const { name, description, price, stock, category } = req.body;
-      const product = await Product.create({ name, description, price, stock, category });
-      res.status(201).json(product); // Send created product in response
-    } catch (error) {
-      res.status(400).json({ error: error.message }); // Handle errors
+
+    if (!body.category || !Types.ObjectId.isValid(body.category)) {
+      return NextResponse.json(
+        { error: "Valid category ID is required" },
+        { status: 400 }
+      );
     }
-  } else {
-    res.status(405).json({ error: 'Method Not Allowed' }); // Unsupported methods
+
+    if (typeof body.price !== "number" || body.price <= 0) {
+      return NextResponse.json(
+        { error: "Valid price is required" },
+        { status: 400 }
+      );
+    }
+
+    if (typeof body.stock !== "number" || body.stock < 0) {
+      return NextResponse.json(
+        { error: "Valid stock quantity is required" },
+        { status: 400 }
+      );
+    }
+
+    const product = await Product.create({
+      name: body.name,
+      description: body.description,
+      price: body.price,
+      stock: body.stock,
+      category: body.category,
+    });
+
+    return NextResponse.json(product, { status: 201 });
+  } catch (error) {
+    return NextResponse.json(
+      {
+        error:
+          error instanceof Error ? error.message : "Unknown error occurred",
+      },
+      { status: 400 }
+    );
   }
 }

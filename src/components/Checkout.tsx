@@ -24,56 +24,23 @@ import {
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
-import { CheckoutDto, checkoutSchema } from "@/schema";
+import { CheckoutDto, checkoutSchema, emptyAddress } from "@/schema";
 import AddressForm from "./AddressForm";
 
 export default function CheckoutForm() {
   const form = useForm<CheckoutDto>({
     resolver: zodResolver(checkoutSchema),
     defaultValues: {
-      deliveryAddress: {
-        country: "",
-        firstName: "",
-        lastName: "",
-        email: "",
-        phone: "",
-        address: "",
-        apartment: "",
-        city: "",
-        state: "",
-        postalCode: "",
-      },
+      deliveryAddress: emptyAddress,
       billingAddressType: "same",
-      billingAddress: {
-        country: "",
-        firstName: "",
-        lastName: "",
-        email: "",
-        phone: "",
-        address: "",
-        apartment: "",
-        city: "",
-        state: "",
-        postalCode: "",
-      },
+      billingAddress: undefined,
       shippingMethod: "uk",
       paymentMethod: "paystack",
     },
   });
 
   const clearBillingAddress = () => {
-    form.setValue("billingAddress", {
-      country: "",
-      firstName: "",
-      lastName: "",
-      email: "",
-      phone: "",
-      address: "",
-      apartment: "",
-      city: "",
-      state: "",
-      postalCode: "",
-    });
+    form.setValue("billingAddress", undefined);
   };
 
   async function onSubmit(values: CheckoutDto) {

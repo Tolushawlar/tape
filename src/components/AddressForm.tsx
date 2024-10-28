@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useState } from "react";
 
@@ -99,7 +100,7 @@ const AddressForm = ({
                   >
                     {field.value
                       ? countries?.find(
-                          (country) => country.isoCode === field.value
+                          (country) => country.name === field.value
                         )?.name
                       : "COUNTRY"}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -119,7 +120,7 @@ const AddressForm = ({
                             value={country.name}
                             key={country.isoCode}
                             onSelect={() => {
-                              form.setValue(countryName, country.isoCode);
+                              form.setValue(countryName, country.name);
                               setSelectedCountry(country.isoCode);
                               // Reset state and city when country changes
                               form.setValue(stateName, "");
@@ -209,7 +210,7 @@ const AddressForm = ({
                       onClick={() => handlePopoverChange("state", true)}
                     >
                       {field.value
-                        ? states.find((state) => state.isoCode === field.value)
+                        ? states.find((state) => state.name === field.value)
                             ?.name
                         : "STATE"}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -228,7 +229,7 @@ const AddressForm = ({
                               value={state.name}
                               key={state.isoCode}
                               onSelect={() => {
-                                form.setValue(stateName, state.isoCode);
+                                form.setValue(stateName, state.name);
                                 setSelectedState(state.isoCode);
                                 // Reset city when state changes
                                 form.setValue(cityName, "");

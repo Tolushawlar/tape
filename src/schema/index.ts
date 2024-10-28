@@ -21,18 +21,27 @@ export const checkoutSchema = z
     shippingMethod: z.enum(["uk", "other"]),
     paymentMethod: z.enum(["paystack", "bank"]),
   })
-  .refine(
-    (data) => {
-      if (data.billingAddressType === "same") {
-        return true;
-      }
-      return data.billingAddress !== undefined; // billingAddress is required if different
-    },
-    {
-      message:
-        "Billing address is required when billing address type is different.",
-      path: ["billingAddress"],
+  .superRefine((data, ctx) => {
+    if (data.billingAddressType === "different" && !data.billingAddress) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Billing address is required when using a different address",
+        path: ["billingAddress"],
+      });
     }
-  );
+  });
 
 export type CheckoutDto = z.infer<typeof checkoutSchema>;
+
+export const emptyAddress = {
+  country: "",
+  firstName: "",
+  lastName: "",
+  email: "",
+  phone: "",
+  address: "",
+  apartment: "",
+  city: "",
+  state: "",
+  postalCode: "",
+};
