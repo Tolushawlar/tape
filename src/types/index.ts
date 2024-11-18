@@ -1,4 +1,4 @@
-import { Document, Types } from 'mongoose';
+import { Document, Types } from "mongoose";
 
 export interface ICartItem {
   id: string;
@@ -9,7 +9,6 @@ export interface ICartItem {
   size?: string;
   defaultImage: string;
 }
-
 
 export interface ICategory extends Document {
   name: string;
@@ -34,3 +33,13 @@ export interface IOrder extends Document {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export type Order = {
+  id: number;
+  product: string;
+  additionalProducts?: number;
+  customer: string;
+  email: string;
+  total: string;
+  status: "Processing" | "Shipped" | "Delivered";
+};

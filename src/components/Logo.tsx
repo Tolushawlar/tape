@@ -1,9 +1,9 @@
 import Image from "next/image";
 
-export const Logo = () => {
+export const Logo = ({ type = "home" }: { type?: "home" | "dashboard" }) => {
   return (
     <Image
-      src="/logo2.svg"
+      src={`/${type === "home" ? "logo2.svg" : "logo.svg"}`}
       alt="Logo"
       priority={true}
       width={100}
