@@ -15,18 +15,9 @@ const Homepage = () => {
       </div>
 
       <InfoHero />
-      <CollectionSection
-        collectionName="MEN’S COLLECTION"
-        itemsData={itemsData}
-      />
-      <CollectionSection
-        collectionName="WOMEN’S COLLECTION"
-        itemsData={itemsData}
-      />
-      <CollectionSection
-        collectionName="KID'S COLLECTION"
-        itemsData={itemsData}
-      />
+      <CollectionSection collectionName="MEN" itemsData={itemsData} />
+      <CollectionSection collectionName="WOMEN" itemsData={itemsData} />
+      <CollectionSection collectionName="KIDS" itemsData={itemsData} />
       <CollectionSection collectionName="ACCESSORIES" itemsData={itemsData} />
       <InfoFooter />
     </div>

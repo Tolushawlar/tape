@@ -10,7 +10,7 @@ function InfoFooter() {
     >
       <div className="md:ml-[150px] ml-[20px] mb-10">
         <p className="text-[36px] font-[500] text-white">LASTING ACCESSORIES</p>
-        <HoverTextWithArrow text="Explore today" />
+        <HoverTextWithArrow text="Shop Now" />
       </div>
     </div>
   );

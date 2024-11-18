@@ -32,7 +32,7 @@ const CollectionSection = ({
         </p>
         {showExploreButton && (
           <HoverTextWithArrow
-            text="Explore Now"
+            text="Browse"
             textColor="text-black"
             onClick={navigateToCollection} // Pass the navigation function as onClick prop
           />
