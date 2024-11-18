@@ -17,15 +17,17 @@ const AboutPage = () => {
           One Tape, Many Wears
         </p>
         <p className="text-[12px] font-normal font-Sweet-Regular leading-[27.84px]  text-justify mt-5">
-          Lorem ipsum dolor sit amet consectetur. Odio velit placerat sit nulla
-          pretium lectus phasellus. Magna tellus porta sem viverra at ornare
-          enim ante sit. Diam tellus tellus odio donec varius hendrerit
-          facilisis vitae massa. Tellus augue eget sit enim blandit faucibus.
-          Dolor aliquam lectus tincidunt lacus lorem nam. Elit id aliquet eget
-          maecenas id lacinia. Ultrices ullamcorper aliquet fermentum at potenti
-          placerat sed sit. Nunc augue aenean amet lobortis mattis curabitur
-          risus diam sit. Ipsum pellentesque rhoncus ultrices sollicitudin fusce
-          eget mauris tincidunt ipsum.
+          Tape Wears was born from a shared vision by Braimoh, Joy and Shile to
+          create a brand that blends culture, community, and style. With deep
+          roots in our heritage, we sought to design clothes beyond
+          fashion—offering a sense of belonging for everyone wearing it.
+        </p>
+        <p className="text-[12px] font-normal font-Sweet-Regular leading-[27.84px]  text-justify mt-5">
+          Tape symbolises the threads that connect us. Like the fabric that
+          holds our garments, we believe fashion has the power to bring people
+          together, celebrating both self-expression and authenticity. Every
+          piece is thoughtfully designed to honour our roots while offering you
+          timeless pieces that make you feel comfortable and confident.
         </p>
       </div>
 

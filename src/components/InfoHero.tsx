@@ -12,7 +12,7 @@ function InfoHero() {
 
   return (
     <div
-      className="bg-cover bg-center md:h-[645px] h-[600px] flex flex-row items-center justify-center "
+      className="bg-cover bg-center md:h-[645px] h-[600px] flex flex-row items-center justify-center"
       style={{
         backgroundImage: `url("https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545892/image_1_vhyzms.png")`,
       }}
@@ -24,15 +24,15 @@ function InfoHero() {
             KNOW YOUR WEARS
           </p>
           <p className="text-center text-[14px] font-[400] w-[194px] h-[407px] my-10">
-            Lorem ipsum dolor sit amet consectetur. Odio velit placerat sit
-            nulla pretium lectus phasellus. Magna tellus porta sem viverra at
-            ornare enim ante sit. Diam tellus tellus odio donec varius hendrerit
-            facilisis vitae massa.
+            At the core of Tape Wears is a strong community. We create fashion
+            that connects people who share the same passion for authenticity,
+            heritage, and style. Whether through our designs or exclusive
+            events, Tape Wears is a place where inclusivity and community thrive
           </p>
         </div>
         <div>
           <div onClick={toAbout} className="mb-[80px]">
-            <HoverTextWithArrow text="About TAPE WEARS" />
+            <HoverTextWithArrow text="Join our Community" />
           </div>
         </div>
       </div>
