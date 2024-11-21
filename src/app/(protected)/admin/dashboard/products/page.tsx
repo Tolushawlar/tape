@@ -127,7 +127,7 @@ export default function ProductsPage() {
         </p>
       </div>
       <div className="flex items-center justify-between space-y-2"></div>
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row gap-4 sm:items-center justify-between">
         <Tabs value={statusFilter} onValueChange={setStatusFilter}>
           <TabsList>
             <TabsTrigger value="all">All Products</TabsTrigger>
@@ -137,7 +137,7 @@ export default function ProductsPage() {
           </TabsList>
         </Tabs>
 
-        <Button>
+        <Button className="bg-blue-700">
           <Plus className="mr-2 h-4 w-4" /> Add Product
         </Button>
       </div>
@@ -154,64 +154,60 @@ export default function ProductsPage() {
       </div>
 
       <div className="space-y-4">
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="relative flex-grow">
-            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search products..."
-              value={
-                (table.getColumn("name")?.getFilterValue() as string) ?? ""
-              }
-              onChange={(event) =>
-                table.getColumn("name")?.setFilterValue(event.target.value)
-              }
-              className="pl-8 h-8 w-[150px] lg:w-[250px]"
-            />
-          </div>
+        <div className="relative flex-grow">
+          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search products..."
+            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("name")?.setFilterValue(event.target.value)
+            }
+            className="pl-8 max-w-[400px]"
+          />
+        </div>
 
-          <div className="flex items-center space-x-2">
-            <DatePickerWithRange
-              date={dateRange}
-              setDate={setDateRange}
-              showDatePicker={showDatePicker}
-              setShowDatePicker={setShowDatePicker}
-            />
+        <div className="flex items-center justify-end space-x-2">
+          <DatePickerWithRange
+            date={dateRange}
+            setDate={setDateRange}
+            showDatePicker={showDatePicker}
+            setShowDatePicker={setShowDatePicker}
+          />
 
-            <Popover open={showFilters} onOpenChange={setShowFilters}>
-              <PopoverTrigger asChild>
-                <Button variant="outline" size="sm" className="h-8">
-                  <Filter className="mr-2 h-4 w-4" />
-                  Filter
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-[200px]" align="end">
-                <div className="space-y-2">
-                  <h4 className="font-medium leading-none">Categories</h4>
-                  {categories.map((category) => (
-                    <div key={category} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={category}
-                        checked={categoryFilter.includes(category)}
-                        onCheckedChange={(checked) => {
-                          setCategoryFilter(
-                            checked
-                              ? [...categoryFilter, category]
-                              : categoryFilter.filter((c) => c !== category)
-                          );
-                        }}
-                      />
-                      <label
-                        htmlFor={category}
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        {category}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              </PopoverContent>
-            </Popover>
-          </div>
+          <Popover open={showFilters} onOpenChange={setShowFilters}>
+            <PopoverTrigger asChild>
+              <Button variant="outline" size="sm" className="h-8">
+                <Filter className="mr-2 h-4 w-4" />
+                Filter
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[200px]" align="end">
+              <div className="space-y-2">
+                <h4 className="font-medium leading-none">Categories</h4>
+                {categories.map((category) => (
+                  <div key={category} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={category}
+                      checked={categoryFilter.includes(category)}
+                      onCheckedChange={(checked) => {
+                        setCategoryFilter(
+                          checked
+                            ? [...categoryFilter, category]
+                            : categoryFilter.filter((c) => c !== category)
+                        );
+                      }}
+                    />
+                    <label
+                      htmlFor={category}
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      {category}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </PopoverContent>
+          </Popover>
         </div>
 
         <div className="rounded-md border">
