@@ -10,12 +10,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Product } from "@/constants/products";
 import { Button } from "@/components/ui/button";
 import { SortableHeader } from "../SortableHeader";
+import { ProductCategory } from "@/constants/productCategories";
 import Image from "next/image";
 
-export const productColumns: ColumnDef<Product>[] = [
+export const productCategoriesColumns: ColumnDef<ProductCategory>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -49,58 +49,20 @@ export const productColumns: ColumnDef<Product>[] = [
         />
         <div>
           <div className="font-medium">{row.getValue("name")}</div>
-          {row.original.additionalProducts && (
-            <div className="text-sm text-muted-foreground">
-              +{row.original.additionalProducts} other products
-            </div>
-          )}
+          <div className="text-sm text-muted-foreground">
+            {row.original.description}
+          </div>
         </div>
       </div>
     ),
   },
   {
-    accessorKey: "sku",
-    header: ({ column }) => <SortableHeader column={column} title="SKU" />,
-  },
-  {
-    accessorKey: "category",
-    header: ({ column }) => <SortableHeader column={column} title="Category" />,
-    filterFn: (row, id, value) => {
-      if (Array.isArray(value)) {
-        return value.includes(row.getValue(id));
-      }
-      return true; // No filter applied if value is not an array
-    },
+    accessorKey: "qtySold",
+    header: ({ column }) => <SortableHeader column={column} title="Qty Sold" />,
   },
   {
     accessorKey: "stock",
     header: ({ column }) => <SortableHeader column={column} title="Stock" />,
-  },
-  {
-    accessorKey: "amount",
-    header: ({ column }) => <SortableHeader column={column} title="Amount" />,
-  },
-  {
-    accessorKey: "status",
-    header: ({ column }) => <SortableHeader column={column} title="Status" />,
-    cell: ({ row }) => {
-      const status = row.getValue("status") as string;
-      return (
-        <div
-          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-            status === "Published"
-              ? "bg-green-100 text-green-800"
-              : status === "Draft"
-              ? "bg-gray-100 text-gray-800"
-              : status === "Low Stock"
-              ? "bg-yellow-100 text-yellow-800"
-              : "bg-red-100 text-red-800"
-          }`}
-        >
-          {status}
-        </div>
-      );
-    },
   },
   {
     accessorKey: "dateAdded",
@@ -122,6 +84,7 @@ export const productColumns: ColumnDef<Product>[] = [
       return rowDate >= new Date(startDate) && rowDate <= new Date(endDate);
     },
   },
+
   {
     id: "actions",
     cell: ({ row }) => {

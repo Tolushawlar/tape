@@ -39,7 +39,7 @@ const menuItems = [
     url: `${baseUrl}/products`,
     active: true,
   },
-  { title: "Categories", icon: Tag, url: `${baseUrl}/categories` },
+  { title: "Categories", icon: Tag, url: `${baseUrl}/product-categories` },
   { title: "Orders", icon: ShoppingCart, url: `${baseUrl}/orders` },
   { url: `${baseUrl}/inventory`, icon: Store, title: "Inventory" },
   { title: "Customers", icon: Users, url: `${baseUrl}/customers` },

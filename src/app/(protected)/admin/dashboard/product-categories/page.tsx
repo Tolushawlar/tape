@@ -1,6 +1,6 @@
 "use client";
 
-import { Filter, Plus, Search } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import { motion } from "framer-motion";
 import {
   ColumnFiltersState,
@@ -13,16 +13,11 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { DateRange } from "react-day-picker";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import {
   Table,
   TableBody,
@@ -31,29 +26,24 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { products } from "@/constants/products";
-import { productColumns } from "@/components/dashboard/products/Column";
-import { Checkbox } from "@/components/ui/checkbox";
 import { DatePickerWithRange } from "@/components/dashboard/DatePicker";
+import { productCategories } from "@/constants/productCategories";
+import { productCategoriesColumns } from "@/components/dashboard/product-categories/Column";
 
-export default function ProductsPage() {
+export default function ProductCategoriesPage() {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
-  const [statusFilter, setStatusFilter] = useState("all");
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
     from: undefined,
     to: undefined,
   });
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [showFilters, setShowFilters] = useState(false);
-  const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
 
   const table = useReactTable({
-    data: products,
-    columns: productColumns,
+    data: productCategories,
+    columns: productCategoriesColumns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -71,19 +61,9 @@ export default function ProductsPage() {
   });
 
   const resetAllFilters = () => {
-    setStatusFilter("all");
     setDateRange(undefined);
-    setCategoryFilter([]);
     table.getColumn("name")?.setFilterValue("");
   };
-
-  useEffect(() => {
-    if (statusFilter !== "all") {
-      table.getColumn("status")?.setFilterValue(statusFilter);
-    } else {
-      table.getColumn("status")?.setFilterValue(undefined);
-    }
-  }, [statusFilter, table]);
 
   useEffect(() => {
     if (dateRange?.from && dateRange?.to) {
@@ -99,56 +79,28 @@ export default function ProductsPage() {
     }
   }, [dateRange, table]);
 
-  useEffect(() => {
-    if (categoryFilter.length > 0) {
-      table.getColumn("category")?.setFilterValue(categoryFilter);
-    } else {
-      table.getColumn("category")?.setFilterValue(undefined);
-    }
-  }, [categoryFilter, table]);
-
-  const categories = useMemo(() => {
-    return Array.from(new Set(products.map((product) => product.category)));
-  }, []);
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className="space-y-4 p-4 md:p-8 pt-6"
     >
-      <div>
-        <h2 className="text-2xl font-bold tracking-tight">Products</h2>
-        <p className="text-muted-foreground">
-          Here&apos;s a list of your products
-        </p>
-      </div>
-      <div className="flex items-center justify-between space-y-2"></div>
-      <div className="flex flex-col sm:flex-row gap-4 sm:items-center justify-between">
-        <Tabs value={statusFilter} onValueChange={setStatusFilter}>
-          <TabsList>
-            <TabsTrigger value="all">All Products</TabsTrigger>
-            <TabsTrigger value="Published">Published</TabsTrigger>
-            <TabsTrigger value="Low Stock">Low Stock</TabsTrigger>
-            <TabsTrigger value="Draft">Draft</TabsTrigger>
-          </TabsList>
-        </Tabs>
+      <h2 className="text-2xl font-bold tracking-tight">Product Categories</h2>
 
+      <div className="flex justify-end">
         <Button className="bg-blue-700">
-          <Plus className="mr-2 h-4 w-4" /> Add Product
+          <Plus className="mr-2 h-4 w-4" /> Add Category
         </Button>
       </div>
 
-      <div>
-        <Button
-          variant="outline"
-          size="sm"
-          className="h-8"
-          onClick={resetAllFilters}
-        >
-          Reset All Filters
-        </Button>
-      </div>
+      <Button
+        variant="outline"
+        size="sm"
+        className="h-8"
+        onClick={resetAllFilters}
+      >
+        Reset All Filters
+      </Button>
 
       <div className="space-y-4">
         <div className="relative flex-grow">
@@ -170,41 +122,6 @@ export default function ProductsPage() {
             showDatePicker={showDatePicker}
             setShowDatePicker={setShowDatePicker}
           />
-
-          <Popover open={showFilters} onOpenChange={setShowFilters}>
-            <PopoverTrigger asChild>
-              <Button variant="outline" size="sm" className="h-8">
-                <Filter className="mr-2 h-4 w-4" />
-                Filter
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-[200px]" align="end">
-              <div className="space-y-2">
-                <h4 className="font-medium leading-none">Categories</h4>
-                {categories.map((category) => (
-                  <div key={category} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={category}
-                      checked={categoryFilter.includes(category)}
-                      onCheckedChange={(checked) => {
-                        setCategoryFilter((prev) =>
-                          checked
-                            ? [...prev, category]
-                            : prev.filter((c) => c !== category)
-                        );
-                      }}
-                    />
-                    <label
-                      htmlFor={category}
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      {category}
-                    </label>
-                  </div>
-                ))}
-              </div>
-            </PopoverContent>
-          </Popover>
         </div>
 
         <div className="rounded-md border">
@@ -247,7 +164,7 @@ export default function ProductsPage() {
               ) : (
                 <TableRow>
                   <TableCell
-                    colSpan={productColumns.length}
+                    colSpan={productCategoriesColumns.length}
                     className="h-24 text-center"
                   >
                     No results.
