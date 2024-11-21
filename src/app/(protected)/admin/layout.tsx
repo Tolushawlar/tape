@@ -7,7 +7,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
-      <div className="flex flex-1 h-screen overflow-hidden bg-gray-800 bg-opacity-50">
+      <div className="flex flex-1 h-screen overflow-hidden">
         <AppSidebar />
         <div className="flex flex-col flex-1 overflow-hidden">
           <Header />
