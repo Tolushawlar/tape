@@ -6,7 +6,6 @@ import {
   ShoppingCart,
   Users,
   Settings,
-  Store,
   Package,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -41,7 +40,6 @@ const menuItems = [
   },
   { title: "Categories", icon: Tag, url: `${baseUrl}/product-categories` },
   { title: "Orders", icon: ShoppingCart, url: `${baseUrl}/orders` },
-  { url: `${baseUrl}/inventory`, icon: Store, title: "Inventory" },
   { title: "Customers", icon: Users, url: `${baseUrl}/customers` },
   { title: "Settings", icon: Settings, url: `${baseUrl}/settings` },
 ];
