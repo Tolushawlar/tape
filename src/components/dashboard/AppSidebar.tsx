@@ -78,7 +78,8 @@ export function SidebarLink({
   title: string;
 }) {
   const pathname = usePathname();
-  const isActive = pathname === url;
+  const isActive =
+    pathname === baseUrl || (pathname.startsWith(url) && url !== baseUrl);
 
   return (
     <Link
