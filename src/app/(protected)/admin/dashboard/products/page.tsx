@@ -36,6 +36,7 @@ import { products } from "@/constants/products";
 import { productColumns } from "@/components/dashboard/products/Column";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DatePickerWithRange } from "@/components/dashboard/DatePicker";
+import { useRouter } from "next/navigation";
 
 export default function ProductsPage() {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -50,6 +51,8 @@ export default function ProductsPage() {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
+
+  const { push } = useRouter();
 
   const table = useReactTable({
     data: products,
@@ -134,7 +137,10 @@ export default function ProductsPage() {
           </TabsList>
         </Tabs>
 
-        <Button className="bg-blue-700">
+        <Button
+          className="bg-blue-700"
+          onClick={() => push("/admin/dashboard/products/add-product")}
+        >
           <Plus className="mr-2 h-4 w-4" /> Add Product
         </Button>
       </div>
