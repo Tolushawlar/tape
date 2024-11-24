@@ -1,15 +1,9 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ChevronDown, Pencil, Trash2 } from "lucide-react";
+import { Eye, Trash2 } from "lucide-react";
 import Image from "next/image";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { SortableHeader } from "../SortableHeader";
@@ -132,27 +126,23 @@ export const orderColumns: ColumnDef<Order>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const product = row.original;
+      const order = row.original;
 
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <ChevronDown className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => console.log("Edit", product.id)}>
-              <Pencil className="mr-2 h-4 w-4" />
-              Edit
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => console.log("Delete", product.id)}>
-              <Trash2 className="mr-2 h-4 w-4" />
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex items-center gap-2">
+          <Button
+            size={"icon"}
+            variant={"ghost"}
+            onClick={() =>
+              (window.location.href = `/admin/dashboard/orders/${order.id}`)
+            }
+          >
+            <Eye />
+          </Button>
+          <Button size={"icon"} variant={"ghost"}>
+            <Trash2 />
+          </Button>
+        </div>
       );
     },
   },
