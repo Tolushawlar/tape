@@ -1,8 +1,10 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { ArrowLeft, Copy, Mail, Phone, MapPin } from "lucide-react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import Image from "next/image";
+
 import { Button } from "@/components/ui/button";
 
 const orderDetails = {
@@ -289,9 +291,11 @@ export function OrderDetails() {
                   <tr key={product.sku}>
                     <td className="px-6 py-4">
                       <div className="flex items-center">
-                        <img
+                        <Image
                           src="/placeholder.svg"
                           alt={product.name}
+                          width={50}
+                          height={50}
                           className="w-10 h-10 rounded mr-3"
                         />
                         <div>
