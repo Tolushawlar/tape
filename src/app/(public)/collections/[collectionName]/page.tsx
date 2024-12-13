@@ -11,9 +11,9 @@ const CollectionPage = ({ params }: { params: { collectionName: string } }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const decodedCollectionName = decodeURIComponent(collectionName);
-  const capitalizedText =
-    decodedCollectionName.charAt(0).toUpperCase() +
-    decodedCollectionName.slice(1).toLowerCase();
+  // const capitalizedText =
+  //   decodedCollectionName.charAt(0).toUpperCase() +
+  //   decodedCollectionName.slice(1).toLowerCase();
 
   useEffect(() => {
     const fetchItems = async () => {

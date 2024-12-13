@@ -28,14 +28,14 @@ export default function Product({ productName }: ProductProps) {
   const [selectedSize, setSelectedSize] = useState("");
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const { push } = useRouter();
 
   const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchItems = async () => {
-      setIsLoading(true);
+      // setIsLoading(true);
       try {
         const response = await axios.get(
           `https://tapebackend.onrender.com/api/products`
@@ -44,7 +44,7 @@ export default function Product({ productName }: ProductProps) {
       } catch (error) {
         console.error("Error fetching items:", error);
       } finally {
-        setIsLoading(false);
+        // setIsLoading(false);
       }
     };
     fetchItems();
@@ -69,12 +69,12 @@ export default function Product({ productName }: ProductProps) {
 
   console.log(filteredItems);
 
-  const colors = [
-    { name: "Black", value: "black" },
-    { name: "White", value: "white" },
-    { name: "Red", value: "red" },
-    { name: "Blue", value: "blue" },
-  ];
+  // const colors = [
+  //   { name: "Black", value: "black" },
+  //   { name: "White", value: "white" },
+  //   { name: "Red", value: "red" },
+  //   { name: "Blue", value: "blue" },
+  // ];
 
   const product = itemsData.find((item) => item.name === productName);
 
