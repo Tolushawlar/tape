@@ -1,10 +1,54 @@
+"use client";
 import ImageCard from "@/components/ItemsCard";
-import { itemsData } from "@/constants";
+// import { itemsData } from "@/constants";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const CollectionPage = ({ params }: { params: { collectionName: string } }) => {
+  const [items, setItems] = useState([]);
+  const [filteredItems, setFilteredItems] = useState([]);
   const { collectionName } = params;
+  const [isLoading, setIsLoading] = useState(false);
 
   const decodedCollectionName = decodeURIComponent(collectionName);
+  const capitalizedText =
+    decodedCollectionName.charAt(0).toUpperCase() +
+    decodedCollectionName.slice(1).toLowerCase();
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axios.get(
+          `https://tapebackend.onrender.com/api/products`
+        );
+        setItems(response.data);
+      } catch (error) {
+        console.error("Error fetching items:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchItems();
+  }, [decodedCollectionName]); // Runs only when decodedCollectionName changes
+
+  // filter the data from the API
+  useEffect(() => {
+    const capitalizedText =
+      decodedCollectionName.charAt(0).toUpperCase() +
+      decodedCollectionName.slice(1).toLowerCase();
+
+    const filteredItems = items.filter((item) => {
+      const category = item.category || "";
+      const subcategory = item.subcategory || "";
+      return (
+        category.toLowerCase() === capitalizedText.toLowerCase() ||
+        subcategory.toLowerCase() === capitalizedText.toLowerCase()
+      );
+    });
+
+    setFilteredItems(filteredItems);
+  }, [items, decodedCollectionName]);
 
   return (
     <div>
@@ -21,31 +65,27 @@ const CollectionPage = ({ params }: { params: { collectionName: string } }) => {
       </div>
 
       {/* Render specific collection items here */}
-      <div className="flex flex-wrap justify-center gap-6 mt-10 mb-10">
-        {itemsData.map((item, index) => (
-          <ImageCard
-            key={index}
-            id={item.id}
-            name={item.name}
-            defaultImage={item.defaultImage}
-            hoverImage={item.hoverImage}
-            price={item.price}
-            itemName={item.name}
-          />
-        ))}
-
-        {itemsData.map((item, index) => (
-          <ImageCard
-            key={index}
-            id={item.id}
-            name={item.name}
-            defaultImage={item.defaultImage}
-            hoverImage={item.hoverImage}
-            price={item.price}
-            itemName={item.name}
-          />
-        ))}
-      </div>
+      {isLoading ? (
+        <p>Loading items...</p>
+      ) : items.length > 0 ? (
+        <div className="flex flex-wrap justify-center gap-6 mt-10 mb-10">
+          {filteredItems.map((item, index) => (
+            <ImageCard
+              key={index}
+              id={item._id}
+              name={item.name}
+              defaultImage={item.images.main}
+              hoverImage={item.images.others?.[0]}
+              price={item.price}
+              itemName={item.name}
+            />
+          ))}
+        </div>
+      ) : (
+        <p className="text-center text-gray-500 h-[90vh]">
+          No items found for this collection.
+        </p>
+      )}
     </div>
   );
 };

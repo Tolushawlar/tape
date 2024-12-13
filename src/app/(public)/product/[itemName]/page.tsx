@@ -1,11 +1,9 @@
 import CollectionSection from "@/components/CollectionSection";
 import Product from "@/components/Product";
-
 import { itemsData } from "@/constants";
 
 const SingleProductPage = ({ params }: { params: { itemName: string } }) => {
   const { itemName } = params;
-
   const decodedItemName = decodeURIComponent(itemName);
 
   return (

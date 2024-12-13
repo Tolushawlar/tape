@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { ShoppingCart } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -18,7 +18,7 @@ import FiveColumnSection from "./FiveColumnSection";
 import { itemsData } from "@/constants";
 import { useRouter } from "next/navigation";
 import { useCartStore } from "@/lib/store/cart-store";
-
+import axios from "axios";
 interface ProductProps {
   productName: string;
 }
@@ -26,10 +26,48 @@ interface ProductProps {
 export default function Product({ productName }: ProductProps) {
   const [selectedColor, setSelectedColor] = useState("white");
   const [selectedSize, setSelectedSize] = useState("");
-
+  const [items, setItems] = useState([]);
+  const [filteredItems, setFilteredItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const { push } = useRouter();
 
   const { addToCart } = useCart();
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axios.get(
+          `https://tapebackend.onrender.com/api/products`
+        );
+        setItems(response.data);
+      } catch (error) {
+        console.error("Error fetching items:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchItems();
+  }, [productName]); // Runs only when decodedCollectionName changes
+
+  // filter the data from the API
+  useEffect(() => {
+    const capitalizedText =
+      productName.charAt(0).toUpperCase() + productName.slice(1).toLowerCase();
+
+    const filteredItems = items.filter((item) => {
+      const itemName = item.name || "";
+      // const subcategory = item.subcategory || "";
+      return (
+        itemName.toLowerCase() === capitalizedText.toLowerCase()
+        // subcategory.toLowerCase() === capitalizedText.toLowerCase()
+      );
+    });
+
+    setFilteredItems(filteredItems);
+  }, [items, productName]);
+
+  console.log(filteredItems);
 
   const colors = [
     { name: "Black", value: "black" },
@@ -67,6 +105,9 @@ export default function Product({ productName }: ProductProps) {
     openCartSheet();
   };
 
+  const firstMenItem = filteredItems[0];
+  const mainImageUrl = firstMenItem?.images?.main;
+
   return (
     <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8 w-full">
       <div className="w-full">
@@ -75,9 +116,7 @@ export default function Product({ productName }: ProductProps) {
             <Card>
               <CardContent className="p-6">
                 <Image
-                  src={`${
-                    product?.defaultImage || defaultImage
-                  }?height=600&width=600`}
+                  src={`${mainImageUrl || defaultImage}?height=600&width=600`}
                   width={200}
                   height={200}
                   alt={`${productName}-image"`}
@@ -88,24 +127,28 @@ export default function Product({ productName }: ProductProps) {
           </div>
 
           <div className="md:w-1/2">
-            <h1 className="text-3xl font-bold mb-4">{productName}</h1>
-            <p className="text-4xl font-bold mb-6">£{product?.price}</p>
+            <h1 className="text-3xl font-bold mb-4">
+              {filteredItems[0]?.name}
+            </h1>
+            <p className="text-4xl font-bold mb-6">
+              £{filteredItems[0]?.price}
+            </p>
 
             <div className="mb-6">
               <h2 className="text-lg font-semibold mb-2">Colors</h2>
               <div className="flex space-x-2">
-                {colors.map((color) => (
-                  <button
-                    key={color.value}
-                    className={`w-8 h-8 rounded-full border-2 ${
-                      selectedColor === color.value
-                        ? "border-blue-500"
-                        : "border-gray-300"
-                    }`}
-                    style={{ backgroundColor: color.value }}
-                    onClick={() => setSelectedColor(color.value)}
-                  />
-                ))}
+                {/* {filteredItems[0]?.color.map((color) => ( */}
+                <button
+                  key={firstMenItem?.color}
+                  className={`w-8 h-8 rounded-full border-2 ${
+                    selectedColor === firstMenItem?.color
+                      ? "border-blue-500"
+                      : "border-gray-300"
+                  }`}
+                  style={{ backgroundColor: firstMenItem?.color }}
+                  onClick={() => setSelectedColor(firstMenItem?.color)}
+                />
+                {/* ))} */}
               </div>
             </div>
 
@@ -116,11 +159,12 @@ export default function Product({ productName }: ProductProps) {
                   <SelectValue placeholder="Select a size" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="xs">XS</SelectItem>
+                  <SelectItem value={firstMenItem?.size}>{firstMenItem?.size}</SelectItem>
+                  {/* <SelectItem value="xs">XS</SelectItem>
                   <SelectItem value="s">S</SelectItem>
                   <SelectItem value="m">M</SelectItem>
                   <SelectItem value="l">L</SelectItem>
-                  <SelectItem value="xl">XL</SelectItem>
+                  <SelectItem value="xl">XL</SelectItem> */}
                 </SelectContent>
               </Select>
             </div>
