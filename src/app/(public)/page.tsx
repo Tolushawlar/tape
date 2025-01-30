@@ -7,6 +7,11 @@ import { itemsData } from "@/constants";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
+interface Item {
+  category?: string; // Make 'category' optional
+  // ... other properties of your items (name, images, price, etc.)
+}
+
 const Homepage = () => {
   const [items, setItems] = useState([]);
   // const [filteredItems, setFilteredItems] = useState([]);

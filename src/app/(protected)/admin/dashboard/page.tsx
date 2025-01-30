@@ -187,14 +187,14 @@ export default function Component() {
       animate={{ opacity: 1, y: 0 }}
       className="p-4 md:p-8"
     >
-      <div className="mb-8">
+      {/* <div className="mb-8">
         <h2 className="text-xl md:text-2xl font-bold">
           WELCOME BACK, ADESHILE
         </h2>
         <p className="text-gray-500">
           welcome back jay
         </p>
-      </div>
+      </div> */}
 
       {/* Stats Grid */}
       <motion.div
@@ -368,7 +368,7 @@ export default function Component() {
               </DropdownMenu>
             </div>
             <p className="text-sm text-gray-500 mb-6">
-              Top Product in This Month
+              Top Product in This New Month
             </p>
             <div className="space-y-6">
               {topProducts.map((product, index) => (

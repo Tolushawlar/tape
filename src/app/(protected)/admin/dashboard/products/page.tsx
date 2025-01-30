@@ -37,6 +37,7 @@ import { productColumns } from "@/components/dashboard/products/Column";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DatePickerWithRange } from "@/components/dashboard/DatePicker";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 export default function ProductsPage() {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -51,6 +52,7 @@ export default function ProductsPage() {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
+  const [products, setProducts] = useState([]);
 
   const { push } = useRouter();
 
@@ -114,6 +116,23 @@ export default function ProductsPage() {
     return Array.from(new Set(products.map((product) => product.category)));
   }, []);
 
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get(
+          "https://tapebackend.onrender.com/api/products"
+        );
+        setProducts(response.data);
+        // console.log(response.data)
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  console.log(products);
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -131,9 +150,9 @@ export default function ProductsPage() {
         <Tabs value={statusFilter} onValueChange={setStatusFilter}>
           <TabsList>
             <TabsTrigger value="all">All Products</TabsTrigger>
-            <TabsTrigger value="Published">Published</TabsTrigger>
+            {/* <TabsTrigger value="Published">Published</TabsTrigger>
             <TabsTrigger value="Low Stock">Low Stock</TabsTrigger>
-            <TabsTrigger value="Draft">Draft</TabsTrigger>
+            <TabsTrigger value="Draft">Draft</TabsTrigger> */}
           </TabsList>
         </Tabs>
 
@@ -145,7 +164,7 @@ export default function ProductsPage() {
         </Button>
       </div>
 
-      <div>
+      {/* <div>
         <Button
           variant="outline"
           size="sm"
@@ -154,7 +173,7 @@ export default function ProductsPage() {
         >
           Reset All Filters
         </Button>
-      </div>
+      </div> */}
 
       <div className="space-y-4">
         <div className="relative flex-grow">
@@ -169,7 +188,7 @@ export default function ProductsPage() {
           />
         </div>
 
-        <div className="flex items-center justify-end space-x-2">
+        {/* <div className="flex items-center justify-end space-x-2">
           <DatePickerWithRange
             date={dateRange}
             setDate={setDateRange}
@@ -211,7 +230,7 @@ export default function ProductsPage() {
               </div>
             </PopoverContent>
           </Popover>
-        </div>
+        </div> */}
 
         <div className="rounded-md border">
           <Table>
@@ -261,10 +280,33 @@ export default function ProductsPage() {
                 </TableRow>
               )}
             </TableBody>
+            {/* <TableBody>
+              {products.length > 0 ? (
+                products.map((product) => (
+                  <TableRow key={product.id}>
+                    {" "}
+                    {productColumns.map((column) => (
+                      <TableCell key={column.id}>
+                        {flexRender(column.cell, product[column.dataField])}{" "}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={productColumns.length}
+                    className="h-24 text-center"
+                  >
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody> */}
           </Table>
         </div>
 
-        <div className="flex items-center justify-between space-x-2 py-4">
+        {/* <div className="flex items-center justify-between space-x-2 py-4">
           <div className="flex-1 text-sm text-muted-foreground">
             {table.getFilteredSelectedRowModel().rows.length} of{" "}
             {table.getFilteredRowModel().rows.length} row(s) selected.
@@ -287,7 +329,7 @@ export default function ProductsPage() {
               Next
             </Button>
           </div>
-        </div>
+        </div> */}
       </div>
     </motion.div>
   );

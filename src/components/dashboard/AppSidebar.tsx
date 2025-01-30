@@ -3,9 +3,9 @@
 import {
   LayoutDashboard,
   Tag,
-  ShoppingCart,
-  Users,
-  Settings,
+  // ShoppingCart,
+  // Users,
+  // Settings,
   Package,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -39,9 +39,9 @@ const menuItems = [
     active: true,
   },
   { title: "Categories", icon: Tag, url: `${baseUrl}/product-categories` },
-  { title: "Orders", icon: ShoppingCart, url: `${baseUrl}/orders` },
-  { title: "Customers", icon: Users, url: `${baseUrl}/customers` },
-  { title: "Settings", icon: Settings, url: `${baseUrl}/settings` },
+  // { title: "Orders", icon: ShoppingCart, url: `${baseUrl}/orders` },
+  // { title: "Customers", icon: Users, url: `${baseUrl}/customers` },
+  // { title: "Settings", icon: Settings, url: `${baseUrl}/settings` },
 ];
 
 export function AppSidebar() {

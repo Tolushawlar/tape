@@ -7,6 +7,11 @@ const nextConfig = {
         hostname: "res.cloudinary.com",
         pathname: "**",
       },
+      {
+        protocol: "https",
+        hostname: "holushawlar.sirv.com",
+        pathname: "**",
+      },
     ],
   },
 };
