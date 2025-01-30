@@ -39,6 +39,16 @@ import { DatePickerWithRange } from "@/components/dashboard/DatePicker";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
+
+interface Product {
+  id: string;
+  name: string;
+  category: string;
+  status: string;
+  dateAdded: string;
+  // Add other properties that exist in the product object
+}
+
 export default function ProductsPage() {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -52,7 +62,7 @@ export default function ProductsPage() {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<Product[]>([]);
 
   const { push } = useRouter();
 
@@ -116,21 +126,47 @@ export default function ProductsPage() {
     return Array.from(new Set(products.map((product) => product.category)));
   }, []);
 
+  // useEffect(() => {
+  //   const fetchProducts = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         "https://tapebackend.onrender.com/api/products"
+  //       );
+  //       setProducts(response.data);
+  //       // console.log(response.data)
+  //     } catch (error) {
+  //       console.error("Error fetching products:", error);
+  //     }
+  //   };
+
+  //   fetchProducts();
+  // }, []);
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(
-          "https://tapebackend.onrender.com/api/products"
-        );
-        setProducts(response.data);
-        // console.log(response.data)
+        const response = await axios.get("https://tapebackend.onrender.com/api/products");
+        
+        // Validate and ensure data is an array
+        if (Array.isArray(response.data)) {
+          setProducts(response.data.map(item => ({
+            id: item.id,
+            name: item.name,
+            category: item.category || "Unknown", // Handle missing category
+            status: item.status || "Unavailable",
+            dateAdded: item.dateAdded || new Date().toISOString(),
+          })));
+        } else {
+          console.error("Invalid product data format:", response.data);
+        }
       } catch (error) {
         console.error("Error fetching products:", error);
       }
     };
-
+  
     fetchProducts();
   }, []);
+  
 
   console.log(products);
   return (
