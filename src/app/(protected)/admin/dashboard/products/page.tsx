@@ -45,7 +45,7 @@ export interface Product {
   category: string;
   status: string;
   dateAdded: string;
-  additionalProducts: string;
+  // additionalProducts: string;
   // Add other properties that exist in the product object
 }
 
