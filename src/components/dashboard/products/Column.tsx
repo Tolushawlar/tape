@@ -42,14 +42,14 @@ export const productColumns: ColumnDef<Product>[] = [
           height={40}
           className="w-8 h-8 mr-2 rounded"
         />
-        <div>
+        {/* <div>
           <div className="font-medium">{row.getValue("name")}</div>
           {row.original.additionalProducts && (
             <div className="text-sm text-muted-foreground">
               +{row.original.additionalProducts} other products
             </div>
           )}
-        </div>
+        </div> */}
       </div>
     ),
   },
