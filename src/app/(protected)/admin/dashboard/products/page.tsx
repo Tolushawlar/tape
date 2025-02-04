@@ -39,13 +39,13 @@ import { DatePickerWithRange } from "@/components/dashboard/DatePicker";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
-
-interface Product {
+export interface Product {
   id: string;
   name: string;
   category: string;
   status: string;
   dateAdded: string;
+  additionalProducts: string;
   // Add other properties that exist in the product object
 }
 
@@ -145,17 +145,21 @@ export default function ProductsPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("https://tapebackend.onrender.com/api/products");
-        
+        const response = await axios.get(
+          "https://tapebackend.onrender.com/api/products"
+        );
+
         // Validate and ensure data is an array
         if (Array.isArray(response.data)) {
-          setProducts(response.data.map(item => ({
-            id: item.id,
-            name: item.name,
-            category: item.category || "Unknown", // Handle missing category
-            status: item.status || "Unavailable",
-            dateAdded: item.dateAdded || new Date().toISOString(),
-          })));
+          setProducts(
+            response.data.map((item) => ({
+              id: item.id,
+              name: item.name,
+              category: item.category || "Unknown", // Handle missing category
+              status: item.status || "Unavailable",
+              dateAdded: item.dateAdded || new Date().toISOString(),
+            }))
+          );
         } else {
           console.error("Invalid product data format:", response.data);
         }
@@ -163,10 +167,9 @@ export default function ProductsPage() {
         console.error("Error fetching products:", error);
       }
     };
-  
+
     fetchProducts();
   }, []);
-  
 
   console.log(products);
   return (
