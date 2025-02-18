@@ -5,15 +5,15 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 interface Item {
-  category?: string;
-  subcategory?: string;
-  _id?: string; // Include _id for potential future use
-  name?: string;
-  images?: {
-    main?: string;
-    others?: string[];
+  category: string;
+  subcategory: string;
+  _id: string; // Include _id for potential future use
+  name: string;
+  images: {
+    main: string;
+    others: string[];
   };
-  price?: number;
+  price: string;
 }
 
 const CollectionPage = ({ params }: { params: { collectionName: string } }) => {
@@ -51,14 +51,14 @@ const CollectionPage = ({ params }: { params: { collectionName: string } }) => {
       decodedCollectionName.charAt(0).toUpperCase() +
       decodedCollectionName.slice(1).toLowerCase();
 
-      const filteredItems = items.filter((item: Item) => {
-        const category = item.category || "";
-        const subcategory = item.subcategory || "";
-        return (
-          category.toLowerCase() === capitalizedText.toLowerCase() ||
-          subcategory.toLowerCase() === capitalizedText.toLowerCase()
-        );
-      });      
+    const filteredItems = items.filter((item: Item) => {
+      const category = item.category || "";
+      const subcategory = item.subcategory || "";
+      return (
+        category.toLowerCase() === capitalizedText.toLowerCase() ||
+        subcategory.toLowerCase() === capitalizedText.toLowerCase()
+      );
+    });
 
     setItems2(filteredItems);
   }, [items, decodedCollectionName]);
@@ -82,7 +82,7 @@ const CollectionPage = ({ params }: { params: { collectionName: string } }) => {
         <p>Loading items...</p>
       ) : items.length > 0 ? (
         <div className="flex flex-wrap justify-center gap-6 mt-10 mb-10">
-          {items2.map((item, index) => (
+          {items.map((item, index) => (
             <ImageCard
               key={index}
               id={item._id}
