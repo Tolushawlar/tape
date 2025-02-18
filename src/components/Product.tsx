@@ -23,11 +23,26 @@ interface ProductProps {
   productName: string;
 }
 
+interface Item {
+  category: string;
+  subcategory: string;
+  _id: string; // Include _id for potential future use
+  name: string;
+  images: {
+    main: string;
+    others: string[];
+  };
+  price: string;
+  size: string;
+  color: string;
+}
+
+
 export default function Product({ productName }: ProductProps) {
   const [selectedColor, setSelectedColor] = useState("white");
   const [selectedSize, setSelectedSize] = useState("");
-  const [items, setItems] = useState([]);
-  const [filteredItems, setFilteredItems] = useState([]);
+  const [items, setItems] = useState<Item[]>([]);
+  const [filteredItems, setFilteredItems] = useState<Item[]>([]);
   // const [isLoading, setIsLoading] = useState(false);
   const { push } = useRouter();
 
@@ -56,6 +71,7 @@ export default function Product({ productName }: ProductProps) {
       productName.charAt(0).toUpperCase() + productName.slice(1).toLowerCase();
 
     const filteredItems = items.filter((item) => {
+      console.log(item);
       const itemName = item.name || "";
       // const subcategory = item.subcategory || "";
       return (
@@ -106,6 +122,7 @@ export default function Product({ productName }: ProductProps) {
   };
 
   const firstMenItem = filteredItems[0];
+  console.log(firstMenItem);
   const mainImageUrl = firstMenItem?.images?.main;
 
   return (
