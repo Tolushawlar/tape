@@ -24,56 +24,171 @@ import { containerVariants, fadeIn, sectionVariants } from "@/utils";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import { ProductDto, productSchema } from "@/schema/product";
+import axios from "axios";
 
 const categories = ["Men", "Women", "Kids", "Accessories"];
 const discountTypes = ["Percentage", "Fixed Amount"];
 const taxClasses = ["Standard", "Reduced", "Zero"];
 const variationTypes = ["Size", "Color", "Material", "Style"];
+const availableSizes = ["XS", "S", "M", "L", "XL"];
+const availableColors = ["Red", "Blue", "Black", "White", "Green"];
 
 export function AddProductForm() {
-  const [images, setImages] = useState<File[]>([]);
+  const [images, setImages] = useState<{ main: File | null; others: File[] }>({
+    main: null,
+    others: [],
+  });
+
+  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedColor, setSelectedColor] = useState("");
+
+  // const {
+  //   register,
+  //   control,
+  //   handleSubmit,
+  //   watch,
+  //   setValue,
+  //   formState: { errors },
+  // } = useForm<ProductDto>({
+  //   resolver: zodResolver(productSchema),
+  //   defaultValues: {
+  //     name: "",
+  //     basePrice: 0,
+  //     color: "",
+  //     size: "",
+  //     category: "",
+  //     description: "",
+  //     productDetails: "",
+  //     sizeAndFit: "",
+  //     lookAfterMe: "",
+  //     aboutMe: "",
+  //     quantity: 0,
+  //   },
+  // });
+
+  // Function to handle size selection
+const handleSizeChange = (size: string) => {
+  setSelectedSize(size);
+  setValue("size", size); // Update the form field
+};
+
+// Function to handle color selection
+const handleColorChange = (color: string) => {
+  setSelectedColor(color);
+  setValue("color", color); // Update the form field
+};
+  
+
+  const onDrop = (acceptedFiles: File[]) => {
+    if (!acceptedFiles.length) return;
+
+    setImages((prevImages) => {
+      const newMain = prevImages.main || acceptedFiles[0]; // Set first image as main if not set
+      const newOthers = prevImages.main
+        ? [...prevImages.others, ...acceptedFiles]
+        : acceptedFiles.slice(1);
+
+      return { main: newMain, others: newOthers };
+    });
+  };
+
+  const handleSubmitForm = async (data: ProductDto) => {
+  console.log("clicked submit");
+     event?.preventDefault(); // Prevent default form submission
+     console.log("Form submission triggered with data:", data);
+    const formData = new FormData();
+
+    if (images.main) formData.append("main", images.main);
+    images.others.forEach((file, index) =>
+      formData.append(`others[${index}]`, file)
+    );
+
+    formData.append("name", data.name);
+    formData.append("basePrice", String(data.basePrice));
+    formData.append("color", data.color);
+    formData.append("size", data.size);
+    formData.append("category", data.category);
+    formData.append("description", data.description);
+    formData.append("productDetails", data.productDetails);
+    formData.append("sizeAndFit", data.sizeAndFit);
+    formData.append("lookAfterMe", data.lookAfterMe);
+    formData.append("aboutMe", data.aboutMe);
+    formData.append("quantity", String(data.quantity));
+
+    console.log("Submitting FormData:", Object.fromEntries(formData.entries()));
+
+    try {
+      const response = await fetch(
+        "https://tapebackend.onrender.com/api/products",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to upload product");
+
+      console.log("Product uploaded successfully");
+    } catch (error) {
+      console.error("Upload error:", error);
+    }
+  };
+
+  // const onSubmit = (data: ProductDto) => {
+  //   console.log("working");
+  //   console.log("Form data:", data);
+  // };
 
   const {
     register,
-    control,
     handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<ProductDto>({
-    resolver: zodResolver(productSchema),
-    defaultValues: {
-      name: "",
-      description: "",
-      category: "",
-      tags: [],
-      status: "Draft",
-      basePrice: 0,
-      sku: "",
-      quantity: 0,
-      variations: [],
-      isPhysical: true,
-      dimensions: {
-        weight: 0,
-        height: 0,
-        length: 0,
-        width: 0,
-      },
-    },
-  });
-
-  const { fields, append, remove } = useFieldArray({
-    name: "variations",
     control,
-  });
+    setValue,
+    formState: { errors },
+  } = useForm();
 
-  const onSubmit = (data: ProductDto) => {
-    console.log("Form data:", data);
-    // HandlaproductSchema form submission
+  const onSubmit = async (data: any) => {
+    try {
+      // Handle image uploads if necessary
+      const formData = new FormData();
+      formData.append("name", data.name);
+      formData.append("description", data.description);
+      formData.append("aboutMe", data.aboutMe);
+      formData.append("productDetails", data.productDetails);
+      formData.append("sizeAndFit", data.sizeAndFit);
+      formData.append("lookAfterMe", data.lookAfterMe);
+      formData.append("category", data.category);
+      formData.append("basePrice", data.basePrice);
+      formData.append("size", data.size);
+      formData.append("color", data.color);
+      formData.append("quantity", data.quantity);
+
+      // Add images if available
+      if (data.images?.main) {
+        formData.append("mainImage", data.images.main);
+      }
+      if (data.images?.others?.length) {
+        data.images.others.forEach((file: File, index: number) => {
+          formData.append(`otherImages[${index}]`, file);
+        });
+      }
+
+      // API request
+      const response = await axios.post("/api/products", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.status === 201) {
+        alert("Product created successfully!");
+      }
+    } catch (error) {
+      console.error("Error creating product:", error);
+      alert("Failed to create product. Please try again.");
+    }
   };
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    setImages((prev) => [...prev, ...acceptedFiles]);
-  }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -82,7 +197,7 @@ export function AddProductForm() {
     },
   });
 
-  const status = watch("status");
+  // const status = watch("status");
 
   return (
     <motion.section
@@ -91,25 +206,18 @@ export function AddProductForm() {
       animate="visible"
       variants={containerVariants}
     >
+      
+
+      <form id="prodcutForm" onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center space-x-4">
           <h1 className="text-2xl font-bold">Add Products</h1>
-          <div
-            className={`px-2 py-1 rounded-full text-xs font-semibold ${
-              status === "Published"
-                ? "bg-green-100 text-green-800"
-                : "bg-yellow-100 text-yellow-800"
-            }`}
-          >
-            {status}
-          </div>
+      
         </div>
-        <Button type="submit" onClick={handleSubmit(onSubmit)}>
+        <Button type="submit">
           Save Product
         </Button>
       </div>
-
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <motion.section
           className="bg-blue-50/50 p-6 rounded-lg"
           variants={sectionVariants}
@@ -131,10 +239,10 @@ export function AddProductForm() {
               )}
             </div>
             <div>
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">Product Description</Label>
               <Textarea
                 id="description"
-                placeholder="Type product description here..."
+                placeholder="This is the description of the product. It gives a brief overview of the product features and benefits...."
                 {...register("description")}
                 className="mt-1 min-h-[100px]"
               />
@@ -145,59 +253,66 @@ export function AddProductForm() {
               )}
             </div>
 
-            {/* <div>
-              <Label htmlFor="category">Category</Label>
-              <Controller
-                name="category"
-                control={control}
-                render={({ field }) => (
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categories.map((category) => (
-                        <SelectItem
-                          key={category}
-                          value={category.toLowerCase()}
-                        >
-                          {category}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )}
+            <div>
+              <Label htmlFor="aboutMe">About Product </Label>
+              <Textarea
+                id="aboutMe"
+                placeholder="Information about the brand or the product’s origin and background..."
+                {...register("aboutMe")}
+                className="mt-1 min-h-[100px]"
               />
-              {errors.category && (
+              {errors.aboutMe && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.category.message}
+                  {errors.aboutMe.message}
                 </p>
               )}
-            </div> */}
+            </div>
 
-            {/* <div>
-              <Label htmlFor="status">Status</Label>
-              <Controller
-                name="status"
-                control={control}
-                render={({ field }) => (
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Draft">Draft</SelectItem>
-                      <SelectItem value="Published">Published</SelectItem>
-                    </SelectContent>
-                  </Select>
-                )}
+            <div>
+              <Label htmlFor="productDetails">Product Details</Label>
+              <Textarea
+                id="productDetails"
+                placeholder="These are the details about the product including specifications and technical details..."
+                {...register("productDetails")}
+                className="mt-1 min-h-[100px]"
               />
-              {errors.status && (
+              {errors.productDetails && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.status.message}
+                  {errors.productDetails.message}
                 </p>
               )}
-            </div> */}
+            </div>
+
+            <div>
+              <Label htmlFor="sizeAndFit">Product Size Fit</Label>
+              <Textarea
+                id="sizeAndFit"
+                placeholder="Information on the sizing and fitting of the product to help you choose the right size..."
+                {...register("sizeAndFit")}
+                className="mt-1 min-h-[100px]"
+              />
+              {errors.sizeAndFit && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.sizeAndFit.message}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <Label htmlFor="lookAfterMe">Product LookAtMe</Label>
+              <Textarea
+                id="lookAfterMe"
+                placeholder="Care instructions for maintaining the quality and longevity of the product..."
+                {...register("lookAfterMe")}
+                className="mt-1 min-h-[100px]"
+              />
+              {errors.lookAfterMe && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.lookAfterMe.message}
+                </p>
+              )}
+            </div>
+
           </div>
         </motion.section>
 
@@ -228,65 +343,13 @@ export function AddProductForm() {
                   )}
                 />
 
-                <TagInputField
-                  id="tags"
-                  name="tags"
-                  control={control}
-                  label="Product Tags"
-                />
+             
               </div>
             </CardContent>
           </Card>
         </motion.section>
 
-        <motion.div {...fadeIn} transition={{ delay: 0.3 }}>
-          <Card className="bg-[#F8F9FC]">
-            <CardContent className="p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold">Status</h2>
-                <div
-                  className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                    status === "Published"
-                      ? "bg-green-100 text-green-800"
-                      : "bg-yellow-100 text-yellow-800"
-                  }`}
-                >
-                  {status}
-                </div>
-              </div>
-              <div>
-                <Label
-                  htmlFor="status"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Product Status
-                </Label>
-                <Controller
-                  name="status"
-                  control={control}
-                  render={({ field }) => (
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a status" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Draft">Draft</SelectItem>
-                        <SelectItem value="Published">Published</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  )}
-                />
-
-                {errors.status && (
-                  <p className="mt-1 text-sm text-red-600">
-                    {errors.status.message}
-                  </p>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-
+       
         <motion.section {...fadeIn} transition={{ delay: 0.5 }}>
           <Card className="bg-[#F8F9FC]">
             <CardContent className="p-6">
@@ -301,17 +364,40 @@ export function AddProductForm() {
                   <p className="text-sm text-gray-500">
                     {isDragActive
                       ? "Drop the files here..."
-                      : "Drag and drop image here, or click to Select files"}
+                      : "Drag and drop or click to select files"}
                   </p>
                 </div>
               </div>
-              {images.length > 0 && (
+
+              {/* Display Uploaded Images */}
+              {images.main && (
                 <div className="grid grid-cols-3 gap-4 mt-4">
-                  {images.map((file, index) => (
+                  {/* Main Image */}
+                  <div className="relative group">
+                    <Image
+                      src={URL.createObjectURL(images.main)}
+                      alt="Main Image"
+                      width={100}
+                      height={100}
+                      className="rounded-lg object-cover w-full aspect-square"
+                    />
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setImages((prev) => ({ ...prev, main: null }))
+                      }
+                      className="absolute top-2 right-2 p-1 rounded-full bg-white/80 opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <Trash2 className="h-4 w-4 text-red-500" />
+                    </button>
+                  </div>
+
+                  {/* Other Images */}
+                  {images.others.map((file, index) => (
                     <div key={index} className="relative group">
                       <Image
                         src={URL.createObjectURL(file)}
-                        alt={`Preview ${index}`}
+                        alt={`Other Image ${index}`}
                         width={100}
                         height={100}
                         className="rounded-lg object-cover w-full aspect-square"
@@ -319,7 +405,10 @@ export function AddProductForm() {
                       <button
                         type="button"
                         onClick={() =>
-                          setImages(images.filter((_, i) => i !== index))
+                          setImages((prev) => ({
+                            ...prev,
+                            others: prev.others.filter((_, i) => i !== index),
+                          }))
                         }
                         className="absolute top-2 right-2 p-1 rounded-full bg-white/80 opacity-0 group-hover:opacity-100 transition-opacity"
                       >
@@ -329,74 +418,49 @@ export function AddProductForm() {
                   ))}
                 </div>
               )}
+              <div>
+                {errors.images?.main && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {errors.images.main.message}
+                  </p>
+                )}
+
+                {errors.images?.others && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {errors.images.others.message}
+                  </p>
+                )}
+              </div>
             </CardContent>
           </Card>
         </motion.section>
 
         <motion.div {...fadeIn} transition={{ delay: 0.6 }}>
           <Card className="bg-[#F8F9FC]">
+            
             <CardContent className="p-6">
-              <h2 className="text-lg font-semibold mb-4">Pricing</h2>
+              <h2 className="text-lg font-semibold mb-4">
+                Product Specifications
+              </h2>
               <div className="grid gap-4 md:grid-cols-2">
+                {/* Size Dropdown */}
                 <div>
-                  <Label
-                    htmlFor="basePrice"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Base Price
-                  </Label>
-                  <Input
-                    {...register("basePrice")}
-                    id="basePrice"
-                    type="text"
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                  />
-                  {errors.basePrice && (
-                    <p className="mt-1 text-sm text-red-600">
-                      {errors.basePrice.message}
-                    </p>
-                  )}
-                </div>
-                <div className="grid gap-4 md:grid-cols-2">
                   <div>
                     <Label
-                      htmlFor="discountType"
+                      htmlFor="basePrice"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Discount Type
-                    </Label>
-                    <Select {...register("discountType")}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select discount type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {discountTypes.map((type) => (
-                          <SelectItem key={type} value={type.toLowerCase()}>
-                            {type}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label
-                      htmlFor="discountPercentage"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Discount Percentage (%)
+                      Base Price
                     </Label>
                     <Input
-                      type="number"
-                      placeholder="0"
-                      min="0"
-                      max="100"
-                      {...register("discountPercentage", {
-                        valueAsNumber: true,
-                      })}
+                      {...register("basePrice")}
+                      id="basePrice"
+                      type="text"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                     />
-                    {errors.discountPercentage && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {errors.discountPercentage.message}
+                    {errors.basePrice && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.basePrice.message}
                       </p>
                     )}
                   </div>
@@ -404,42 +468,63 @@ export function AddProductForm() {
 
                 <div>
                   <Label
-                    htmlFor="taxClass"
+                    htmlFor="productSize"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    Tax Class
+                    Product Size
                   </Label>
-                  <Select {...register("taxClass")}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select tax class" />
+                  <Select onValueChange={handleSizeChange} >
+                    <SelectTrigger className="w-full mt-1">
+                      <SelectValue placeholder="Select a size" />
                     </SelectTrigger>
                     <SelectContent>
-                      {taxClasses.map((taxClass) => (
+                      {availableSizes.map((size) => (
                         <SelectItem
-                          key={taxClass}
-                          value={taxClass.toLowerCase()}
+                          key={size}
+                          value={size}
+                          {...register("size")}
                         >
-                          {taxClass}
+                          {size}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
+                  {errors.size && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.size.message}
+                    </p>
+                  )}
                 </div>
 
+                {/* Color Dropdown */}
                 <div>
                   <Label
-                    htmlFor="vatAmount"
+                    htmlFor="productColor"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    VAT Amount (%)
+                    Product Color
                   </Label>
-                  <Input
-                    {...register("vatAmount")}
-                    id="vatAmount"
-                    type="number"
-                    placeholder="Type VAT amount..."
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                  />
+                  <Select onValueChange={handleColorChange}>
+                    <SelectTrigger className="w-full mt-1">
+                      <SelectValue placeholder="Select a color" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {availableColors.map((color) => (
+                        <SelectItem
+                          key={color}
+                          {...register("color")}
+                          value={color}
+                        >
+                          {color}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {errors.color && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.color.message}
+                    </p>
+                  )}
                 </div>
               </div>
             </CardContent>
@@ -452,27 +537,7 @@ export function AddProductForm() {
         >
           <h2 className="text-lg font-semibold mb-4">Inventory</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <Label htmlFor="sku">SKU</Label>
-              <Input
-                id="sku"
-                placeholder="Type product SKU here..."
-                {...register("sku")}
-              />
-              {errors.sku && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.sku.message}
-                </p>
-              )}
-            </div>
-            <div>
-              <Label htmlFor="barcode">Barcode</Label>
-              <Input
-                id="barcode"
-                placeholder="Product barcode..."
-                {...register("barcode")}
-              />
-            </div>
+       
             <div>
               <Label htmlFor="quantity">Quantity</Label>
               <Input
@@ -487,119 +552,6 @@ export function AddProductForm() {
                 </p>
               )}
             </div>
-          </div>
-        </motion.section>
-
-        <motion.section {...fadeIn} transition={{ delay: 0.8 }}>
-          <Card className="bg-[#F8F9FC]">
-            <CardContent className="p-6">
-              <h2 className="text-lg font-semibold mb-4">Variation</h2>
-              {fields.map((field, index) => (
-                <div key={field.id} className="grid gap-4 md:grid-cols-2 mb-4">
-                  <div className="space-y-2">
-                    <Label
-                      htmlFor={`variations.${index}.type`}
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Variation Type
-                    </Label>
-                    <Select {...register(`variations.${index}.type` as const)}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select variation" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {variationTypes.map((type) => (
-                          <SelectItem key={type} value={type.toLowerCase()}>
-                            {type}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="flex gap-2 items-center">
-                    <div className="flex-1">
-                      <Label
-                        htmlFor={`variations.${index}.value`}
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        Variation
-                      </Label>
-                      <Input
-                        {...register(`variations.${index}.value` as const)}
-                        id={`variations.${index}.value`}
-                        type="text"
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                      />
-                    </div>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="icon"
-                      className="mt-6"
-                      onClick={() => remove(index)}
-                    >
-                      <Minus className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              ))}
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="mt-2"
-                onClick={() => append({ type: "", value: "" })}
-              >
-                <Plus className="mr-2 h-4 w-4" />
-                Add Variant
-              </Button>
-            </CardContent>
-          </Card>
-        </motion.section>
-
-        <motion.section
-          className="bg-blue-50/50 p-6 rounded-lg"
-          variants={sectionVariants}
-        >
-          <h2 className="text-lg font-semibold mb-4">Shipping</h2>
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <Controller
-                name="isPhysical"
-                control={control}
-                render={({ field }) => (
-                  <Checkbox
-                    id="isPhysical"
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                )}
-              />
-              <Label htmlFor="isPhysical">This is a physical product</Label>
-            </div>
-
-            {watch("isPhysical") && (
-              <div className="grid gap-4 md:grid-cols-4">
-                {["weight", "height", "length", "width"].map((field) => (
-                  <div key={field}>
-                    <Label
-                      htmlFor={field}
-                      className="block text-sm font-medium text-gray-700 capitalize"
-                    >
-                      {field}
-                    </Label>
-                    <Input
-                      {...register(field as keyof ProductDto, {
-                        valueAsNumber: true,
-                      })}
-                      id={field}
-                      type="number"
-                      className="mt-1 "
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
         </motion.section>
       </form>
