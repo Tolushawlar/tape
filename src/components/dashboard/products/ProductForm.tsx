@@ -26,7 +26,7 @@ import Image from "next/image";
 import { ProductDto, productSchema } from "@/schema/product";
 import axios from "axios";
 
-const categories = ["Men", "Women", "Kids", "Accessories"];
+const categories = ["Men's Wear", "Women's Wear", "Kids Wear", "Accessories"];
 const discountTypes = ["Percentage", "Fixed Amount"];
 const taxClasses = ["Standard", "Reduced", "Zero"];
 const variationTypes = ["Size", "Color", "Material", "Style"];
@@ -42,42 +42,17 @@ export function AddProductForm() {
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
 
-  // const {
-  //   register,
-  //   control,
-  //   handleSubmit,
-  //   watch,
-  //   setValue,
-  //   formState: { errors },
-  // } = useForm<ProductDto>({
-  //   resolver: zodResolver(productSchema),
-  //   defaultValues: {
-  //     name: "",
-  //     basePrice: 0,
-  //     color: "",
-  //     size: "",
-  //     category: "",
-  //     description: "",
-  //     productDetails: "",
-  //     sizeAndFit: "",
-  //     lookAfterMe: "",
-  //     aboutMe: "",
-  //     quantity: 0,
-  //   },
-  // });
+  const handleSizeChange = (size: string) => {
+    setSelectedSize(size);
+    // setValue("size", size); // Update the form field
+  };
 
-  // Function to handle size selection
-const handleSizeChange = (size: string) => {
-  setSelectedSize(size);
-  setValue("size", size); // Update the form field
-};
+  // Function to handle color selection
+  const handleColorChange = (color: string) => {
+    setSelectedColor(color);
+    // setValue("color", color); // Update the form field
+  };
 
-// Function to handle color selection
-const handleColorChange = (color: string) => {
-  setSelectedColor(color);
-  setValue("color", color); // Update the form field
-};
-  
 
   const onDrop = (acceptedFiles: File[]) => {
     if (!acceptedFiles.length) return;
@@ -92,102 +67,79 @@ const handleColorChange = (color: string) => {
     });
   };
 
-  const handleSubmitForm = async (data: ProductDto) => {
-  console.log("clicked submit");
-     event?.preventDefault(); // Prevent default form submission
-     console.log("Form submission triggered with data:", data);
-    const formData = new FormData();
 
-    if (images.main) formData.append("main", images.main);
-    images.others.forEach((file, index) =>
-      formData.append(`others[${index}]`, file)
-    );
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   control,
+  //   setValue,
+  //   formState: { errors },
+  // } = useForm();
 
-    formData.append("name", data.name);
-    formData.append("basePrice", String(data.basePrice));
-    formData.append("color", data.color);
-    formData.append("size", data.size);
-    formData.append("category", data.category);
-    formData.append("description", data.description);
-    formData.append("productDetails", data.productDetails);
-    formData.append("sizeAndFit", data.sizeAndFit);
-    formData.append("lookAfterMe", data.lookAfterMe);
-    formData.append("aboutMe", data.aboutMe);
-    formData.append("quantity", String(data.quantity));
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // const onSubmit = async (data: any) => {
+  //   try {
+  //     console.log("Form data received:", data); // Debug what data is being received
 
-    console.log("Submitting FormData:", Object.fromEntries(formData.entries()));
+  //     // Validate required fields
+  //     if (!data.name || data.name.trim() === '') {
+  //       alert("Product name is required");
+  //       return;
+  //     }
+  //     const formData = new FormData();
+  //     formData.append("name", data.name);
+  //     formData.append("description", data.description);
+  //     formData.append("about", data.about);
+  //     formData.append("productDetails", data.productDetails);
+  //     formData.append("sizeFit", data.sizeFit);
+  //     formData.append("lookAtMe", data.lookAtMe);
+  //     formData.append("category", data.category);
+  //     formData.append("price", data.price);
+  //     formData.append("size", data.size);
+  //     formData.append("color", data.color);
+  //     formData.append("stock", data.stock);
 
-    try {
-      const response = await fetch(
-        "https://tapebackend.onrender.com/api/products",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
 
-      if (!response.ok) throw new Error("Failed to upload product");
+  //     // Add images using the images state variable
+  //     if (images.main) {
+  //       formData.append("images.main", images.main);
+  //     }
 
-      console.log("Product uploaded successfully");
-    } catch (error) {
-      console.error("Upload error:", error);
-    }
-  };
+  //     if (images.others && images.others.length > 0) {
+  //       images.others.forEach((file, index) => {
+  //         formData.append(`images.others[${index}]`, file);
+  //       });
+  //     }
 
-  // const onSubmit = (data: ProductDto) => {
-  //   console.log("working");
-  //   console.log("Form data:", data);
+
+  //     // Add images if available
+  //     // if (data.images.main) {
+  //     //   formData.append("images.main", data.images.main);
+  //     // }
+  //     // if (data.images.others?.length) {
+  //     //   data.images.others.forEach((file: File, index: number) => {
+  //     //     formData.append(`others[${index}]`, file);
+  //     //   });
+  //     // }
+
+  //     // API request
+  //     const response = await axios.post("/api/products",
+  //       formData, {
+  //       headers: {
+  //         "Content-Type": "multipart/form-data",
+  //       },
+  //     });
+
+  //     if (response.status === 201) {
+  //       console.log(formData);
+  //       alert("Product created successfully!");
+  //     }
+  //   } catch (error) {
+  //     // console.log(formData);
+  //     console.error("Error creating product:", error);
+  //     alert("Failed to create product. Please try again.");
+  //   }
   // };
-
-  const {
-    register,
-    handleSubmit,
-    control,
-    setValue,
-    formState: { errors },
-  } = useForm();
-
-  const onSubmit = async (data: any) => {
-    try {
-      // Handle image uploads if necessary
-      const formData = new FormData();
-      formData.append("name", data.name);
-      formData.append("description", data.description);
-      formData.append("aboutMe", data.aboutMe);
-      formData.append("productDetails", data.productDetails);
-      formData.append("sizeAndFit", data.sizeAndFit);
-      formData.append("lookAfterMe", data.lookAfterMe);
-      formData.append("category", data.category);
-      formData.append("basePrice", data.basePrice);
-      formData.append("size", data.size);
-      formData.append("color", data.color);
-      formData.append("quantity", data.quantity);
-
-      // Add images if available
-      if (data.images?.main) {
-        formData.append("mainImage", data.images.main);
-      }
-      if (data.images?.others?.length) {
-        data.images.others.forEach((file: File, index: number) => {
-          formData.append(`otherImages[${index}]`, file);
-        });
-      }
-
-      // API request
-      const response = await axios.post("/api/products", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      if (response.status === 201) {
-        alert("Product created successfully!");
-      }
-    } catch (error) {
-      console.error("Error creating product:", error);
-      alert("Failed to create product. Please try again.");
-    }
-  };
 
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -198,6 +150,50 @@ const handleColorChange = (color: string) => {
   });
 
   // const status = watch("status");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onSubmit = async (data: any) => {
+    try {
+      // Create the product data object with the expected format
+      const productData = {
+        name: data.name,
+        price: parseFloat(data.price), // Convert to number
+        color: data.color,
+        size: data.size,
+        category: data.category,
+        subcategory: "item", // Set subcategory to "item" as requested
+        description: data.description || "",
+        productDetails: data.productDetails || "",
+        sizeFit: data.sizeFit || "",
+        lookAtMe: data.lookAtMe || "",
+        about: data.about || "",
+        stock: parseInt(data.stock, 10), // Convert to integer
+        images: {
+          main: data.main, // Use the URL from the form field
+          others: data.other,
+        }
+      };
+      
+      console.log("Sending product data:", productData);
+      
+      // Send the request with application/json content type
+      const response = await axios.post(
+        "https://tapebackend.onrender.com/api/products",
+        productData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      
+      if (response.status === 201) {
+        alert("Product created successfully!");
+        // Reset form or redirect as needed
+      }
+    } catch (error) {
+      console.error("Error creating product:", error);      
+    }
+  };
 
   return (
     <motion.section
@@ -206,18 +202,18 @@ const handleColorChange = (color: string) => {
       animate="visible"
       variants={containerVariants}
     >
-      
 
-      <form id="prodcutForm" onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex items-center space-x-4">
-          <h1 className="text-2xl font-bold">Add Products</h1>
-      
+
+      <form id="prodcutForm" onSubmit={(onSubmit)} className="space-y-6">
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex items-center space-x-4">
+            <h1 className="text-2xl font-bold">Add Products</h1>
+
+          </div>
+          <Button type="submit">
+            Save Product
+          </Button>
         </div>
-        <Button type="submit">
-          Save Product
-        </Button>
-      </div>
         <motion.section
           className="bg-blue-50/50 p-6 rounded-lg"
           variants={sectionVariants}
@@ -229,43 +225,71 @@ const handleColorChange = (color: string) => {
               <Input
                 id="name"
                 placeholder="Type product name here..."
-                {...register("name")}
+                // {...register("name")}
                 className="mt-1"
               />
-              {errors.name && (
+              {/* {errors.name && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.name.message}
+                  {errors.name.message as React.ReactNode}
                 </p>
-              )}
+              )} */}
+            </div>
+            <div>
+              <Label htmlFor="name">Product Main Image</Label>
+              <Input
+                id="name"
+                placeholder="Type product main image link here..."
+                // {...register("main")}
+                className="mt-1"
+              />
+              {/* {errors.name && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.name.message as React.ReactNode}
+                </p>
+              )} */}
+            </div>
+              <div>
+              <Label htmlFor="other">Product Other Image</Label>
+              <Input
+                id="other"
+                placeholder="Type product other image link here..."
+                // {...register("other")}
+                className="mt-1"
+              />
+              {/* {errors.name && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.name.message as React.ReactNode}
+                </p>
+              )} */}
             </div>
             <div>
               <Label htmlFor="description">Product Description</Label>
               <Textarea
                 id="description"
                 placeholder="This is the description of the product. It gives a brief overview of the product features and benefits...."
-                {...register("description")}
+                // {...register("description")}
                 className="mt-1 min-h-[100px]"
               />
-              {errors.description && (
+              {/* {errors.description && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.description.message}
+                  {errors.description.message as React.ReactNode}
                 </p>
-              )}
+              )} */}
             </div>
 
             <div>
-              <Label htmlFor="aboutMe">About Product </Label>
+              <Label htmlFor="about">About Product </Label>
               <Textarea
-                id="aboutMe"
+                id="about"
                 placeholder="Information about the brand or the product’s origin and background..."
-                {...register("aboutMe")}
+                // {...register("about")}
                 className="mt-1 min-h-[100px]"
               />
-              {errors.aboutMe && (
+              {/* {errors.about && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.aboutMe.message}
+                  {errors.about.message as React.ReactNode}
                 </p>
-              )}
+              )} */}
             </div>
 
             <div>
@@ -273,44 +297,44 @@ const handleColorChange = (color: string) => {
               <Textarea
                 id="productDetails"
                 placeholder="These are the details about the product including specifications and technical details..."
-                {...register("productDetails")}
+                // {...register("productDetails")}
                 className="mt-1 min-h-[100px]"
               />
-              {errors.productDetails && (
+              {/* {errors.productDetails && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.productDetails.message}
+                  {errors.productDetails.message as React.ReactNode}
                 </p>
-              )}
+              )} */}
             </div>
 
             <div>
-              <Label htmlFor="sizeAndFit">Product Size Fit</Label>
+              <Label htmlFor="sizeFit">Product Size Fit</Label>
               <Textarea
-                id="sizeAndFit"
+                id="sizeFit"
                 placeholder="Information on the sizing and fitting of the product to help you choose the right size..."
-                {...register("sizeAndFit")}
+                // {...register("sizeFit")}
                 className="mt-1 min-h-[100px]"
               />
-              {errors.sizeAndFit && (
+              {/* {errors.sizeFit && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.sizeAndFit.message}
+                  {errors.sizeFit.message as React.ReactNode}
                 </p>
-              )}
+              )} */}
             </div>
 
             <div>
-              <Label htmlFor="lookAfterMe">Product LookAtMe</Label>
+              <Label htmlFor="lookAtMe">Product LookAtMe</Label>
               <Textarea
-                id="lookAfterMe"
+                id="lookAtMe"
                 placeholder="Care instructions for maintaining the quality and longevity of the product..."
-                {...register("lookAfterMe")}
+                // {...register("lookAtMe")}
                 className="mt-1 min-h-[100px]"
               />
-              {errors.lookAfterMe && (
+              {/* {errors.lookAtMe && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.lookAfterMe.message}
+                  {errors.lookAtMe.message as React.ReactNode}
                 </p>
-              )}
+              )} */}
             </div>
 
           </div>
@@ -323,7 +347,7 @@ const handleColorChange = (color: string) => {
               <div className="space-y-4">
                 <Controller
                   name="category"
-                  control={control}
+                  // control={control}
                   render={({ field }) => (
                     <Select onValueChange={field.onChange} value={field.value}>
                       <SelectTrigger>
@@ -343,13 +367,13 @@ const handleColorChange = (color: string) => {
                   )}
                 />
 
-             
+
               </div>
             </CardContent>
           </Card>
         </motion.section>
 
-       
+
         <motion.section {...fadeIn} transition={{ delay: 0.5 }}>
           <Card className="bg-[#F8F9FC]">
             <CardContent className="p-6">
@@ -418,26 +442,26 @@ const handleColorChange = (color: string) => {
                   ))}
                 </div>
               )}
-              <div>
+              {/* <div>
                 {errors.images?.main && (
                   <p className="mt-1 text-sm text-red-600">
-                    {errors.images.main.message}
+                    {errors.images.main.message  as React.ReactNode}
                   </p>
                 )}
 
                 {errors.images?.others && (
                   <p className="mt-1 text-sm text-red-600">
-                    {errors.images.others.message}
+                    {errors.images.others.message  as React.ReactNode}
                   </p>
                 )}
-              </div>
+              </div> */}
             </CardContent>
           </Card>
         </motion.section>
 
         <motion.div {...fadeIn} transition={{ delay: 0.6 }}>
           <Card className="bg-[#F8F9FC]">
-            
+
             <CardContent className="p-6">
               <h2 className="text-lg font-semibold mb-4">
                 Product Specifications
@@ -447,28 +471,28 @@ const handleColorChange = (color: string) => {
                 <div>
                   <div>
                     <Label
-                      htmlFor="basePrice"
+                      htmlFor="price"
                       className="block text-sm font-medium text-gray-700"
                     >
                       Base Price
                     </Label>
                     <Input
-                      {...register("basePrice")}
-                      id="basePrice"
+                  //     {...register("price")}
+                      id="price"
                       type="text"
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                     />
-                    {errors.basePrice && (
+                    {/* {errors.price && (
                       <p className="mt-1 text-sm text-red-600">
-                        {errors.basePrice.message}
+                        {errors.price.message as React.ReactNode}
                       </p>
-                    )}
+                    )} */}
                   </div>
                 </div>
 
                 <div>
                   <Label
-                    htmlFor="productSize"
+                    htmlFor="size"
                     className="block text-sm font-medium text-gray-700"
                   >
                     Product Size
@@ -482,18 +506,18 @@ const handleColorChange = (color: string) => {
                         <SelectItem
                           key={size}
                           value={size}
-                          {...register("size")}
+                          // {...register("size")}
                         >
                           {size}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
-                  {errors.size && (
+                  {/* {errors.size && (
                     <p className="mt-1 text-sm text-red-600">
-                      {errors.size.message}
+                      {errors.size.message as React.ReactNode}
                     </p>
-                  )}
+                  )} */}
                 </div>
 
                 {/* Color Dropdown */}
@@ -512,7 +536,7 @@ const handleColorChange = (color: string) => {
                       {availableColors.map((color) => (
                         <SelectItem
                           key={color}
-                          {...register("color")}
+                          // {...register("color")}
                           value={color}
                         >
                           {color}
@@ -520,11 +544,11 @@ const handleColorChange = (color: string) => {
                       ))}
                     </SelectContent>
                   </Select>
-                  {errors.color && (
+                  {/* {errors.color && (
                     <p className="mt-1 text-sm text-red-600">
-                      {errors.color.message}
+                      {errors.color.message as React.ReactNode}
                     </p>
-                  )}
+                  )} */}
                 </div>
               </div>
             </CardContent>
@@ -537,20 +561,20 @@ const handleColorChange = (color: string) => {
         >
           <h2 className="text-lg font-semibold mb-4">Inventory</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-       
+
             <div>
-              <Label htmlFor="quantity">Quantity</Label>
+              <Label htmlFor="stock">Quantity</Label>
               <Input
-                id="quantity"
+                id="stock"
                 type="number"
                 min="0"
-                {...register("quantity", { valueAsNumber: true })}
+                // {...register("stock", { valueAsNumber: true })}
               />
-              {errors.quantity && (
+              {/* {errors.stock && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.quantity.message}
+                  {errors.stock.message as React.ReactNode}
                 </p>
-              )}
+              )} */}
             </div>
           </div>
         </motion.section>

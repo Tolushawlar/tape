@@ -1,0 +1,6 @@
+{
+    "workbench.editor.languageDetection": true,
+    "json.format.enable": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "notebook.defaultFormatter": "esbenp.prettier-vscode"
+}

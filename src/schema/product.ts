@@ -4,14 +4,14 @@ export const productSchema = z.object({
   name: z.string().min(1, "Product name is required"),
   description: z.string().min(1, "Description is required"),
   category: z.string().min(1, "Category is required"),
-  basePrice: z.coerce.number().min(0, "Price must be positive"),
+  price: z.coerce.number().min(0, "Price must be positive"),
   color: z.string().min(1, "Color is required"),
   size: z.string().min(1, "Size is required"),
   productDetails: z.string().min(1, "Content is requried"),
-  sizeAndFit: z.string().min(1, "Content is requried"),
-  lookAfterMe: z.string().min(1, "Content is requried"),
-  aboutMe: z.string().min(1, "Content is requried"),
-  quantity: z.number().min(0, "Quantity must be positive"),
+  sizeFit: z.string().min(1, "Content is requried"),
+  lookAtMe: z.string().min(1, "Content is requried"),
+  about: z.string().min(1, "Content is requried"),
+  stock: z.number().min(0, "Quantity must be positive"),
 
   // ✅ Images validation with required fields & error messages
   images: z.object({
