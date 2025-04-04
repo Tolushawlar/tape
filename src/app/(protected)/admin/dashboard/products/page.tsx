@@ -45,6 +45,8 @@ export interface Product {
   category: string;
   status: string;
   dateAdded: string;
+  price: string;
+  stock: number;
   // additionalProducts: string;
   // Add other properties that exist in the product object
 }
@@ -77,6 +79,7 @@ export default function ProductsPage() {
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    enableRowSelection: false,
     state: {
       sorting,
       columnFilters,
@@ -146,8 +149,10 @@ export default function ProductsPage() {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          "https://tapebackend.onrender.com/api/products"
+          // "https://tapebackend.onrender.com/api/products"
+          "https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product",
         );
+        console.log(response.data)
 
         // Validate and ensure data is an array
         if (Array.isArray(response.data)) {
@@ -157,7 +162,9 @@ export default function ProductsPage() {
               name: item.name,
               category: item.category || "Unknown", // Handle missing category
               status: item.status || "Unavailable",
-              dateAdded: item.dateAdded || new Date().toISOString(),
+              dateAdded: item.created_at || new Date().toISOString(),
+              amount: item.price,
+              stock: item.stock,
             }))
           );
         } else {
@@ -292,6 +299,7 @@ export default function ProductsPage() {
               ))}
             </TableHeader>
             <TableBody>
+               {/* using the react table, the items is been passed and looped through in this section */}
               {table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => (
                   <TableRow
@@ -345,7 +353,7 @@ export default function ProductsPage() {
           </Table>
         </div>
 
-        {/* <div className="flex items-center justify-between space-x-2 py-4">
+        <div className="flex items-center justify-between space-x-2 py-4">
           <div className="flex-1 text-sm text-muted-foreground">
             {table.getFilteredSelectedRowModel().rows.length} of{" "}
             {table.getFilteredRowModel().rows.length} row(s) selected.
@@ -368,7 +376,7 @@ export default function ProductsPage() {
               Next
             </Button>
           </div>
-        </div> */}
+        </div>
       </div>
     </motion.div>
   );

@@ -11,7 +11,7 @@ export function Header() {
         <SidebarTrigger />
       </div>
       <div className="flex items-center space-x-4">
-        <Button variant="ghost" size="icon">
+        {/* <Button variant="ghost" size="icon">
           <Bell className="h-5 w-5" />
         </Button>
 
@@ -23,8 +23,8 @@ export function Header() {
 
           <Button variant="ghost" size="icon" className="hidden md:inline-flex">
             <ChevronDown className="w-5 h-5" />
-          </Button>
-        </div>
+          </Button> 
+        </div>*/}
       </div>
     </header>
   );

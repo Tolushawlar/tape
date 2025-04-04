@@ -1,83 +1,49 @@
-import { connectToDatabase } from "@/lib/mongodb";
-import Product, { IProduct } from "@/models/Product";
-import { NextResponse } from "next/server";
-import { Types } from "mongoose";
+// app/api/products/route.ts
+import { NextResponse } from 'next/server';
+import type { Product } from '../../../types/product';
 
-export async function GET(): Promise<
-  NextResponse<IProduct[] | { error: string }>
-> {
+export async function GET() {
   try {
-    await connectToDatabase();
-    const products = await Product.find().populate("category");
-    return NextResponse.json(products);
+    // Replace this with your actual data fetching logic
+    const products: Product[] = [
+      { id: '1', name: 'T-Shirt', price: 29.99 },
+      { id: '2', name: 'Hoodie', price: 49.99 },
+    ];
+
+    return NextResponse.json(products, { status: 200 });
   } catch (error) {
     return NextResponse.json(
-      {
-        error:
-          error instanceof Error ? error.message : "Unknown error occurred",
-      },
+      { error: 'Failed to fetch products' },
       { status: 500 }
     );
   }
 }
 
-type ProductCreateRequest = {
-  name: string;
-  description: string;
-  price: number;
-  stock: number;
-  category: string; // Category ID
-};
-
-export async function POST(
-  request: Request
-): Promise<NextResponse<IProduct | { error: string }>> {
+export async function POST(request: Request) {
   try {
-    await connectToDatabase();
-    const body: ProductCreateRequest = await request.json();
-
-    // Validation
-    if (!body.name) {
-      return NextResponse.json({ error: "Name is required" }, { status: 400 });
-    }
-
-    if (!body.category || !Types.ObjectId.isValid(body.category)) {
+    const body = await request.json();
+    
+    // Validate the request body
+    if (!body.name || !body.price) {
       return NextResponse.json(
-        { error: "Valid category ID is required" },
+        { error: 'Name and price are required' },
         { status: 400 }
       );
     }
 
-    if (typeof body.price !== "number" || body.price <= 0) {
-      return NextResponse.json(
-        { error: "Valid price is required" },
-        { status: 400 }
-      );
-    }
-
-    if (typeof body.stock !== "number" || body.stock < 0) {
-      return NextResponse.json(
-        { error: "Valid stock quantity is required" },
-        { status: 400 }
-      );
-    }
-
-    const product = await Product.create({
+    // Create new product
+    // Replace this with your actual database logic
+    const newProduct: Product = {
+      id: Date.now().toString(), // Generate a unique ID
       name: body.name,
-      description: body.description,
       price: body.price,
-      stock: body.stock,
-      category: body.category,
-    });
+    };
 
-    return NextResponse.json(product, { status: 201 });
+    return NextResponse.json(newProduct, { status: 201 });
   } catch (error) {
     return NextResponse.json(
-      {
-        error:
-          error instanceof Error ? error.message : "Unknown error occurred",
-      },
-      { status: 400 }
+      { error: 'Failed to create product' },
+      { status: 500 }
     );
   }
 }

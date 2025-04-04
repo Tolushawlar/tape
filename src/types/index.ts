@@ -37,9 +37,12 @@ export interface IOrder extends Document {
 export type Order = {
   id: number;
   product: string;
+  first_name: string;
+  last_name: string;
+  created_at: string;
   additionalProducts?: number;
   customer: string;
   email: string;
-  total: string;
+  Total: string;
   status: "Processing" | "Shipped" | "Delivered";
 };

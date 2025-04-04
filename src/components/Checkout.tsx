@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircle2 } from "lucide-react";
 import { useForm, FormProvider } from "react-hook-form";
+import { useRouter } from 'next/navigation'; // Import useRouter
 
 import OrderSummary from "./OrderSummary";
 import { Button } from "@/components/ui/button";
@@ -43,8 +44,60 @@ export default function CheckoutForm() {
     form.setValue("billingAddress", undefined);
   };
 
+  const router = useRouter(); // Initialize router
+
   async function onSubmit(values: CheckoutDto) {
-    console.log(values);
+    try {
+      const delivery = values.deliveryAddress;
+      const billing = values.billingAddressType === 'different' ? values.billingAddress : delivery;
+
+      const orderData = {
+        created_at: Date.now(),
+        quantity: 1, // You might need to adjust this
+        purchased_at: Date.now(),
+        product_id: 1, // You might need to adjust this
+        user_id: 0, // You might need to adjust this
+        Total: 79, // You might need to adjust this
+        first_name: delivery.firstName,
+        last_name: delivery.lastName,
+        email: delivery.email,
+        phone_number: delivery.phone,
+        address: delivery.address,
+        country: delivery.country,
+        city: delivery.city,
+        state: delivery.state,
+        postal_code: delivery.postalCode,
+        billing_address: billing?.address,
+        billing_country: billing?.country,
+        billing_first_name: billing?.firstName,
+        billing_last_name: billing?.lastName,
+        billing_email: billing?.email,
+        billing_phone_number: billing?.phone,
+        billing_apartment: billing?.apartment,
+        billing_state: billing?.state,
+        billing_city: billing?.city,
+        billing_postal_code: billing?.postalCode,
+      };
+
+      const response = await fetch('https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      if (response.ok) {
+        // Order placed successfully
+        console.log('Order placed successfully!');
+        router.push('/success'); // Redirect to success page
+      } else {
+        // Handle error
+        console.error('Failed to place order:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error placing order:', error);
+    }
   }
 
   return (

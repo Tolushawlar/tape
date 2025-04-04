@@ -9,27 +9,28 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 interface Item {
-  category: string;
-  subcategory: string;
-  _id: string; // Include _id for potential future use
+  _id: string;
   name: string;
-  images: {
-    main: string;
-    others: string[];
+  image: {
+    path: string;
   };
+  image2: {
+    path: stringpath;
+  };
+  category: string;
   price: string;
 }
 
 const Homepage = () => {
-  const [items, setItems] = useState<Item[]>([]);
-  // const [filteredItems, setFilteredItems] = useState([]);
+  const [items, setItems] = useState<[]>([]);
 
   useEffect(() => {
     const fetchItems = async () => {
       try {
         const response = await axios.get(
-          `https://tapebackend.onrender.com/api/products`
+          `https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product`
         );
+        console.log(response.data);
         setItems(response.data);
       } catch (error) {
         console.error("Error fetching items:", error);
@@ -37,53 +38,39 @@ const Homepage = () => {
     };
 
     fetchItems();
-  }, []); // Runs only once on component mount
-
-  // Filter items based on category
-  // const menItems = items.filter((item) => {
-  //   const category = item.category?.toLowerCase(); // Handle missing category
-  //   return category === "men";
-  // });
-
-  // const womenItems = items.filter((item) => {
-  //   const category = item.category?.toLowerCase(); // Handle missing category
-  //   return category === "women";
-  // });
-
-  // const kidItems = items.filter((item) => {
-  //   const category = item.category?.toLowerCase(); // Handle missing category
-  //   return category === "kids";
-  // });
+  }, []);
 
   const menItems: ImageCardProps[] = items
-    .filter((item) => item.category?.toLowerCase() === "men")
+    .filter((item: Item) => item.category?.toLowerCase() === "men")
     .map((item) => ({
-      id: item._id,
-      name: item.name,
-      defaultImage: item.images.main,
-      hoverImage: item.images.others?.[0] || item.images.main, // Ensure fallback image
-      price: item.price,
+      id: (item as Item)._id,
+      name: (item as Item).name,
+      defaultImage: (item as Item).image.path,
+      hoverImage: (item as Item).image2.path,
+      price: (item as Item).price,
     }));
 
   const womenItems: ImageCardProps[] = items
-    .filter((item) => item.category?.toLowerCase() === "women")
+    .filter((item: Item) => item.category?.toLowerCase() === "women")
     .map((item) => ({
-      id: item._id,
-      name: item.name,
-      defaultImage: item.images.main,
-      hoverImage: item.images.others?.[0] || item.images.main,
-      price: item.price,
+      id: (item as Item)._id,
+      name: (item as Item).name,
+      defaultImage: (item as Item).image.path,
+      hoverImage: (item as Item).image2.path,
+      price: (item as Item).price,
     }));
 
+
   const kidItems: ImageCardProps[] = items
-    .filter((item) => item.category?.toLowerCase() === "kids")
+    .filter((item: Item) => item.category?.toLowerCase() === "kids")
     .map((item) => ({
-      id: item._id,
-      name: item.name,
-      defaultImage: item.images.main,
-      hoverImage: item.images.others?.[0] || item.images.main,
-      price: item.price,
+      id: (item as Item)._id,
+      name: (item as Item).name,
+      defaultImage: (item as Item).image.path,
+      hoverImage: (item as Item).image2.path,
+      price: (item as Item).price,
     }));
+
 
   console.log(menItems);
 
@@ -91,9 +78,6 @@ const Homepage = () => {
     <div>
       <div>
         <Carousel2 />
-        {/* <div className="absolute top-0 left-0 right-0 z-20">
-          <Navbar />
-        </div> */}
       </div>
 
       <InfoHero />

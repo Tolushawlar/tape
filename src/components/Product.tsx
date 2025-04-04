@@ -24,18 +24,19 @@ interface ProductProps {
 }
 
 interface Item {
-  category: string;
-  subcategory: string;
-  _id: string; // Include _id for potential future use
+  _id: string;
   name: string;
-  images: {
-    main: string;
-    others: string[];
+  image: {
+    url: string;
   };
+  image2: {
+    url: string;
+  };
+  category: string;
   price: string;
   size: string;
   color: string;
-}
+};
 
 
 export default function Product({ productName }: ProductProps) {
@@ -53,7 +54,8 @@ export default function Product({ productName }: ProductProps) {
       // setIsLoading(true);
       try {
         const response = await axios.get(
-          `https://tapebackend.onrender.com/api/products`
+          // `https://tapebackend.onrender.com/api/products`
+          `https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product`
         );
         setItems(response.data);
       } catch (error) {
@@ -114,7 +116,7 @@ export default function Product({ productName }: ProductProps) {
       name: productName,
       price: product?.price || "41000.00",
       size: selectedSize,
-      defaultImage: product?.defaultImage || defaultImage,
+      defaultImage: product?.image.path || defaultImage,
       color: selectedColor,
     };
     addToCart(item);
@@ -123,7 +125,7 @@ export default function Product({ productName }: ProductProps) {
 
   const firstMenItem = filteredItems[0];
   console.log(firstMenItem);
-  const mainImageUrl = firstMenItem?.images?.main;
+  const mainImageUrl = firstMenItem?.images?.path;
 
   return (
     <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8 w-full">
@@ -133,11 +135,11 @@ export default function Product({ productName }: ProductProps) {
             <Card>
               <CardContent className="p-6">
                 <Image
-                  src={`${mainImageUrl || defaultImage}?height=600&width=600`}
-                  width={200}
-                  height={200}
-                  alt={`${productName}-image"`}
+                  src={mainImageUrl}
+                  width={600}
+                  height={600}
                   className="w-full h-auto object-cover rounded-lg shadow-lg"
+                  alt="image"
                 />
               </CardContent>
             </Card>
@@ -157,11 +159,10 @@ export default function Product({ productName }: ProductProps) {
                 {/* {filteredItems[0]?.color.map((color) => ( */}
                 <button
                   key={firstMenItem?.color}
-                  className={`w-8 h-8 rounded-full border-2 ${
-                    selectedColor === firstMenItem?.color
-                      ? "border-blue-500"
-                      : "border-gray-300"
-                  }`}
+                  className={`w-8 h-8 rounded-full border-2 ${selectedColor === firstMenItem?.color
+                    ? "border-blue-500"
+                    : "border-gray-300"
+                    }`}
                   style={{ backgroundColor: firstMenItem?.color }}
                   onClick={() => setSelectedColor(firstMenItem?.color)}
                 />
@@ -206,7 +207,7 @@ export default function Product({ productName }: ProductProps) {
 
             <Card>
               <CardContent className="p-4">
-                <FiveColumnSection />
+                <FiveColumnSection item={firstMenItem}/>
               </CardContent>
             </Card>
           </div>

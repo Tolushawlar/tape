@@ -49,7 +49,9 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent className="bg-[#1a1f37]">
         <div className="p-4">
-          <Logo type="dashboard" />
+          <Link href="/">
+            <Logo type="dashboard" />
+          </Link>
         </div>
         <SidebarMenu>
           {menuItems.map((item) => (
@@ -85,11 +87,10 @@ export function SidebarLink({
     <Link
       href={url}
       aria-label={title}
-      className={`flex items-center gap-3 px-6 py-3 transition-colors ${
-        isActive
-          ? "text-white bg-white bg-opacity-10 border-l-4 border-blue-500"
-          : "text-gray-400 hover:text-white"
-      }`}
+      className={`flex items-center gap-3 px-6 py-3 transition-colors ${isActive
+        ? "text-white bg-white bg-opacity-10 border-l-4 border-blue-500"
+        : "text-gray-400 hover:text-white"
+        }`}
     >
       <Icon className="w-5 h-5" />
       {title}

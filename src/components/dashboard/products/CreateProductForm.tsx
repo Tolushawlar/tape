@@ -33,6 +33,39 @@ const productSchema = z.object({
     other: z.string(),
 });
 
+
+// {
+//     "name": "string",
+//     "description": "string",
+//     "price": 0,
+//     "size": "string",
+//     "color": "string",
+//     "category": "string",
+//     "brand": "string",
+//     "stock": 0,
+//     "productDetails": "string",
+//     "sizeFit": "string",
+//     "lookAtMe": "string",
+//     "about": "string",
+//     "image": {
+//       "access": "public",
+//       "path": "string",
+//       "name": "string",
+//       "type": "string",
+//       "size": 0,
+//       "mime": "string",
+//       "meta": {}
+//     },
+//     "image2": {
+//       "access": "public",
+//       "path": "string",
+//       "name": "string",
+//       "type": "string",
+//       "size": 0,
+//       "mime": "string",
+//       "meta": {}
+//     }
+//   }
 type ProductFormData = z.infer<typeof productSchema>;
 
 const categories = ["Men", "Women", "Kids", "Accessories"];
@@ -87,27 +120,61 @@ export function CreateProductForm() {
 
     const onSubmit = async (data: ProductFormData) => {
         try {
+            // const productData = {
+            //     name: data.name,
+            //     price: parseFloat(data.price),
+            //     color: data.color,
+            //     size: data.size,
+            //     category: data.category,
+            //     subcategory: "item",
+            //     description: data.description || "",
+            //     (data.productDetails: data.productDetails || "",
+            //     sizeFit: data.sizeFit || "",
+            //     lookAtMe: data.lookAtMe || "",
+            //     about: data.about || "",
+            //     stock: parseIntstock, 10),
+            //     images: {
+            //         main: data.main,
+            //         others: data.other,
+            //     },
+            // };
+
             const productData = {
                 name: data.name,
                 price: parseFloat(data.price),
                 color: data.color,
                 size: data.size,
                 category: data.category,
-                subcategory: "item",
                 description: data.description || "",
+                brand: "string",
                 productDetails: data.productDetails || "",
                 sizeFit: data.sizeFit || "",
                 lookAtMe: data.lookAtMe || "",
                 about: data.about || "",
-                stock: parseInt(data.stock, 10),
-                images: {
-                    main: data.main,
-                    others: data.other,
+                stock: data.stock ||  10,
+                image: {
+                    "access": "public",
+                    "path": data.main,
+                    "name": "string",
+                    "type": "string",
+                    "size": 0,
+                    "mime": "string",
+                    "meta": {}
                 },
+                image2: {
+                    "access": "public",
+                    "path": data.other,
+                    "name": "string",
+                    "type": "string",
+                    "size": 0,
+                    "mime": "string",
+                    "meta": {}
+                }
             };
 
             const response = await axios.post(
-                "https://tapebackend.onrender.com/api/products",
+                // "https://tapebackend.onrender.com/api/products",
+                "https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product",
                 productData,
                 {
                     headers: {
@@ -116,7 +183,8 @@ export function CreateProductForm() {
                 }
             );
 
-            if (response.status === 201) {
+            if (response.status === 200) {
+                console.log(productData);
                 alert("Product created successfully!");
                 reset();
             }
