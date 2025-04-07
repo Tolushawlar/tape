@@ -163,7 +163,7 @@ export default function ProductsPage() {
               category: item.category || "Unknown", // Handle missing category
               status: item.status || "Unavailable",
               dateAdded: item.created_at || new Date().toISOString(),
-              amount: item.price,
+              price: item.price,
               stock: item.stock,
             }))
           );
