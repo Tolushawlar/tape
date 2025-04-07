@@ -15,7 +15,7 @@ interface Item {
     path: string;
   };
   image2: {
-    path: stringpath;
+    path: string;
   };
   category: string;
   price: string;
