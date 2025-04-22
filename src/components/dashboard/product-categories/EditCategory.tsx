@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 
 import * as React from "react";
@@ -15,7 +16,7 @@ import { Dropzone } from "../Dropzone";
 import { CategoryDto, categorySchema } from "@/schema/category";
 
 const defaultCategory = {
-  name: "Oversize T-shirt",
+  category_name: "Oversize T-shirt", // Changed from name to category_name
   description:
     "As classic as they come, this is the garment that speaks to every man. Designed to stand the test of time, our signature straight-cut crew neck T-Shirt is cut from a compact organic, extra-long staple cotton jersey and accentuated with a ribbed neckline.",
   thumbnail: "/placeholder.svg",
@@ -34,7 +35,7 @@ export function EditCategoryForm() {
   } = useForm<CategoryDto>({
     resolver: zodResolver(categorySchema),
     defaultValues: {
-      name: defaultCategory.name,
+      category_name: defaultCategory.category_name, // Changed from name to category_name
       description: defaultCategory.description,
       thumbnail: defaultCategory.thumbnail,
     },
@@ -90,26 +91,26 @@ export function EditCategoryForm() {
                 <h2 className="text-lg font-medium">General Information</h2>
                 <div>
                   <label
-                    htmlFor="name"
+                    htmlFor="category_name"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
                     Product Name
                   </label>
                   <Controller
-                    name="name"
+                    name="category_name"
                     control={control}
                     render={({ field }) => (
                       <Input
-                        id="name"
+                        id="category_name"
                         placeholder="Type category name here..."
                         {...field}
                         className="bg-white"
                       />
                     )}
                   />
-                  {errors.name && (
+                  {errors.category_name && (
                     <p className="mt-1 text-sm text-red-600">
-                      {errors.name.message}
+                      {errors.category_name.message}
                     </p>
                   )}
                 </div>
