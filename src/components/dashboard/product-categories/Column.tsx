@@ -2,12 +2,28 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Eye, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { SortableHeader } from "../SortableHeader";
 import { ProductCategory } from "@/constants/productCategories";
 import Image from "next/image";
+
+// Mock data for categories
+const mockCategories = [
+  {
+    id: 1,
+    created_at: 1744276668265,
+    category_name: "",
+    description: "All men products"
+  }
+];
+
+// Fetch categories from mock data
+const fetchCategories = async () => {
+  return mockCategories;
+};
 
 export const productCategoriesColumns: ColumnDef<ProductCategory>[] = [
   {
@@ -30,19 +46,19 @@ export const productCategoriesColumns: ColumnDef<ProductCategory>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "name",
-    header: ({ column }) => <SortableHeader column={column} title="Product" />,
+    accessorKey: "category_name",
+    header: ({ column }) => <SortableHeader column={column} title="Categories" />,
     cell: ({ row }) => (
       <div className="flex items-center">
-        <Image
+        {/* <Image
           src="/placeholder.svg"
           alt={row.getValue("name")}
           width={40}
           height={40}
           className="w-8 h-8 mr-2 rounded"
-        />
+        /> */}
         <div>
-          <div className="font-medium">{row.getValue("name")}</div>
+          <div className="font-medium">{row.getValue("category_name")}</div>
           <div className="text-sm text-muted-foreground">
             {row.original.description}
           </div>
@@ -51,15 +67,7 @@ export const productCategoriesColumns: ColumnDef<ProductCategory>[] = [
     ),
   },
   {
-    accessorKey: "qtySold",
-    header: ({ column }) => <SortableHeader column={column} title="Qty Sold" />,
-  },
-  {
-    accessorKey: "stock",
-    header: ({ column }) => <SortableHeader column={column} title="Stock" />,
-  },
-  {
-    accessorKey: "dateAdded",
+    accessorKey: "created_at",
     header: ({ column }) => (
       <SortableHeader column={column} title="Date Added" />
     ),
@@ -86,7 +94,7 @@ export const productCategoriesColumns: ColumnDef<ProductCategory>[] = [
 
       return (
         <div className="flex items-center gap-2">
-          <Button
+          {/* <Button
             size={"icon"}
             variant={"ghost"}
             onClick={() =>
@@ -94,8 +102,23 @@ export const productCategoriesColumns: ColumnDef<ProductCategory>[] = [
             }
           >
             <Eye />
-          </Button>
-          <Button size={"icon"} variant={"ghost"}>
+          </Button> */}
+          <Button
+            size={"icon"}
+            variant={"ghost"}
+            onClick={async () => {
+              try {
+                // Delete category from database
+                await fetch(`https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/category/${category.id}`, {
+                  method: 'DELETE',
+                });
+                // Refresh data after deletion
+                window.location.reload();
+              } catch (error) {
+                console.error('Error deleting category:', error);
+              }
+            }}
+          >
             <Trash2 />
           </Button>
         </div>

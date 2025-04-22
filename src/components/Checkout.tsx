@@ -3,7 +3,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircle2 } from "lucide-react";
 import { useForm, FormProvider } from "react-hook-form";
-import { useRouter } from 'next/navigation'; // Import useRouter
+import { useRouter } from 'next/navigation';
+import { useCart } from "@/context/cartContext";
 
 import OrderSummary from "./OrderSummary";
 import { Button } from "@/components/ui/button";
@@ -29,6 +30,7 @@ import { CheckoutDto, checkoutSchema, emptyAddress } from "@/schema";
 import AddressForm from "./AddressForm";
 
 export default function CheckoutForm() {
+  const { cartItems } = useCart();
   const form = useForm<CheckoutDto>({
     resolver: zodResolver(checkoutSchema),
     defaultValues: {
@@ -44,20 +46,22 @@ export default function CheckoutForm() {
     form.setValue("billingAddress", undefined);
   };
 
-  const router = useRouter(); // Initialize router
+  const router = useRouter();
 
   async function onSubmit(values: CheckoutDto) {
     try {
       const delivery = values.deliveryAddress;
       const billing = values.billingAddressType === 'different' ? values.billingAddress : delivery;
 
+      const total = cartItems.reduce((sum, item) => sum + (Number(item.price) * item.quantity), 0);
+      console.log(cartItems);
       const orderData = {
         created_at: Date.now(),
-        quantity: 1, // You might need to adjust this
+        quantity: cartItems.reduce((sum, item) => sum + item.quantity, 0),
         purchased_at: Date.now(),
-        product_id: 1, // You might need to adjust this
-        user_id: 0, // You might need to adjust this
-        Total: 79, // You might need to adjust this
+        product_id: cartItems.map(item => item.id),
+        user_id: 0,
+        Total: total,
         first_name: delivery.firstName,
         last_name: delivery.lastName,
         email: delivery.email,
@@ -77,6 +81,7 @@ export default function CheckoutForm() {
         billing_state: billing?.state,
         billing_city: billing?.city,
         billing_postal_code: billing?.postalCode,
+        cart_items: cartItems
       };
 
       const response = await fetch('https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/order', {
@@ -88,18 +93,16 @@ export default function CheckoutForm() {
       });
 
       if (response.ok) {
-        // Order placed successfully
-        console.log('Order placed successfully!');
-        router.push('/success'); // Redirect to success page
+        alert('Order placed successfully!');
+        router.push('/');
       } else {
-        // Handle error
         console.error('Failed to place order:', response.statusText);
       }
     } catch (error) {
       console.error('Error placing order:', error);
     }
   }
-
+ 
   return (
     <FormProvider {...form}>
       <div className="container mx-auto p-6">

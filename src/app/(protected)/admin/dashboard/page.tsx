@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 
 import {
@@ -95,13 +96,128 @@ const columns: ColumnDef<Order>[] = [
   },
   {
     id: "actions",
-    cell: () => (
-      <div className="flex items-center gap-2">
-        <Button variant="ghost" size="icon">
-          <Trash2 className="w-4 h-4" />
-        </Button>
-      </div>
-    ),
+    cell: ({ row }) => {
+      const [showModal, setShowModal] = useState(false);
+      const [orderDetails, setOrderDetails] = useState<Order | null>(null);
+
+      const handleDelete = async () => {
+        try {
+          const response = await fetch(`https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/order/${row.original.id}`, {
+            method: 'DELETE'
+          });
+          if (response.ok) {
+            window.location.reload();
+          }
+        } catch (error) {
+          console.error('Error deleting order:', error);
+        }
+      };
+
+      const handleView = async () => {
+        try {
+          const response = await fetch(`https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/order/${row.original.id}`);
+          if (response.ok) {
+            const data = await response.json();
+            setOrderDetails(data);
+            setShowModal(true);
+          }
+        } catch (error) {
+          console.error('Error viewing order:', error);
+        }
+      };
+
+      return (
+        <>
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="icon" onClick={handleDelete}>
+              <Trash2 className="w-4 h-4" />
+            </Button>
+            <Button variant="ghost" size="icon" onClick={handleView}>
+              <Eye className="w-4 h-4" />
+            </Button>
+          </div>
+
+          {showModal && orderDetails && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-2xl font-bold">Order Details</h2>
+                  <Button variant="ghost" onClick={() => setShowModal(false)}>
+                    ✕
+                  </Button>
+                </div>
+
+                <div className="grid grid-cols-2 gap-6">
+                  <div>
+                    <h3 className="font-semibold text-lg mb-4">Shipping Information</h3>
+                    <div className="space-y-2">
+                      <p><span className="font-medium">Name:</span> {orderDetails.first_name} {orderDetails.last_name}</p>
+                      <p><span className="font-medium">Email:</span> {orderDetails.email}</p>
+                      <p><span className="font-medium">Phone:</span> {orderDetails.phone_number}</p>
+                      <p><span className="font-medium">Address:</span> {orderDetails.address}</p>
+                      <p><span className="font-medium">City:</span> {orderDetails.city}</p>
+                      <p><span className="font-medium">State:</span> {orderDetails.state}</p>
+                      <p><span className="font-medium">Country:</span> {orderDetails.country}</p>
+                      <p><span className="font-medium">Postal Code:</span> {orderDetails.postal_code}</p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="font-semibold text-lg mb-4">Billing Information</h3>
+                    <div className="space-y-2">
+                      <p><span className="font-medium">Name:</span> {orderDetails.billing_first_name} {orderDetails.billing_last_name}</p>
+                      <p><span className="font-medium">Email:</span> {orderDetails.billing_email}</p>
+                      <p><span className="font-medium">Phone:</span> {orderDetails.billing_phone_number}</p>
+                      <p><span className="font-medium">Address:</span> {orderDetails.billing_address}</p>
+                      <p><span className="font-medium">City:</span> {orderDetails.billing_city}</p>
+                      <p><span className="font-medium">State:</span> {orderDetails.billing_state}</p>
+                      <p><span className="font-medium">Country:</span> {orderDetails.billing_country}</p>
+                      <p><span className="font-medium">Postal Code:</span> {orderDetails.billing_postal_code}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-6 pt-6 border-t">
+                  <h3 className="font-semibold text-lg mb-4">Order Summary</h3>
+                  <div className="space-y-2">
+                    <p><span className="font-medium">Order ID:</span> {orderDetails.id}</p>
+                    <p><span className="font-medium">Order Date:</span> {new Date(orderDetails.created_at).toLocaleDateString()}</p>
+                    <p><span className="font-medium">Quantity:</span> {orderDetails.quantity}</p>
+                    <p><span className="font-medium">Total Amount:</span> €{orderDetails.Total}</p>
+                  </div>
+                </div>
+
+                <div className="mt-6 pt-6 border-t">
+                  <h3 className="font-semibold text-lg mb-4">Order Items</h3>
+                  <div className="space-y-4">
+                    {orderDetails.cart_items?.map((item: any, index: number) => (
+                      <div key={index} className="flex items-center justify-between border-b pb-4">
+                        <div className="flex items-center gap-4">
+                          {item.image && (
+                            <Image
+                              src={item.image}
+                              alt={item.name}
+                              width={60}
+                              height={60}
+                              className="rounded-md"
+                            />
+                          )}
+                          <div>
+                            <p className="font-medium">{item.name}</p>
+                            <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>
+                          </div>
+                        </div>
+                        <p className="font-medium">€{item.price}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      );
+    },
   },
 ];
 

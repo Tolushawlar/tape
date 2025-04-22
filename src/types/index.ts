@@ -1,4 +1,5 @@
 import { Document, Types } from "mongoose";
+import { ReactNode } from "react";
 
 export interface ICartItem {
   id: string;
@@ -35,6 +36,22 @@ export interface IOrder extends Document {
 }
 
 export type Order = {
+  phone_number: ReactNode;
+  address: ReactNode;
+  city: ReactNode;
+  state: ReactNode;
+  country: ReactNode;
+  postal_code: ReactNode;
+  billing_first_name: ReactNode;
+  billing_last_name: ReactNode;
+  billing_email: ReactNode;
+  billing_phone_number: ReactNode;
+  billing_address: ReactNode;
+  billing_city: ReactNode;
+  billing_state: ReactNode;
+  billing_country: ReactNode;
+  billing_postal_code: ReactNode;
+  quantity: ReactNode;
   id: number;
   product: string;
   first_name: string;
@@ -45,4 +62,5 @@ export type Order = {
   email: string;
   Total: string;
   status: "Processing" | "Shipped" | "Delivered";
+  cart_items: never;
 };

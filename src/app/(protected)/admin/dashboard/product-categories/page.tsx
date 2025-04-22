@@ -27,7 +27,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { DatePickerWithRange } from "@/components/dashboard/DatePicker";
-import { productCategories } from "@/constants/productCategories";
 import { productCategoriesColumns } from "@/components/dashboard/product-categories/Column";
 import { useRouter } from "next/navigation";
 
@@ -41,9 +40,24 @@ export default function ProductCategoriesPage() {
     to: undefined,
   });
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/category');
+        const data = await response.json();
+        setCategories(data);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const table = useReactTable({
-    data: productCategories,
+    data: categories,
     columns: productCategoriesColumns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -112,7 +126,7 @@ export default function ProductCategoriesPage() {
         <div className="relative flex-grow">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search products..."
+            placeholder="Search categories..."
             value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
             onChange={(event) =>
               table.getColumn("name")?.setFilterValue(event.target.value)
@@ -121,14 +135,14 @@ export default function ProductCategoriesPage() {
           />
         </div>
 
-        <div className="flex items-center justify-end space-x-2">
+        {/* <div className="flex items-center justify-end space-x-2">
           <DatePickerWithRange
             date={dateRange}
             setDate={setDateRange}
             showDatePicker={showDatePicker}
             setShowDatePicker={setShowDatePicker}
           />
-        </div>
+        </div> */}
 
         <div className="rounded-md border">
           <Table>

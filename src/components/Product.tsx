@@ -27,10 +27,10 @@ interface Item {
   _id: string;
   name: string;
   image: {
-    url: string;
+    path: string;
   };
   image2: {
-    url: string;
+    path: string;
   };
   category: string;
   price: string;
@@ -193,7 +193,7 @@ export default function Product({ productName }: ProductProps) {
                 onClick={handleAddToCart}
               >
                 <ShoppingCart className="mr-2 h-4 w-4" /> Add to Cart
-              </Button>
+              </Button>   
               <Button
                 variant="outline"
                 className="flex-1"

@@ -72,7 +72,7 @@ export const productColumns: ColumnDef<Product>[] = [
     header: ({ column }) => <SortableHeader column={column} title="Stock" />,
   },
   {
-    accessorKey: "amount",
+    accessorKey: "price",
     header: ({ column }) => <SortableHeader column={column} title="Amount (£)" />,
   },
   {
@@ -132,17 +132,36 @@ export const productColumns: ColumnDef<Product>[] = [
       const product = row.original;
 
       return (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center">
           <Button
             size={"icon"}
             variant={"ghost"}
             onClick={() =>
-              (window.location.href = `/admin/dashboard/products/${product.id}/edit`)
-            }
+              (window.location.href = `/admin/dashboard/products/${product.id}/`)}
           >
             <Edit2 />
           </Button>
-          <Button size={"icon"} variant={"ghost"}>
+        </div>
+      );
+    },
+  },
+  {
+    id: "actions2",
+    cell: ({ row }) => {
+      const product = row.original;
+
+      return (
+        <div className="flex items-center ">
+          <Button
+            size={"icon"}
+            variant={"ghost"}
+            onClick={() => {
+              fetch(`https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product/${row.original.id}`, {
+                method: 'DELETE',
+              }).then(() => {
+                window.location.reload();
+              });
+            }}>
             <Trash2 />
           </Button>
         </div>

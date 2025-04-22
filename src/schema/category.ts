@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const categorySchema = z.object({
-  name: z.string().min(1, "Category name is required"),
+  category_name: z.string().min(1, "Category name is required"),
   description: z.string().optional(),
   thumbnail: z.any().optional(), // We'll store the File object here
 });
