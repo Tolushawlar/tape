@@ -43,7 +43,7 @@ interface FiveColumnSectionProps {
       path: string;
     };
     image2: {
-      url: string;
+      path: string;
     };
     category: string;
     price: string;

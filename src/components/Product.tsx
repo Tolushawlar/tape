@@ -36,6 +36,12 @@ interface Item {
   price: string;
   size: string;
   color: string;
+  description: string;
+  sizeFit: string;
+  aboutMe: string;
+  productDetails: string;
+  about: string;
+  lookAtMe: string
 };
 
 
@@ -116,7 +122,7 @@ export default function Product({ productName }: ProductProps) {
       name: productName,
       price: product?.price || "41000.00",
       size: selectedSize,
-      defaultImage: product?.image.path || defaultImage,
+      defaultImage: product?.defaultImage || defaultImage,
       color: selectedColor,
     };
     addToCart(item);
@@ -125,7 +131,7 @@ export default function Product({ productName }: ProductProps) {
 
   const firstMenItem = filteredItems[0];
   console.log(firstMenItem);
-  const mainImageUrl = firstMenItem?.images?.path;
+  const mainImageUrl = firstMenItem?.image?.path;
 
   return (
     <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8 w-full">
@@ -193,7 +199,7 @@ export default function Product({ productName }: ProductProps) {
                 onClick={handleAddToCart}
               >
                 <ShoppingCart className="mr-2 h-4 w-4" /> Add to Cart
-              </Button>   
+              </Button>
               <Button
                 variant="outline"
                 className="flex-1"
@@ -207,7 +213,22 @@ export default function Product({ productName }: ProductProps) {
 
             <Card>
               <CardContent className="p-4">
-                <FiveColumnSection item={firstMenItem}/>
+                <FiveColumnSection item={{
+                  _id: firstMenItem?._id || '',
+                  name: firstMenItem?.name || '',
+                  image: firstMenItem?.image || { path: '' },
+                  image2: firstMenItem?.image2 || { path: '' },
+                  category: firstMenItem?.category || '',
+                  price: firstMenItem?.price || '',
+                  size: firstMenItem?.size || '',
+                  color: firstMenItem?.color || '',
+                  description: firstMenItem?.description || '',
+                  sizeFit: firstMenItem?.sizeFit || '',
+                  aboutMe: firstMenItem?.aboutMe || '',
+                  productDetails: firstMenItem?.productDetails || '',
+                  about: firstMenItem?.about || '',
+                  lookAtMe: firstMenItem?.lookAtMe || ''
+                }} />
               </CardContent>
             </Card>
           </div>
