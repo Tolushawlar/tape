@@ -191,8 +191,8 @@ const columns: ColumnDef<Order>[] = [
                 <div className="mt-6 pt-6 border-t">
                   <h3 className="font-semibold text-lg mb-4">Order Items</h3>
                   <div className="space-y-4">
-                    {orderDetails.cart_items?.map((item: any, index: number) => (
-                      <div key={index} className="flex items-center justify-between border-b pb-4">
+                    {(orderDetails.cart_items as any[])?.map((item: any, index: number) => (
+                      <div key={index} className="flex justify-between items-center">
                         <div className="flex items-center gap-4">
                           {item.image && (
                             <Image
