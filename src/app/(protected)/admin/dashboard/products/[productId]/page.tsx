@@ -46,7 +46,7 @@ interface ProductImage {
   type: string;
   size: number;
   mime: string;
-  meta: {};
+  meta: any;
 }
 
 interface ProductData {
