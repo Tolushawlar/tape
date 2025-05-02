@@ -39,6 +39,40 @@ const productSchema = z.object({
 
 type ProductFormData = z.infer<typeof productSchema>;
 
+interface ProductImage {
+  access: "public";
+  path: string;
+  name: string;
+  type: string;
+  size: number;
+  mime: string;
+  meta: {};
+}
+
+interface ProductData {
+  price: number;
+  category: string;
+  description: string;
+  brand: string;
+  productDetails: string;
+  sizeFit: string;
+  lookAtMe: string;
+  about: string;
+  stock: number;
+  image: ProductImage;
+  image2: ProductImage;
+  color1?: string;
+  color2?: string;
+  color3?: string;
+  color4?: string;
+  color5?: string;
+  size1?: string;
+  size2?: string;
+  size3?: string;
+  size4?: string;
+  size5?: string;
+}
+
 interface Category {
   id: number;
   category_name: string;
@@ -191,8 +225,7 @@ const ProductPage = () => {
 
   const onSubmit = async (data: ProductFormData) => {
     try {
-      const productData: any = {
-        name: data.name,
+      const productData: ProductData = {
         price: parseFloat(data.price),
         category: data.category,
         description: data.description || "",

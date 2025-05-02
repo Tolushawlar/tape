@@ -15,7 +15,7 @@ const OrderSummary = () => {
   const { cartItems, removeFromCart, reduceQuantity, addToCart } = useCart();
   const { push } = useRouter();
 
-  const handleDecreaseQuantity = (item: any) => {
+  const handleDecreaseQuantity = (item: Array) => {
     if (item.quantity === 1) {
       removeFromCart(item.id);
     } else {
