@@ -3,6 +3,8 @@ import ImageCard from "@/components/ItemsCard";
 // import { itemsData } from "@/constants";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import _ from 'lodash';
+
 
 interface Item {
   size1: string;
@@ -11,7 +13,7 @@ interface Item {
   size4: string;
   size5: string;
   category: string;
-  subcategory: string;
+  description: string;
   id: string; // Include _id for potential future use
   name: string;
   image: {
@@ -29,6 +31,7 @@ const CollectionPage = ({ params }: { params: { collectionName: string } }) => {
   const [items2, setItems2] = useState<Item[]>([]);
   const { collectionName } = params;
   const [isLoading, setIsLoading] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
 
   const decodedCollectionName = decodeURIComponent(collectionName);
   // const capitalizedText =
@@ -52,23 +55,37 @@ const CollectionPage = ({ params }: { params: { collectionName: string } }) => {
     };
     fetchItems();
   }, [decodedCollectionName]);
+
   // filter the data from the API
+  // useEffect(() => {
+  //   const searchTerm = decodedCollectionName.toLowerCase();
+  //   console.log(searchTerm)
+
+  //   const filteredItems = items.filter((item: Item) => {
+  //     const category = (item.category || "").toLowerCase();
+  //     const subcategory = (item.description || "").toLowerCase();
+  //     const name = (item.name || "").toLowerCase();
+  //     console.log('Name:', name);
+  //     return (
+  //       name.includes(searchTerm)
+  //     );
+  //   });
+
+  //   setItems2(filteredItems);
+  // }, [items, decodedCollectionName]);
+
+
   useEffect(() => {
-    const capitalizedText =
-      decodedCollectionName.charAt(0).toUpperCase() +
-      decodedCollectionName.slice(1).toLowerCase();
-
-    const filteredItems = items.filter((item: Item) => {
-      const category = item.category || "";
-      const subcategory = item.subcategory || "";
-      return (
-        category.toLowerCase() === capitalizedText.toLowerCase() ||
-        subcategory.toLowerCase() === capitalizedText.toLowerCase()
-      );
+    const searchTerm = decodedCollectionName.toLowerCase();
+    const filteredItems = _.filter(items, (item) => {
+      const name = (item.name || "").toLowerCase();
+      const description = (item.description || "").toLowerCase();
+      return _.includes(name, searchTerm) || _.includes(description, searchTerm);
     });
-
     setItems2(filteredItems);
+    setHasSearched(true);
   }, [items, decodedCollectionName]);
+  console.log(items2)
 
   return (
     <div>
@@ -83,8 +100,10 @@ const CollectionPage = ({ params }: { params: { collectionName: string } }) => {
 
       {/* Render specific collection items here */}
       {isLoading ? (
-        <p className="ml-32 mt-32">Loading items...</p>
-      ) : items2.length > 0 ? (
+        <p className="text-center mt-32">Loading items...</p>
+      ) : hasSearched && items2.length === 0 ? (
+        <p className="text-center mt-32">No items found.</p>
+      ) : (
         <div className="flex flex-wrap justify-center gap-6 mt-10 mb-[200px]">
           {items2.map((item, index) => (
             <ImageCard
@@ -103,10 +122,6 @@ const CollectionPage = ({ params }: { params: { collectionName: string } }) => {
             />
           ))}
         </div>
-      ) : (
-        <p className="text-center text-gray-500 h-[90vh] mt-28">
-          No items found for this collection.
-        </p>
       )}
     </div>
   );

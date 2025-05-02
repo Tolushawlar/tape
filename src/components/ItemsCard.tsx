@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState } from "react";
@@ -8,6 +9,12 @@ import { useCartStore } from "@/lib/store/cart-store";
 
 export interface ImageCardProps {
   id: string;
+  color1: any,
+  size1: any,
+  size2: any,
+  size3: any,
+  size4: any,
+  size5: any,
   name: string;
   defaultImage: string;
   hoverImage: string;
@@ -21,30 +28,44 @@ const ImageCard = ({
   defaultImage,
   hoverImage,
   price,
+  color1,
   size,
+  size1,
+  size2,
+  size3,
+  size4,
+  size5
 }: ImageCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [isSizeVisible, setIsSizeVisible] = useState(false); // To toggle size visibility
+  const [isSizeVisible, setIsSizeVisible] = useState(false);
   const { setGlobalState } = useGlobalState();
 
-  const { addToCart } = useCart(); // Get addToCart function from context
+  const { addToCart } = useCart();
 
   const { toggleCartSheet } = useCartStore();
 
   const router = useRouter();
 
-  // Function to handle size click and add to cart
-  const handleSizeClick = () => {
-    const item = { id, name, price, defaultImage, size };
-    addToCart(item); // Add item to cart with selected size
-    setIsSizeVisible(false); // Hide size options after adding to cart
+  const availableSizes = [size1, size2, size3, size4, size5].filter(size => size);
+  // const handleSizeClick = () => {
+  //   const item = { id, name, price, defaultImage, size };
+  //   console.log(item);
+  //   addToCart(item);
+  //   setIsSizeVisible(false);
+  //   toggleCartSheet();
+  //   setGlobalState(true);
+  // };
+
+  const handleSizeClick = (selectedSize: string) => {
+    const item = { id, name, price, defaultImage, color:color1, size: selectedSize };
+    addToCart(item);
+    setIsSizeVisible(false);
     toggleCartSheet();
     setGlobalState(true);
   };
 
-  // Function to show size options when "Add to Cart" is clicked
   const showSizeOptions = () => {
-    setIsSizeVisible(true); // Show sizes
+    setIsSizeVisible(true);
   };
 
   return (
@@ -54,7 +75,6 @@ const ImageCard = ({
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {/* Background image */}
         <div
           className="absolute inset-0 bg-cover bg-center transition-all duration-500"
           style={{
@@ -62,30 +82,41 @@ const ImageCard = ({
           }}
         ></div>
 
-        {/* Add to Cart / Size selection buttons */}
         <div
-          className={`absolute bottom-5 inset-0 flex justify-center items-end transition-opacity duration-500 ${
-            isHovered ? "opacity-100" : "opacity-0"
-          }`}
+          className={`absolute bottom-5 inset-0 flex justify-center items-end transition-opacity duration-500 ${isHovered ? "opacity-100" : "opacity-0"
+            }`}
         >
           {!isSizeVisible && (
             <button
-              onClick={showSizeOptions} // Show size options
+              onClick={showSizeOptions}
               className="cursor-pointer bg-white text-black text-[12px] font-normal w-[239px] h-[37px] py-2 px-4 transition font-Sweet-Regular"
             >
               Add to Cart
             </button>
           )}
 
-          {isSizeVisible && (
-            <div className="flex flex-row items-center justify-between w-[239px] h-[37px] bg-white cursor-pointer py-2 px-4 transition text-black text-[12px] font-Sweet-Regular">
-              {["XXS", "XS", "S", "M", "L", "XL", "XXL"].map((size) => (
+          {/* {isSizeVisible && (
+            <div className="flex flex-row items-center justify-center space-x-10 w-[239px] h-[37px] bg-white cursor-pointer py-2 px-4 transition text-black text-[12px] font-Sweet-Regular">
+              {availableSizes.map((size) => (
                 <button
                   key={size}
-                  onClick={handleSizeClick} // Add to cart immediately on size click
+                  onClick={handleSizeClick}
                   className="p-1 bg-white"
                 >
                   {size}
+                </button>
+              ))}
+            </div>
+          )} */}
+          {isSizeVisible && (
+            <div className="flex flex-row items-center justify-center space-x-10 w-[239px] h-[37px] bg-white cursor-pointer py-2 px-4 transition text-black text-[12px] font-Sweet-Regular">
+              {availableSizes.map((individualSize) => (
+                <button
+                  key={individualSize}
+                  onClick={() => handleSizeClick(individualSize)} // Pass the individual size
+                  className="p-1 bg-white"
+                >
+                  {individualSize}
                 </button>
               ))}
             </div>
@@ -93,10 +124,9 @@ const ImageCard = ({
         </div>
       </div>
 
-      {/* Item info */}
       <div
         className="mt-5 w-[275px] cursor-pointer"
-        onClick={() => router.push(`/product/${encodeURIComponent(name)}`)} // Navigate on click
+        onClick={() => router.push(`/product/${encodeURIComponent(name)}`)}
       >
         <p className="text-[12px] font-normal">{name}</p>
         <p className="text-[12px] font-normal">£ {price}</p>

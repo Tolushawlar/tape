@@ -31,13 +31,13 @@ export const productColumns: ColumnDef<Product>[] = [
   //   enableHiding: false,
   // },
   {
-    accessorKey: "images.main",
+    accessorKey: "image",
     header: ({ column }) => <SortableHeader column={column} title="Product Image" />,
     cell: ({ row }) => (
       <div className="flex items-center">
         <Image
-          src="/placeholder.svg"
-          alt={row.getValue("images.main")}
+          src={row.getValue("image")}
+          alt="product"
           width={40}
           height={40}
           className="w-8 h-8 mr-2 rounded"

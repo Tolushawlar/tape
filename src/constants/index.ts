@@ -91,7 +91,7 @@ export const sectionData = [
     image:
       "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725546252/modal1_tdwpgr.png",
     categories: [
-      { label: "All Tops", href: "#" },
+      { label: " Tops", href: "#" },
       { label: "T-shirts", href: "#" },
       { label: "Sweaters & Hoodies", href: "#" },
     ],
@@ -103,7 +103,7 @@ export const sectionData = [
     image:
       "https://res.cloudinary.com/dtlxunbzr/image/upload/v1726482624/image_15_ujfj1n.png",
     categories: [
-      { label: "All Tops", href: "#" },
+      { label: " Tops", href: "#" },
       { label: "T-shirts", href: "#" },
       { label: "Sweaters & Hoodies", href: "#" },
     ],
@@ -115,7 +115,7 @@ export const sectionData = [
     image:
       "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725546251/modal3_mwkwaf.png",
     categories: [
-      { label: "All Tops", href: "#" },
+      { label: " Tops", href: "#" },
       { label: "T-shirts", href: "#" },
       { label: "Sweaters & Hoodies", href: "#" },
     ],

@@ -9,7 +9,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 interface Item {
-  _id: string;
+  id: string;
   name: string;
   image: {
     path: string;
@@ -19,6 +19,16 @@ interface Item {
   };
   category: string;
   price: string;
+  color1: string;
+  color2: string;
+  color3: string;
+  color4: string;
+  color5: string;
+  size1: string;
+  size2: string;
+  size3: string;
+  size4: string;
+  size5: string;
 }
 
 const Homepage = () => {
@@ -30,7 +40,7 @@ const Homepage = () => {
         const response = await axios.get(
           `https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product`
         );
-        console.log(response.data);
+        // console.log(response.data);
         setItems(response.data);
       } catch (error) {
         console.error("Error fetching items:", error);
@@ -43,34 +53,84 @@ const Homepage = () => {
   const menItems: ImageCardProps[] = items
     .filter((item: Item) => item.category?.toLowerCase() === "men")
     .map((item) => ({
-      id: (item as Item)._id,
+      id: (item as Item).id,
       name: (item as Item).name,
       defaultImage: (item as Item).image.path,
       hoverImage: (item as Item).image2.path,
       price: (item as Item).price,
+      color1: (item as Item).color1,
+      color2: (item as Item).color2,
+      color3: (item as Item).color3,
+      color4: (item as Item).color4,
+      color5: (item as Item).color5,
+      size1: (item as Item).size1,
+      size2: (item as Item).size2,
+      size3: (item as Item).size3,
+      size4: (item as Item).size4,
+      size5: (item as Item).size5,
     }));
 
   const womenItems: ImageCardProps[] = items
     .filter((item: Item) => item.category?.toLowerCase() === "women")
     .map((item) => ({
-      id: (item as Item)._id,
+      id: (item as Item).id,
       name: (item as Item).name,
       defaultImage: (item as Item).image.path,
       hoverImage: (item as Item).image2.path,
       price: (item as Item).price,
+      color1: (item as Item).color1,
+      color2: (item as Item).color2,
+      color3: (item as Item).color3,
+      color4: (item as Item).color4,
+      color5: (item as Item).color5,
+      size1: (item as Item).size1,
+      size2: (item as Item).size2,
+      size3: (item as Item).size3,
+      size4: (item as Item).size4,
+      size5: (item as Item).size5,
     }));
 
 
   const kidItems: ImageCardProps[] = items
     .filter((item: Item) => item.category?.toLowerCase() === "kids")
     .map((item) => ({
-      id: (item as Item)._id,
+      id: (item as Item).id,
       name: (item as Item).name,
       defaultImage: (item as Item).image.path,
       hoverImage: (item as Item).image2.path,
       price: (item as Item).price,
+      color1: (item as Item).color1,
+      color2: (item as Item).color2,
+      color3: (item as Item).color3,
+      color4: (item as Item).color4,
+      color5: (item as Item).color5,
+      size1: (item as Item).size1,
+      size2: (item as Item).size2,
+      size3: (item as Item).size3,
+      size4: (item as Item).size4,
+      size5: (item as Item).size5,
     }));
 
+
+  const accessoryItems: ImageCardProps[] = items
+    .filter((item: Item) => item.category?.toLowerCase() === "accessories")
+    .map((item) => ({
+      id: (item as Item).id,
+      name: (item as Item).name,
+      defaultImage: (item as Item).image.path,
+      hoverImage: (item as Item).image2.path,
+      price: (item as Item).price,
+      color1: (item as Item).color1,
+      color2: (item as Item).color2,
+      color3: (item as Item).color3,
+      color4: (item as Item).color4,
+      color5: (item as Item).color5,
+      size1: (item as Item).size1,
+      size2: (item as Item).size2,
+      size3: (item as Item).size3,
+      size4: (item as Item).size4,
+      size5: (item as Item).size5,
+    }));
 
   console.log(menItems);
 
@@ -84,7 +144,7 @@ const Homepage = () => {
       <CollectionSection collectionName="MEN" itemsData={menItems} />
       <CollectionSection collectionName="WOMEN" itemsData={womenItems} />
       <CollectionSection collectionName="KIDS" itemsData={kidItems} />
-      <CollectionSection collectionName="ACCESSORIES" itemsData={itemsData} />
+      <CollectionSection collectionName="ACCESSORIES" itemsData={accessoryItems} />
       <InfoFooter />
     </div>
   );

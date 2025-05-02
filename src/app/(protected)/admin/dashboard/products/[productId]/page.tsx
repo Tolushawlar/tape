@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -15,14 +17,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams, usePathname } from "next/navigation";
+import { PlusCircledIcon, TrashIcon } from "@radix-ui/react-icons";
 
 const productSchema = z.object({
   name: z.string().min(1, "Product name is required"),
   price: z.string().min(1, "Price is required"),
-  color: z.string().min(1, "Color is required"),
-  size: z.string().min(1, "Size is required"),
   category: z.string().min(1, "Category is required"),
   description: z.string(),
   productDetails: z.string(),
@@ -32,24 +33,35 @@ const productSchema = z.object({
   stock: z.string().min(1, "Stock is required"),
   main: z.string().min(1, "Main image URL is required"),
   other: z.string(),
+  colors: z.array(z.string()),
+  sizes: z.array(z.string()),
 });
 
 type ProductFormData = z.infer<typeof productSchema>;
 
-const categories = ["Men", "Women", "Kids", "Accessories"];
-const availableSizes = ["XS", "S", "M", "L", "XL"];
-const availableColors = ["Red", "Blue", "Black", "White", "Green"];
+interface Category {
+  id: number;
+  category_name: string;
+  created_at: string;
+}
 
 const ProductPage = () => {
   const pathname = usePathname();
   const productId = pathname.split('/').pop();
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [colors, setColors] = useState<string[]>([]);
+  const [sizes, setSizes] = useState<string[]>([]);
+  const [newColor, setNewColor] = useState("");
+  const [newSize, setNewSize] = useState("");
 
   const {
     register,
     handleSubmit,
     setValue,
+    getValues,
     formState: { errors, isSubmitting },
     reset,
+    control,
   } = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
     defaultValues: {
@@ -59,23 +71,36 @@ const ProductPage = () => {
       lookAtMe: "",
       about: "",
       other: "",
+      colors: [],
+      sizes: [],
     }
   });
 
   useEffect(() => {
-    register("category", { required: "Category is required" });
-    register("color", { required: "Color is required" });
-    register("size", { required: "Size is required" });
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(
+          "https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/category"
+        );
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
 
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
     const fetchProduct = async () => {
       try {
-        console.log("Fetching product with ID:", productId); // Log the productId
+        console.log("Fetching product with ID:", productId);
         const response = await axios.get(
           `https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product/${productId}`
         );
-        console.log("API Response:", response); // Log the full response
+        console.log("API Response:", response);
         const product = response.data;
-        console.log("Product data:", product); // Log the product data
+        console.log("Product data:", product);
 
         if (!product) {
           throw new Error("No product data received");
@@ -83,8 +108,6 @@ const ProductPage = () => {
 
         setValue("name", product.name);
         setValue("price", product.price.toString());
-        setValue("color", product.color);
-        setValue("size", product.size);
         setValue("category", product.category);
         setValue("description", product.description);
         setValue("productDetails", product.productDetails);
@@ -94,18 +117,38 @@ const ProductPage = () => {
         setValue("stock", product.stock.toString());
         setValue("main", product.image.path);
         setValue("other", product.image2.path);
+
+        const initialColors = [
+          product.color1,
+          product.color2,
+          product.color3,
+          product.color4,
+          product.color5,
+        ].filter(Boolean) as string[];
+        setColors(initialColors);
+        setValue("colors", initialColors);
+
+        const initialSizes = [
+          product.size1,
+          product.size2,
+          product.size3,
+          product.size4,
+          product.size5,
+        ].filter(Boolean) as string[];
+        setSizes(initialSizes);
+        setValue("sizes", initialSizes);
       } catch (error) {
         console.error("Error fetching product:", error);
       }
     };
 
     if (productId) {
-      console.log("Initiating product fetch for ID:", productId); // Log before fetch
+      console.log("Initiating product fetch for ID:", productId);
       fetchProduct();
     } else {
-      console.log("No product ID available"); // Log if no productId
+      console.log("No product ID available");
     }
-  }, [productId, register, setValue]);
+  }, [productId, setValue]);
 
   const handleCategoryChange = (value: string) => {
     setValue("category", value, {
@@ -114,27 +157,43 @@ const ProductPage = () => {
     });
   };
 
-  const handleColorChange = (value: string) => {
-    setValue("color", value, {
-      shouldValidate: true,
-      shouldDirty: true
-    });
+  const handleRemoveColor = (index: number) => {
+    const updatedColors = [...colors];
+    updatedColors.splice(index, 1);
+    setColors(updatedColors);
+    setValue("colors", updatedColors);
   };
 
-  const handleSizeChange = (value: string) => {
-    setValue("size", value, {
-      shouldValidate: true,
-      shouldDirty: true
-    });
+  const handleAddColor = () => {
+    if (newColor && !colors.includes(newColor)) {
+      const updatedColors = [...colors, newColor];
+      setColors(updatedColors);
+      setValue("colors", updatedColors);
+      setNewColor("");
+    }
+  };
+
+  const handleRemoveSize = (index: number) => {
+    const updatedSizes = [...sizes];
+    updatedSizes.splice(index, 1);
+    setSizes(updatedSizes);
+    setValue("sizes", updatedSizes);
+  };
+
+  const handleAddSize = () => {
+    if (newSize && !sizes.includes(newSize)) {
+      const updatedSizes = [...sizes, newSize];
+      setSizes(updatedSizes);
+      setValue("sizes", updatedSizes);
+      setNewSize("");
+    }
   };
 
   const onSubmit = async (data: ProductFormData) => {
     try {
-      const productData = {
+      const productData: unknown = {
         name: data.name,
         price: parseFloat(data.price),
-        color: data.color,
-        size: data.size,
         category: data.category,
         description: data.description || "",
         brand: "string",
@@ -142,7 +201,7 @@ const ProductPage = () => {
         sizeFit: data.sizeFit || "",
         lookAtMe: data.lookAtMe || "",
         about: data.about || "",
-        stock: data.stock || 10,
+        stock: parseInt(data.stock, 10) || 0,
         image: {
           "access": "public",
           "path": data.main,
@@ -160,8 +219,26 @@ const ProductPage = () => {
           "size": 0,
           "mime": "string",
           "meta": {}
-        }
+        },
       };
+
+      // Map colors to color1, color2, etc.
+      data.colors.forEach((color, index) => {
+        productData[`color${index + 1}`] = color;
+      });
+      // Add empty strings for any missing color fields
+      for (let i = data.colors.length + 1; i <= 5; i++) {
+        productData[`color${i}`] = "";
+      }
+
+      // Map sizes to size1, size2, etc.
+      data.sizes.forEach((size, index) => {
+        productData[`size${index + 1}`] = size;
+      });
+      // Add empty strings for any missing size fields
+      for (let i = data.sizes.length + 1; i <= 5; i++) {
+        productData[`size${i}`] = "";
+      }
 
       const response = await axios.patch(
         `https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product/${productId}`,
@@ -174,7 +251,7 @@ const ProductPage = () => {
       );
 
       if (response.status === 200) {
-        console.log(productData);
+        console.log("Updated data:", productData);
         alert("Product updated successfully!");
         window.location.href = "/admin/dashboard/products";
       }
@@ -221,62 +298,23 @@ const ProductPage = () => {
 
           <div>
             <Label htmlFor="category">Category</Label>
-            <Select onValueChange={handleCategoryChange}>
+            <Select onValueChange={handleCategoryChange} defaultValue={getValues("category")}>
               <SelectTrigger>
-                <SelectValue placeholder="Select category" />
+                <SelectValue placeholder={getValues("category") || "Select a category"} />
               </SelectTrigger>
               <SelectContent>
-                {categories.map((category) => (
+                {categories.map((cat) => (
                   <SelectItem
-                    key={category}
-                    value={category}
-                    defaultValue={category}
+                    key={cat.id}
+                    value={cat.category_name}
                   >
-                    {category}
+                    {cat.category_name}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
             {errors.category && (
               <span className="text-red-500 text-sm">{errors.category.message}</span>
-            )}
-          </div>
-
-          <div>
-            <Label htmlFor="color">Color</Label>
-            <Select onValueChange={handleColorChange}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select color" />
-              </SelectTrigger>
-              <SelectContent>
-                {availableColors.map((color) => (
-                  <SelectItem key={color} value={color.toLowerCase()}>
-                    {color}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {errors.color && (
-              <span className="text-red-500 text-sm">{errors.color.message}</span>
-            )}
-          </div>
-
-          <div>
-            <Label htmlFor="size">Size</Label>
-            <Select onValueChange={handleSizeChange}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select size" />
-              </SelectTrigger>
-              <SelectContent>
-                {availableSizes.map((size) => (
-                  <SelectItem key={size} value={size.toLowerCase()}>
-                    {size}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {errors.size && (
-              <span className="text-red-500 text-sm">{errors.size.message}</span>
             )}
           </div>
 
@@ -313,6 +351,66 @@ const ProductPage = () => {
         </div>
 
         <div className="space-y-4">
+          <div>
+            <Label>Colors</Label>
+            <div className="flex flex-wrap gap-2">
+              {colors.map((color, index) => (
+                <div key={index} className="flex items-center space-x-1 border rounded-md p-1">
+                  <span>{color}</span>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveColor(index)}
+                    className="text-red-500 hover:text-red-700 focus:outline-none"
+                  >
+                    <TrashIcon className="w-4 h-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
+            <div className="flex items-center space-x-2 mt-2">
+              <Input
+                type="text"
+                placeholder="Add new color"
+                value={newColor}
+                onChange={(e) => setNewColor(e.target.value)}
+              />
+              <Button type="button" size="sm" onClick={handleAddColor}>
+                <PlusCircledIcon className="w-4 h-4 mr-1" />
+                Add Color
+              </Button>
+            </div>
+          </div>
+
+          <div>
+            <Label>Sizes</Label>
+            <div className="flex flex-wrap gap-2">
+              {sizes.map((size, index) => (
+                <div key={index} className="flex items-center space-x-1 border rounded-md p-1">
+                  <span>{size}</span>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveSize(index)}
+                    className="text-red-500 hover:text-red-700 focus:outline-none"
+                  >
+                    <TrashIcon className="w-4 h-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
+            <div className="flex items-center space-x-2 mt-2">
+              <Input
+                type="text"
+                placeholder="Add new size"
+                value={newSize}
+                onChange={(e) => setNewSize(e.target.value)}
+              />
+              <Button type="button" size="sm" onClick={handleAddSize}>
+                <PlusCircledIcon className="w-4 h-4 mr-1" />
+                Add Size
+              </Button>
+            </div>
+          </div>
+
           <div>
             <Label htmlFor="description">Description</Label>
             <Textarea

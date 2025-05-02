@@ -112,7 +112,7 @@ export default function ProductCategoriesPage() {
           <Plus className="mr-2 h-4 w-4" /> Add Category
         </Button>
       </div>
-
+      {/* 
       <Button
         variant="outline"
         size="sm"
@@ -120,10 +120,10 @@ export default function ProductCategoriesPage() {
         onClick={resetAllFilters}
       >
         Reset All Filters
-      </Button>
+      </Button> */}
 
       <div className="space-y-4">
-        <div className="relative flex-grow">
+        {/* <div className="relative flex-grow">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Search categories..."
@@ -133,7 +133,7 @@ export default function ProductCategoriesPage() {
             }
             className="pl-8 max-w-[400px]"
           />
-        </div>
+        </div> */}
 
         {/* <div className="flex items-center justify-end space-x-2">
           <DatePickerWithRange
@@ -155,9 +155,9 @@ export default function ProductCategoriesPage() {
                         {header.isPlaceholder
                           ? null
                           : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                       </TableHead>
                     );
                   })}

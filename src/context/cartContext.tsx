@@ -8,6 +8,7 @@ interface CartContextType {
   addToCart: (item: Omit<ICartItem, "quantity">) => void;
   removeFromCart: (itemId: string) => void;
   clearCart: () => void;
+  reduceQuantity: (itemId: string, size: string) => void;
 }
 
 // Create a context for the cart with proper typing
@@ -26,11 +27,11 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   const addToCart = (item: Omit<ICartItem, "quantity">) => {
     setCartItems((prevItems) => {
       const existingItem = prevItems.find(
-        (cartItem) => cartItem.id === item.id
+        (cartItem) => cartItem.id === item.id && cartItem.size === item.size
       );
       if (existingItem) {
         return prevItems.map((cartItem) =>
-          cartItem.id === item.id
+          cartItem.id === item.id && cartItem.size === item.size
             ? { ...cartItem, quantity: cartItem.quantity + 1 }
             : cartItem
         );
@@ -50,9 +51,24 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     setCartItems([]);
   };
 
+  // Reduce quantity of item in cart
+  const reduceQuantity = (itemId: string, size: string) => {
+    setCartItems((prevItems) => {
+      return prevItems.map((item) => {
+        if (item.id === itemId && item.size === size) {
+          if (item.quantity > 1) {
+            return { ...item, quantity: item.quantity - 1 };
+          }
+          return item;
+        }
+        return item;
+      }).filter((item) => item.quantity > 0);
+    });
+  };
+
   return (
     <CartContext.Provider
-      value={{ cartItems, addToCart, removeFromCart, clearCart }}
+      value={{ cartItems, addToCart, removeFromCart, clearCart, reduceQuantity }}
     >
       {children}
     </CartContext.Provider>

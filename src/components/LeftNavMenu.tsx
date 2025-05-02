@@ -29,7 +29,7 @@ export function LeftNavMenu() {
               <ul className="grid gap-3 p-6 md:w-[500px] lg:w-[1000px] xl:w-[1280px] 2xl:w-[1440px] lg:grid-cols-[.75fr_1fr]">
                 <div>
                   {section.categories.map(({ label, href }) => (
-                    <ListItem key={label} href={href}>
+                    <ListItem key={label} href={`/collections2/${encodeURIComponent(label)}`}>
                       {label}
                     </ListItem>
                   ))}
@@ -37,9 +37,9 @@ export function LeftNavMenu() {
 
                 <li>
                   <NavigationMenuLink asChild>
-                    <a
+                    <div
                       className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                      href="/"
+                    // href="/"
                     >
                       <Image
                         src={section.image}
@@ -48,7 +48,7 @@ export function LeftNavMenu() {
                         height={50}
                         className="w-full object-contain"
                       />
-                    </a>
+                    </div>
                   </NavigationMenuLink>
                 </li>
               </ul>

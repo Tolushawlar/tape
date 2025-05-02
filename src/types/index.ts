@@ -9,6 +9,11 @@ export interface ICartItem {
   description?: string;
   size?: string;
   defaultImage: string;
+  size1: string;
+  size2: string;
+  size3: string;
+  size4: string;
+  size5: string;
 }
 
 export interface ICategory extends Document {

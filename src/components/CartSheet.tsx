@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Minus, Plus, ShoppingCart } from "lucide-react";
@@ -18,13 +19,26 @@ import { useCart } from "@/context/cartContext";
 import { useCartStore } from "@/lib/store/cart-store";
 
 const CartSheet = () => {
-  const { cartItems, removeFromCart } = useCart();
+  const { cartItems, removeFromCart, addToCart , reduceQuantity} = useCart();
   const { isOpen, openCartSheet, closeCartSheet } = useCartStore();
   const { push } = useRouter();
 
   const handleCheckout = () => {
     push("/checkout");
     closeCartSheet();
+  };
+
+  const handleDecreaseQuantity = (item: any) => {
+  if (item.quantity === 1) {
+    removeFromCart(item.id);
+  } else {
+    reduceQuantity(item.id, item.size);
+  }
+};
+
+  const handleIncreaseQuantity = (item: any) => {
+    const updatedItem = { ...item, quantity: item.quantity + 1 };
+    addToCart(updatedItem);
   };
 
   return (
@@ -49,7 +63,7 @@ const CartSheet = () => {
               Your cart is empty
             </p>
           )}
-          <ul className="-my-4 divide-y divide-gray-200">
+          <ul className="overflow-y-scroll max-h-[500px] -my-4 divide-y divide-gray-200">
             {cartItems?.map((item) => (
               <li key={item.id} className="flex py-4">
                 <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
@@ -72,17 +86,28 @@ const CartSheet = () => {
                     </p>
                     <p className="mt-1 text-sm text-gray-500">
                       Size: {item.size}
+                      {/* Size: {[item.size1, item.size2, item.size3, item.size4, item.size5].filter(Boolean).join(', ')} */}
                     </p>
                   </div>
                   <div className="flex flex-1 items-end justify-between text-sm">
                     <div className="flex items-center">
-                      <Button variant="outline" size="icon" className="h-8 w-8">
+                      <Button 
+                        variant="outline" 
+                        size="icon" 
+                        className="h-8 w-8"
+                        onClick={() => handleDecreaseQuantity(item)}
+                      >
                         <Minus className="h-4 w-4" />
                       </Button>
                       <span className="mx-2 text-gray-700">
                         {item.quantity}
                       </span>
-                      <Button variant="outline" size="icon" className="h-8 w-8">
+                      <Button 
+                        variant="outline" 
+                        size="icon" 
+                        className="h-8 w-8"
+                        onClick={() => handleIncreaseQuantity(item)}
+                      >
                         <Plus className="h-4 w-4" />
                       </Button>
                     </div>

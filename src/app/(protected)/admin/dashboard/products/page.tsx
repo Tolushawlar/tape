@@ -47,6 +47,7 @@ export interface Product {
   dateAdded: string;
   price: string;
   stock: number;
+  image: { path: string } | null;
   // additionalProducts: string;
   // Add other properties that exist in the product object
 }
@@ -165,6 +166,7 @@ export default function ProductsPage() {
               dateAdded: item.created_at || new Date().toISOString(),
               price: item.price,
               stock: item.stock,
+              image: item.image.path,
             }))
           );
         } else {
@@ -289,9 +291,9 @@ export default function ProductsPage() {
                         {header.isPlaceholder
                           ? null
                           : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                       </TableHead>
                     );
                   })}
@@ -299,7 +301,7 @@ export default function ProductsPage() {
               ))}
             </TableHeader>
             <TableBody>
-               {/* using the react table, the items is been passed and looped through in this section */}
+              {/* using the react table, the items is been passed and looped through in this section */}
               {table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => (
                   <TableRow

@@ -22,6 +22,16 @@ const nextConfig = {
         hostname: "logo.png",
         pathname: "**",
       },
+      {
+        protocol: "https",
+        hostname: "drive.google.com",
+        pathname: "**",
+      },
+      {
+        protocol: "https",
+        hostname: "picsum.photos",
+        pathname: "**",
+      }
     ],
   },
 };

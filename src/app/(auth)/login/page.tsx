@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -25,6 +26,10 @@ const formSchema = z.object({
 });
 
 export default function LoginPage() {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState("");
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,8 +38,45 @@ export default function LoginPage() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      setIsLoading(true);
+      setError("");
+      
+      const response = await fetch("https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      const data = await response.json();
+      console.log(data)
+
+      if (!response.ok) {
+        throw new Error(data.message || "Login failed");
+      }
+
+      // Store user data in localStorage
+      localStorage.setItem("userData", JSON.stringify(data));
+      // Store user data in localStorage with try-catch
+      try {
+        if (typeof window !== 'undefined') {
+          window.localStorage.setItem("userData", JSON.stringify(data));
+        }
+      } catch (storageError) {
+        console.error("Error storing user data:", storageError);
+      }
+      
+      // Redirect to dashboard
+      router.push("/admin/dashboard");
+
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -77,6 +119,7 @@ export default function LoginPage() {
               <p className="text-sm text-muted-foreground">
                 Please fill in your Admin credentials
               </p>
+              {error && <p className="text-sm text-red-500">{error}</p>}
             </div>
           </div>
 
@@ -95,7 +138,7 @@ export default function LoginPage() {
                     <FormItem>
                       <FormLabel>Enter your Admin Email</FormLabel>
                       <FormControl>
-                        <Input placeholder="wisdo" {...field} />
+                        <Input placeholder="Email" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -139,20 +182,15 @@ export default function LoginPage() {
                 <Button
                   type="submit"
                   className="w-full bg-blue-600 hover:bg-blue-500"
+                  disabled={isLoading}
                 >
-                  LOGIN
+                  {isLoading ? "Logging in..." : "LOGIN"}
                 </Button>
 
                 <div className="space-y-2 text-center text-sm">
                   <p className="text-muted-foreground">Do not have login?</p>
                   <p className="text-muted-foreground">
-                    Please contact Super Admin at{" "}
-                    <Link
-                      href="tel:+2349132121191"
-                      className="text-blue-600 hover:text-blue-500"
-                    >
-                      +2349132121191
-                    </Link>{" "}
+                    Please contact Super Admin 
                     for assistance
                   </p>
                 </div>

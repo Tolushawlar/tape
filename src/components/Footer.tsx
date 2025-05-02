@@ -4,15 +4,20 @@ import { FaLinkedin, FaInstagram, FaTwitter, FaFacebook } from "react-icons/fa";
 import React from "react";
 import Image from "next/image";
 import { useGlobalState } from "@/context/GlobalStateContext";
+import { usePathname } from 'next/navigation';
 
 export default function Footer() {
   const { globalState } = useGlobalState();
+  const pathname = usePathname();
+  const isCollectionPage = pathname?.includes('collection');
 
   return (
     <footer
       className={`${
         globalState ? "hidden" : ""
-      } bg-black text-white py-8 px-4 sm:px-6 lg:px-8`}
+      } bg-black text-white py-8 px-4 sm:px-6 lg:px-8 ${
+        isCollectionPage ? "hidden bottom-[-20px] left-0 right-0 " : ""
+      }`}
     >
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center mb-8">

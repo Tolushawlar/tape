@@ -46,7 +46,13 @@ const CollectionSection = ({
             name={item.name}
             defaultImage={item.defaultImage}
             hoverImage={item.hoverImage}
+            color1={item.color1}
             price={item.price}
+            size1={item.size1}
+            size2={item.size2}
+            size3={item.size3}
+            size4={item.size4}
+            size5={item.size5}
           />
         ))}
       </div>

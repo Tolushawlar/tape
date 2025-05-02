@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Command,
@@ -12,7 +12,15 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { products } from "@/constants";
+
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  image: {
+    path: string;
+  };
+}
 
 interface SearchProductProps {
   openSearch: boolean;
@@ -20,6 +28,22 @@ interface SearchProductProps {
 }
 
 const SearchProduct = ({ openSearch, setOpenSearch }: SearchProductProps) => {
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product');
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
@@ -50,7 +74,7 @@ const SearchProduct = ({ openSearch, setOpenSearch }: SearchProductProps) => {
               >
                 <div className="flex items-center space-x-4">
                   <Image
-                    src={product.image}
+                    src={product.image.path}
                     alt={product.name}
                     width={80}
                     height={80}

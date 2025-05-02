@@ -1,3 +1,4 @@
+// eslint-disable-next-line react-hooks/rules-of-hooks
 "use client";
 
 import Image from "next/image";
@@ -19,6 +20,7 @@ import { itemsData } from "@/constants";
 import { useRouter } from "next/navigation";
 import { useCartStore } from "@/lib/store/cart-store";
 import axios from "axios";
+
 interface ProductProps {
   productName: string;
 }
@@ -34,104 +36,106 @@ interface Item {
   };
   category: string;
   price: string;
-  size: string;
-  color: string;
+  size1?: string;
+  size2?: string;
+  size3?: string;
+  size4?: string;
+  size5?: string;
+  color1?: string;
+  color2?: string;
+  color3?: string;
+  color4?: string;
+  color5?: string;
   description: string;
   sizeFit: string;
   aboutMe: string;
   productDetails: string;
   about: string;
-  lookAtMe: string
-};
-
+  lookAtMe: string;
+}
 
 export default function Product({ productName }: ProductProps) {
-  const [selectedColor, setSelectedColor] = useState("white");
+  const [selectedColor, setSelectedColor] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
   const [items, setItems] = useState<Item[]>([]);
   const [filteredItems, setFilteredItems] = useState<Item[]>([]);
-  // const [isLoading, setIsLoading] = useState(false);
   const { push } = useRouter();
-
   const { addToCart } = useCart();
+  const { openCartSheet } = useCartStore();
+  const defaultImage =
+    "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545543/cardImage_dgxddb.png";
 
   useEffect(() => {
     const fetchItems = async () => {
-      // setIsLoading(true);
       try {
         const response = await axios.get(
-          // `https://tapebackend.onrender.com/api/products`
           `https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product`
         );
         setItems(response.data);
       } catch (error) {
         console.error("Error fetching items:", error);
-      } finally {
-        // setIsLoading(false);
       }
     };
     fetchItems();
-  }, [productName]); // Runs only when decodedCollectionName changes
+  }, [productName]);
 
-  // filter the data from the API
   useEffect(() => {
     const capitalizedText =
       productName.charAt(0).toUpperCase() + productName.slice(1).toLowerCase();
 
-    const filteredItems = items.filter((item) => {
-      console.log(item);
+    const filtered = items.filter((item) => {
       const itemName = item.name || "";
-      // const subcategory = item.subcategory || "";
-      return (
-        itemName.toLowerCase() === capitalizedText.toLowerCase()
-        // subcategory.toLowerCase() === capitalizedText.toLowerCase()
-      );
+      return itemName.toLowerCase() === capitalizedText.toLowerCase();
     });
 
-    setFilteredItems(filteredItems);
+    setFilteredItems(filtered);
   }, [items, productName]);
 
-  console.log(filteredItems);
+  const firstItem = filteredItems[0];
+  const mainImageUrl = firstItem?.image?.path;
 
-  // const colors = [
-  //   { name: "Black", value: "black" },
-  //   { name: "White", value: "white" },
-  //   { name: "Red", value: "red" },
-  //   { name: "Blue", value: "blue" },
-  // ];
+  const availableColors = [
+    firstItem?.color1,
+    firstItem?.color2,
+    firstItem?.color3,
+    firstItem?.color4,
+    firstItem?.color5,
+  ].filter(Boolean); // Filter out null or undefined colors
 
-  const product = itemsData.find((item) => item.name === productName);
+  const availableSizes = [
+    firstItem?.size1,
+    firstItem?.size2,
+    firstItem?.size3,
+    firstItem?.size4,
+    firstItem?.size5,
+  ].filter(Boolean); // Filter out null or undefined sizes
 
   const handleSizeSelect = (size: string) => {
     setSelectedSize(size);
   };
-
-  const { openCartSheet } = useCartStore();
-
-  const defaultImage =
-    "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725545543/cardImage_dgxddb.png";
 
   const handleAddToCart = () => {
     if (!selectedSize) {
       alert("Please select a size before adding to cart.");
       return;
     }
+    if (!selectedColor) {
+      alert("Please select a color before adding to cart.");
+      return;
+    }
 
-    const item = {
-      id: "1",
-      name: productName,
-      price: product?.price || "41000.00",
+    const itemToAdd = {
+      id: firstItem?._id || "defaultId", // Use a more robust ID if available
+      name: firstItem?.name || productName,
+      price: firstItem?.price || "41000.00",
       size: selectedSize,
-      defaultImage: product?.defaultImage || defaultImage,
+      defaultImage: mainImageUrl || defaultImage,
       color: selectedColor,
     };
-    addToCart(item);
+    console.log(itemToAdd)
+    addToCart(itemToAdd);
     openCartSheet();
   };
-
-  const firstMenItem = filteredItems[0];
-  console.log(firstMenItem);
-  const mainImageUrl = firstMenItem?.image?.path;
 
   return (
     <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8 w-full">
@@ -141,38 +145,34 @@ export default function Product({ productName }: ProductProps) {
             <Card>
               <CardContent className="p-6">
                 <Image
-                  src={mainImageUrl}
+                  src={mainImageUrl || defaultImage}
                   width={600}
                   height={600}
                   className="w-full h-auto object-cover rounded-lg shadow-lg"
-                  alt="image"
+                  alt={firstItem?.name || "Product Image"}
                 />
               </CardContent>
             </Card>
           </div>
 
           <div className="md:w-1/2">
-            <h1 className="text-3xl font-bold mb-4">
-              {filteredItems[0]?.name}
-            </h1>
-            <p className="text-4xl font-bold mb-6">
-              £{filteredItems[0]?.price}
-            </p>
+            <h1 className="text-3xl font-bold mb-4">{firstItem?.name}</h1>
+            <p className="text-4xl font-bold mb-6">£{firstItem?.price}</p>
 
             <div className="mb-6">
               <h2 className="text-lg font-semibold mb-2">Colors</h2>
               <div className="flex space-x-2">
-                {/* {filteredItems[0]?.color.map((color) => ( */}
-                <button
-                  key={firstMenItem?.color}
-                  className={`w-8 h-8 rounded-full border-2 ${selectedColor === firstMenItem?.color
-                    ? "border-blue-500"
-                    : "border-gray-300"
-                    }`}
-                  style={{ backgroundColor: firstMenItem?.color }}
-                  onClick={() => setSelectedColor(firstMenItem?.color)}
-                />
-                {/* ))} */}
+                {availableColors.map((color) => (
+                  <button
+                    key={color}
+                    className={`w-8 h-8 rounded-full border-2 ${selectedColor === color
+                      ? "border-blue-500"
+                      : "border-gray-300"
+                      }`}
+                    style={{ backgroundColor: color }}
+                    onClick={() => setSelectedColor(color)}
+                  />
+                ))}
               </div>
             </div>
 
@@ -183,12 +183,11 @@ export default function Product({ productName }: ProductProps) {
                   <SelectValue placeholder="Select a size" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={firstMenItem?.size}>{firstMenItem?.size}</SelectItem>
-                  {/* <SelectItem value="xs">XS</SelectItem>
-                  <SelectItem value="s">S</SelectItem>
-                  <SelectItem value="m">M</SelectItem>
-                  <SelectItem value="l">L</SelectItem>
-                  <SelectItem value="xl">XL</SelectItem> */}
+                  {availableSizes.map((size) => (
+                    <SelectItem key={size} value={size}>
+                      {size}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -213,22 +212,24 @@ export default function Product({ productName }: ProductProps) {
 
             <Card>
               <CardContent className="p-4">
-                <FiveColumnSection item={{
-                  _id: firstMenItem?._id || '',
-                  name: firstMenItem?.name || '',
-                  image: firstMenItem?.image || { path: '' },
-                  image2: firstMenItem?.image2 || { path: '' },
-                  category: firstMenItem?.category || '',
-                  price: firstMenItem?.price || '',
-                  size: firstMenItem?.size || '',
-                  color: firstMenItem?.color || '',
-                  description: firstMenItem?.description || '',
-                  sizeFit: firstMenItem?.sizeFit || '',
-                  aboutMe: firstMenItem?.aboutMe || '',
-                  productDetails: firstMenItem?.productDetails || '',
-                  about: firstMenItem?.about || '',
-                  lookAtMe: firstMenItem?.lookAtMe || ''
-                }} />
+                <FiveColumnSection
+                  item={{
+                    _id: firstItem?._id || '',
+                    name: firstItem?.name || '',
+                    image: firstItem?.image || { path: '' },
+                    image2: firstItem?.image2 || { path: '' },
+                    category: firstItem?.category || '',
+                    price: firstItem?.price || '',
+                    size: selectedSize, // Use the selected size here
+                    color: selectedColor, // Use the selected color here
+                    description: firstItem?.description || '',
+                    sizeFit: firstItem?.sizeFit || '',
+                    aboutMe: firstItem?.aboutMe || '',
+                    productDetails: firstItem?.productDetails || '',
+                    about: firstItem?.about || '',
+                    lookAtMe: firstItem?.lookAtMe || '',
+                  }}
+                />
               </CardContent>
             </Card>
           </div>

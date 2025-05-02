@@ -127,6 +127,7 @@ const columns: ColumnDef<Order>[] = [
         }
       };
 
+      console.log(orderDetails);
       return (
         <>
           <div className="flex items-center gap-2">
@@ -184,7 +185,6 @@ const columns: ColumnDef<Order>[] = [
                     <p><span className="font-medium">Order ID:</span> {orderDetails.id}</p>
                     <p><span className="font-medium">Order Date:</span> {new Date(orderDetails.created_at).toLocaleDateString()}</p>
                     <p><span className="font-medium">Quantity:</span> {orderDetails.quantity}</p>
-                    <p><span className="font-medium">Total Amount:</span> €{orderDetails.Total}</p>
                   </div>
                 </div>
 
@@ -207,6 +207,8 @@ const columns: ColumnDef<Order>[] = [
                             <p className="font-medium">{item.name}</p>
                             <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>
                           </div>
+                          <p><span className="font-medium">Size:</span> {(orderDetails.cart_items as any[])?.[0]?.size}</p>
+                          <p><span className="font-medium">Color:</span> {(orderDetails.cart_items as any[])?.[0]?.color}</p>
                         </div>
                         <p className="font-medium">€{item.price}</p>
                       </div>

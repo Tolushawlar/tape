@@ -25,8 +25,8 @@ import { NavUser } from "@/components/nav-user";
 const baseUrl = "/admin/dashboard";
 
 const user = {
-  name: "Adeshile Tape",
-  email: "superadmin@example.com",
+  name: "Adeshile Osunkoya",
+  email: "adeshile@tape.com",
   avatar: "/avatars/shadcn.jpg",
 };
 

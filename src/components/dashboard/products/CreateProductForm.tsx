@@ -15,68 +15,40 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
+const MAX_COLORS = 5;
+const MAX_SIZES = 5;
 
 const productSchema = z.object({
     name: z.string().min(1, "Product name is required"),
     price: z.string().min(1, "Price is required"),
-    color: z.string().min(1, "Color is required"),
-    size: z.string().min(1, "Size is required"),
+    colors: z.array(z.string()).min(1, "At least one color is required").max(MAX_COLORS, `Maximum ${MAX_COLORS} colors allowed`),
+    sizes: z.array(z.string()).min(1, "At least one size is required").max(MAX_SIZES, `Maximum ${MAX_SIZES} sizes allowed`),
     category: z.string().min(1, "Category is required"),
-    description: z.string(),
-    productDetails: z.string(),
-    sizeFit: z.string(),
-    lookAtMe: z.string(),
-    about: z.string(),
-    stock: z.string().min(1, "Stock is required"),
-    main: z.string().min(1, "Main image URL is required"),
-    other: z.string(),
+    description: z.string().min(1, "Description is required"),
+    productDetails: z.string().min(1, "Product details are required"),
+    sizeFit: z.string().min(1, "Size & fit information is required"),
+    lookAtMe: z.string().min(1, "Look at me section is required"),
+    about: z.string().min(1, "About section is required"),
+    stock: z.string().min(1, "Stock is required").regex(/^\d+$/, "Stock must be a number"),
+    main: z.string().min(1, "Main image URL is required").url("Must be a valid URL"),
+    other: z.string().url("Must be a valid URL").optional(),
 });
 
-
-// {
-//     "name": "string",
-//     "description": "string",
-//     "price": 0,
-//     "size": "string",
-//     "color": "string",
-//     "category": "string",
-//     "brand": "string",
-//     "stock": 0,
-//     "productDetails": "string",
-//     "sizeFit": "string",
-//     "lookAtMe": "string",
-//     "about": "string",
-//     "image": {
-//       "access": "public",
-//       "path": "string",
-//       "name": "string",
-//       "type": "string",
-//       "size": 0,
-//       "mime": "string",
-//       "meta": {}
-//     },
-//     "image2": {
-//       "access": "public",
-//       "path": "string",
-//       "name": "string",
-//       "type": "string",
-//       "size": 0,
-//       "mime": "string",
-//       "meta": {}
-//     }
-//   }
 type ProductFormData = z.infer<typeof productSchema>;
 
-const categories = ["Men", "Women", "Kids", "Accessories"];
-const availableSizes = ["XS", "S", "M", "L", "XL"];
-const availableColors = ["Red", "Blue", "Black", "White", "Green"];
+interface Category {
+    _id: string;
+    category_name: string;
+}
 
 export function CreateProductForm() {
     const {
         register,
         handleSubmit,
         setValue,
+        watch,
         formState: { errors, isSubmitting },
         reset,
     } = useForm<ProductFormData>({
@@ -88,13 +60,33 @@ export function CreateProductForm() {
             lookAtMe: "",
             about: "",
             other: "",
+            colors: [],
+            sizes: [],
         }
     });
 
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [currentColors, setCurrentColors] = useState<string[]>([]);
+    const [currentSizes, setCurrentSizes] = useState<string[]>([]);
+    const newColorInput = watch("newColor");
+    const newSizeInput = watch("newSize");
+
     useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await axios.get(
+                    "https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/category"
+                );
+                setCategories(response.data || []);
+            } catch (error) {
+                console.error("Error fetching categories:", error);
+                alert("Failed to fetch categories.");
+                setCategories([]);
+            }
+        };
+
+        fetchCategories();
         register("category", { required: "Category is required" });
-        register("color", { required: "Color is required" });
-        register("size", { required: "Size is required" });
     }, [register]);
 
     const handleCategoryChange = (value: string) => {
@@ -104,46 +96,57 @@ export function CreateProductForm() {
         });
     };
 
-    const handleColorChange = (value: string) => {
-        setValue("color", value, {
-            shouldValidate: true,
-            shouldDirty: true
-        });
+    const handleAddColor = () => {
+        if (newColorInput && !currentColors.includes(newColorInput) && currentColors.length < MAX_COLORS) {
+            setCurrentColors([...currentColors, newColorInput]);
+            setValue("colors", [...currentColors, newColorInput], { shouldValidate: true, shouldDirty: true });
+            setValue("newColor", "");
+        } else if (currentColors.length >= MAX_COLORS) {
+            alert(`You can add a maximum of ${MAX_COLORS} colors.`);
+        }
     };
 
-    const handleSizeChange = (value: string) => {
-        setValue("size", value, {
-            shouldValidate: true,
-            shouldDirty: true
-        });
+    const handleRemoveColor = (colorToRemove: string) => {
+        const updatedColors = currentColors.filter(color => color !== colorToRemove);
+        setCurrentColors(updatedColors);
+        setValue("colors", updatedColors, { shouldValidate: true, shouldDirty: true });
+    };
+
+    const handleAddSize = () => {
+        if (newSizeInput && !currentSizes.includes(newSizeInput) && currentSizes.length < MAX_SIZES) {
+            setCurrentSizes([...currentSizes, newSizeInput]);
+            setValue("sizes", [...currentSizes, newSizeInput], { shouldValidate: true, shouldDirty: true });
+            setValue("newSize", "");
+        } else if (currentSizes.length >= MAX_SIZES) {
+            alert(`You can add a maximum of ${MAX_SIZES} sizes.`);
+        }
+    };
+
+    const handleRemoveSize = (sizeToRemove: string) => {
+        const updatedSizes = currentSizes.filter(size => size !== sizeToRemove);
+        setCurrentSizes(updatedSizes);
+        setValue("sizes", updatedSizes, { shouldValidate: true, shouldDirty: true });
     };
 
     const onSubmit = async (data: ProductFormData) => {
         try {
-            // const productData = {
-            //     name: data.name,
-            //     price: parseFloat(data.price),
-            //     color: data.color,
-            //     size: data.size,
-            //     category: data.category,
-            //     subcategory: "item",
-            //     description: data.description || "",
-            //     (data.productDetails: data.productDetails || "",
-            //     sizeFit: data.sizeFit || "",
-            //     lookAtMe: data.lookAtMe || "",
-            //     about: data.about || "",
-            //     stock: parseIntstock, 10),
-            //     images: {
-            //         main: data.main,
-            //         others: data.other,
-            //     },
-            // };
+            const colorPayload = {};
+            data.colors.forEach((color, index) => {
+                // Dynamically create color1, color2, etc. fields
+                colorPayload[`color${index + 1}`] = color;
+            });
+
+            const sizePayload = {};
+            data.sizes.forEach((size, index) => {
+                // Dynamically create size1, size2, etc. fields
+                sizePayload[`size${index + 1}`] = size;
+            });
 
             const productData = {
                 name: data.name,
                 price: parseFloat(data.price),
-                color: data.color,
-                size: data.size,
+                ...colorPayload, // Spread the dynamically created color fields
+                ...sizePayload, // Spread the dynamically created size fields
                 category: data.category,
                 description: data.description || "",
                 brand: "string",
@@ -151,7 +154,7 @@ export function CreateProductForm() {
                 sizeFit: data.sizeFit || "",
                 lookAtMe: data.lookAtMe || "",
                 about: data.about || "",
-                stock: data.stock ||  10,
+                stock: parseInt(data.stock, 10),
                 image: {
                     "access": "public",
                     "path": data.main,
@@ -163,7 +166,7 @@ export function CreateProductForm() {
                 },
                 image2: {
                     "access": "public",
-                    "path": data.other,
+                    "path": data.other || "",
                     "name": "string",
                     "type": "string",
                     "size": 0,
@@ -173,7 +176,6 @@ export function CreateProductForm() {
             };
 
             const response = await axios.post(
-                // "https://tapebackend.onrender.com/api/products",
                 "https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product",
                 productData,
                 {
@@ -184,9 +186,13 @@ export function CreateProductForm() {
             );
 
             if (response.status === 200) {
-                console.log(productData);
+                console.log("Product data sent:", productData);
                 alert("Product created successfully!");
                 reset();
+                setCurrentColors([]);
+                setCurrentSizes([]);
+                setValue("colors", []);
+                setValue("sizes", []);
             }
         } catch (error) {
             console.error("Error creating product:", error);
@@ -212,7 +218,7 @@ export function CreateProductForm() {
                             {...register("name")}
                         />
                         {errors.name && (
-                            <span className="text-red-500 text-sm">{errors.name.message}</span>
+                            <span className="text-red-500 text-sm">{errors.name?.message}</span>
                         )}
                     </div>
 
@@ -225,7 +231,7 @@ export function CreateProductForm() {
                             {...register("price")}
                         />
                         {errors.price && (
-                            <span className="text-red-500 text-sm">{errors.price.message}</span>
+                            <span className="text-red-500 text-sm">{errors.price?.message}</span>
                         )}
                     </div>
 
@@ -236,56 +242,89 @@ export function CreateProductForm() {
                                 <SelectValue placeholder="Select category" />
                             </SelectTrigger>
                             <SelectContent>
-                                {categories.map((category) => (
-                                    <SelectItem key={category} value={category}>
-                                        {category}
+                                {(categories || []).map((category) => (
+                                    <SelectItem key={category._id} value={category.category_name}>
+                                        {category.category_name}
                                     </SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
                         {errors.category && (
-                            <span className="text-red-500 text-sm">{errors.category.message}</span>
+                            <span className="text-red-500 text-sm">{errors.category?.message}</span>
                         )}
                     </div>
 
                     <div>
-                        <Label htmlFor="color">Color</Label>
-                        <Select onValueChange={handleColorChange}>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Select color" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {availableColors.map((color) => (
-                                    <SelectItem key={color} value={color.toLowerCase()}>
+                        <Label>Colors (Max {MAX_COLORS})</Label>
+                        <div className="flex items-center space-x-2">
+                            <Input
+                                type="text"
+                                placeholder="Enter color"
+                                value={watch("newColor")}
+                                onChange={(e) => setValue("newColor", e.target.value)}
+                            />
+                            <Button type="button" size="sm" onClick={handleAddColor} disabled={currentColors.length >= MAX_COLORS}>
+                                Add Color
+                            </Button>
+                        </div>
+                        {currentColors.length > 0 && (
+                            <div className="mt-2">
+                                {currentColors.map(color => (
+                                    <div key={color} className="inline-flex items-center mr-2 rounded-full bg-gray-200 px-3 py-0.5 text-sm text-gray-800">
                                         {color}
-                                    </SelectItem>
+                                        <button
+                                            type="button"
+                                            className="ml-1 rounded-full hover:bg-gray-300"
+                                            onClick={() => handleRemoveColor(color)}
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-3 w-3">
+                                                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                                            </svg>
+                                        </button>
+                                    </div>
                                 ))}
-                            </SelectContent>
-                        </Select>
-                        {errors.color && (
-                            <span className="text-red-500 text-sm">{errors.color.message}</span>
+                            </div>
+                        )}
+                        {errors.colors && (
+                            <span className="text-red-500 text-sm">{errors.colors?.message}</span>
                         )}
                     </div>
 
                     <div>
-                        <Label htmlFor="size">Size</Label>
-                        <Select onValueChange={handleSizeChange}>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Select size" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {availableSizes.map((size) => (
-                                    <SelectItem key={size} value={size.toLowerCase()}>
+                        <Label>Sizes (Max {MAX_SIZES})</Label>
+                        <div className="flex items-center space-x-2">
+                            <Input
+                                type="text"
+                                placeholder="Enter size"
+                                value={watch("newSize")}
+                                onChange={(e) => setValue("newSize", e.target.value)}
+                            />
+                            <Button type="button" size="sm" onClick={handleAddSize} disabled={currentSizes.length >= MAX_SIZES}>
+                                Add Size
+                            </Button>
+                        </div>
+                        {currentSizes.length > 0 && (
+                            <div className="mt-2">
+                                {currentSizes.map(size => (
+                                    <div key={size} className="inline-flex items-center mr-2 rounded-full bg-gray-200 px-3 py-0.5 text-sm text-gray-800">
                                         {size}
-                                    </SelectItem>
+                                        <button
+                                            type="button"
+                                            className="ml-1 rounded-full hover:bg-gray-300"
+                                            onClick={() => handleRemoveSize(size)}
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-3 w-3">
+                                                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                                            </svg>
+                                        </button>
+                                    </div>
                                 ))}
-                            </SelectContent>
-                        </Select>
-                        {errors.size && (
-                            <span className="text-red-500 text-sm">{errors.size.message}</span>
+                            </div>
+                        )}
+                        {errors.sizes && (
+                            <span className="text-red-500 text-sm">{errors.sizes?.message}</span>
                         )}
                     </div>
-
                     <div>
                         <Label htmlFor="stock">Stock</Label>
                         <Input
@@ -294,7 +333,7 @@ export function CreateProductForm() {
                             {...register("stock")}
                         />
                         {errors.stock && (
-                            <span className="text-red-500 text-sm">{errors.stock.message}</span>
+                            <span className="text-red-500 text-sm">{errors.stock?.message}</span>
                         )}
                     </div>
 
@@ -305,7 +344,7 @@ export function CreateProductForm() {
                             {...register("main")}
                         />
                         {errors.main && (
-                            <span className="text-red-500 text-sm">{errors.main.message}</span>
+                            <span className="text-red-500 text-sm">{errors.main?.message}</span>
                         )}
                     </div>
 
@@ -315,6 +354,9 @@ export function CreateProductForm() {
                             id="other"
                             {...register("other")}
                         />
+                        {errors.other && (
+                            <span className="text-red-500 text-sm">{errors.other?.message}</span>
+                        )}
                     </div>
                 </div>
 
@@ -326,6 +368,9 @@ export function CreateProductForm() {
                             {...register("description")}
                             rows={3}
                         />
+                        {errors.description && (
+                            <span className="text-red-500 text-sm">{errors.description?.message}</span>
+                        )}
                     </div>
 
                     <div>
@@ -335,6 +380,9 @@ export function CreateProductForm() {
                             {...register("productDetails")}
                             rows={3}
                         />
+                        {errors.productDetails && (
+                            <span className="text-red-500 text-sm">{errors.productDetails?.message}</span>
+                        )}
                     </div>
 
                     <div>
@@ -344,6 +392,9 @@ export function CreateProductForm() {
                             {...register("sizeFit")}
                             rows={3}
                         />
+                        {errors.sizeFit && (
+                            <span className="text-red-500 text-sm">{errors.sizeFit?.message}</span>
+                        )}
                     </div>
 
                     <div>
@@ -353,6 +404,9 @@ export function CreateProductForm() {
                             {...register("lookAtMe")}
                             rows={3}
                         />
+                        {errors.lookAtMe && (
+                            <span className="text-red-500 text-sm">{errors.lookAtMe?.message}</span>
+                        )}
                     </div>
 
                     <div>
@@ -362,6 +416,9 @@ export function CreateProductForm() {
                             {...register("about")}
                             rows={3}
                         />
+                        {errors.about && (
+                            <span className="text-red-500 text-sm">{errors.about?.message}</span>
+                        )}
                     </div>
                 </div>
             </form>

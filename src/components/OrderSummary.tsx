@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import Image from "next/image";
@@ -11,8 +12,21 @@ import { Separator } from "@/components/ui/separator";
 import { useCart } from "@/context/cartContext";
 
 const OrderSummary = () => {
-  const { cartItems, removeFromCart } = useCart();
+  const { cartItems, removeFromCart, reduceQuantity, addToCart } = useCart();
   const { push } = useRouter();
+
+  const handleDecreaseQuantity = (item: any) => {
+    if (item.quantity === 1) {
+      removeFromCart(item.id);
+    } else {
+      reduceQuantity(item.id, item.size);
+    }
+  };
+
+  const handleIncreaseQuantity = (item: any) => {
+    const updatedItem = { ...item, quantity: item.quantity + 1 };
+    addToCart(updatedItem);
+  };
 
   const subtotal = cartItems.reduce(
     (total, item) => total + Number(item.price) * item.quantity,
@@ -46,11 +60,21 @@ const OrderSummary = () => {
                 <h3 className="font-semibold">{item.name}</h3>
                 <p className="text-sm text-gray-500">Size: {item.size}</p>
                 <div className="flex items-center space-x-2">
-                  <Button variant="outline" size="icon" className="h-6 w-6">
+                  <Button 
+                    variant="outline" 
+                    size="icon" 
+                    className="h-6 w-6"
+                    onClick={() => handleDecreaseQuantity(item)}
+                  >
                     <Minus className="h-3 w-3" />
                   </Button>
                   <span>{item.quantity}</span>
-                  <Button variant="outline" size="icon" className="h-6 w-6">
+                  <Button 
+                    variant="outline" 
+                    size="icon" 
+                    className="h-6 w-6"
+                    onClick={() => handleIncreaseQuantity(item)}
+                  >
                     <Plus className="h-3 w-3" />
                   </Button>
                 </div>
@@ -68,30 +92,30 @@ const OrderSummary = () => {
           ))}
           <Separator />
           <div className="space-y-2">
-            <div className="flex justify-between">
+            {/* <div className="flex justify-between">
               <span>Subtotal ({cartItems.length} items)</span>
               <span className="font-semibold">£{subtotal.toFixed(2)}</span>
             </div>
             <div className="flex justify-between">
               <span>Shipping</span>
               <span className="font-semibold">£{shipping.toFixed(2)}</span>
-            </div>
+            </div> */}
             <Separator />
             <div className="flex justify-between text-lg font-semibold">
               <span>Total</span>
               <span>£{total.toFixed(2)}</span>
             </div>
-            <p className="text-sm text-gray-500 text-right">
+            {/* <p className="text-sm text-gray-500 text-right">
               Including £{tax.toFixed(2)} in taxes
-            </p>
+            </p> */}
           </div>
 
-          <div className="pt-4 flex gap-3">
+          {/* <div className="pt-4 flex gap-3">
             <Input placeholder="Enter discount code" />
             <Button type="button" className="bg-blue-600 uppercase">
               Apply
             </Button>
-          </div>
+          </div> */}
         </div>
       </CardContent>
     </Card>
