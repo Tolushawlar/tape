@@ -191,7 +191,7 @@ const ProductPage = () => {
 
   const onSubmit = async (data: ProductFormData) => {
     try {
-      const productData: unknown = {
+      const productData: any = {
         name: data.name,
         price: parseFloat(data.price),
         category: data.category,
