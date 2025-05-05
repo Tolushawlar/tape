@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 interface Item {
+  color1: string;
   size1: string;
   size2: string;
   size3: string;
