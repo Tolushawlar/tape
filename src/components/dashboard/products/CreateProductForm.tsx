@@ -34,6 +34,8 @@ const productSchema = z.object({
     stock: z.string().min(1, "Stock is required").regex(/^\d+$/, "Stock must be a number"),
     main: z.string().min(1, "Main image URL is required").url("Must be a valid URL"),
     other: z.string().url("Must be a valid URL").optional(),
+    newColor: z.string().optional(), // Add newColor to the schema
+    newSize: z.string().optional(),   // Add newSize to the schema
 });
 
 type ProductFormData = z.infer<typeof productSchema>;
@@ -43,6 +45,13 @@ interface Category {
     category_name: string;
 }
 
+interface ColorPayload {
+    [key: `color${number}`]: string;
+}
+
+interface SizePayload {
+    [key: `size${number}`]: string;
+}
 export function CreateProductForm() {
     const {
         register,
@@ -130,15 +139,13 @@ export function CreateProductForm() {
 
     const onSubmit = async (data: ProductFormData) => {
         try {
-            const colorPayload = {};
+            const colorPayload: ColorPayload = {};
             data.colors.forEach((color, index) => {
-                // Dynamically create color1, color2, etc. fields
                 colorPayload[`color${index + 1}`] = color;
             });
-
-            const sizePayload = {};
+            
+            const sizePayload: SizePayload = {};
             data.sizes.forEach((size, index) => {
-                // Dynamically create size1, size2, etc. fields
                 sizePayload[`size${index + 1}`] = size;
             });
 
