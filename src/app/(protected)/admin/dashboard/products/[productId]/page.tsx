@@ -71,6 +71,8 @@ interface ProductData {
   size3?: string;
   size4?: string;
   size5?: string;
+  [key: `color${number}`]: string | undefined; // Index signature for color properties
+  [key: `size${number}`]: string | undefined;  // Index signature for size properties
 }
 
 interface Category {
