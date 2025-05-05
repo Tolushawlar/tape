@@ -36,16 +36,16 @@ interface Item {
   };
   category: string;
   price: string;
-  size1?: string;
-  size2?: string;
-  size3?: string;
-  size4?: string;
-  size5?: string;
-  color1?: string;
-  color2?: string;
-  color3?: string;
-  color4?: string;
-  color5?: string;
+  size1?: string | null;
+  size2?: string | null;
+  size3?: string | null;
+  size4?: string | null;
+  size5?: string | null;
+  color1?: string | null;
+  color2?: string | null;
+  color3?: string | null;
+  color4?: string | null;
+  color5?: string | null;
   description: string;
   sizeFit: string;
   aboutMe: string;
@@ -55,8 +55,8 @@ interface Item {
 }
 
 export default function Product({ productName }: ProductProps) {
-  const [selectedColor, setSelectedColor] = useState("");
-  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [items, setItems] = useState<Item[]>([]);
   const [filteredItems, setFilteredItems] = useState<Item[]>([]);
   const { push } = useRouter();
@@ -100,7 +100,7 @@ export default function Product({ productName }: ProductProps) {
     firstItem?.color3,
     firstItem?.color4,
     firstItem?.color5,
-  ].filter(Boolean); // Filter out null or undefined colors
+  ].filter(Boolean) as string[];
 
   const availableSizes = [
     firstItem?.size1,
@@ -108,7 +108,7 @@ export default function Product({ productName }: ProductProps) {
     firstItem?.size3,
     firstItem?.size4,
     firstItem?.size5,
-  ].filter(Boolean); // Filter out null or undefined sizes
+  ].filter(Boolean) as string[];
 
   const handleSizeSelect = (size: string) => {
     setSelectedSize(size);
@@ -178,7 +178,7 @@ export default function Product({ productName }: ProductProps) {
 
             <div className="mb-6">
               <h2 className="text-lg font-semibold mb-2">Size</h2>
-              <Select onValueChange={handleSizeSelect}>
+              <Select onValueChange={(value) => setSelectedSize(value)}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select a size" />
                 </SelectTrigger>
@@ -220,8 +220,8 @@ export default function Product({ productName }: ProductProps) {
                     image2: firstItem?.image2 || { path: '' },
                     category: firstItem?.category || '',
                     price: firstItem?.price || '',
-                    size: selectedSize, // Use the selected size here
-                    color: selectedColor, // Use the selected color here
+                    size: selectedSize || '', // Provide a default value
+                    color: selectedColor || '', // Provide a default value
                     description: firstItem?.description || '',
                     sizeFit: firstItem?.sizeFit || '',
                     aboutMe: firstItem?.aboutMe || '',

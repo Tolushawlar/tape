@@ -128,7 +128,7 @@ const CartSheet = () => {
           {cartItems.length !== 0 && (
             <>
               <div className="flex justify-between text-base font-medium text-gray-900">
-                <p>Subtotal</p>
+                <p>Total</p>
                 <p>
                   £
                   {cartItems
@@ -141,9 +141,9 @@ const CartSheet = () => {
                 </p>
               </div>
 
-              <p className="mt-0.5 text-sm text-gray-500">
+              {/* <p className="mt-0.5 text-sm text-gray-500">
                 Shipping and taxes calculated at checkout.
-              </p>
+              </p> */}
 
               <div className="mt-6">
                 <Button
