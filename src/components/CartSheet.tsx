@@ -129,7 +129,7 @@ const CartSheet = () => {
             <>
               <div className="flex justify-between text-base font-medium text-gray-900">
                 <p>Total</p>
-                <p>
+                <p> 
                   £
                   {cartItems
                     .reduce(
