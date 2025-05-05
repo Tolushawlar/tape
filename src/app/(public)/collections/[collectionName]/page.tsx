@@ -95,6 +95,7 @@ const CollectionPage = ({ params }: { params: { collectionName: string } }) => {
               hoverImage={item.image2.path?.[0]}
               price={item.price}
               itemName={item.name}
+              color1={item.color1}
               size1={item.size1}
               size2={item.size2}
               size3={item.size3}
