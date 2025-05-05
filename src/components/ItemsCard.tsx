@@ -58,7 +58,7 @@ const ImageCard = ({
 
   const handleSizeClick = (selectedSize: string) => {
     const item = { id, name, price, defaultImage, color:color1, size: selectedSize };
-    addToCart(item);
+    addToCart(item); 
     setIsSizeVisible(false);
     toggleCartSheet();
     setGlobalState(true);

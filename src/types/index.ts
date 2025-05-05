@@ -9,11 +9,11 @@ export interface ICartItem {
   description?: string;
   size?: string;
   defaultImage: string;
-  size1: string;
-  size2: string;
-  size3: string;
-  size4: string;
-  size5: string;
+  size1?: string | null | undefined;
+  size2?: string | null | undefined;
+  size3?: string | null | undefined;
+  size4?: string | null | undefined;
+  size5?: string | null | undefined;
 }
 
 export interface ICategory extends Document {
