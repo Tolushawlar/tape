@@ -10,20 +10,25 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useCart } from "@/context/cartContext";
+import { ICartItem } from "@/context/cartContext"; // Import the ICartItem interface
 
 const OrderSummary = () => {
   const { cartItems, removeFromCart, reduceQuantity, addToCart } = useCart();
   const { push } = useRouter();
 
-  const handleDecreaseQuantity = (item: Array) => {
+  const handleDecreaseQuantity = (item: ICartItem) => {
     if (item.quantity === 1) {
       removeFromCart(item.id);
     } else {
-      reduceQuantity(item.id, item.size);
+      if (item.size) { // Check if item.size has a value
+        reduceQuantity(item.id, item.size);
+      } else {
+        console.error("Error: Item size is undefined", item);
+        // Optionally handle the case where size is undefined, e.g., show an error message
+      }
     }
   };
-
-  const handleIncreaseQuantity = (item: any) => {
+  const handleIncreaseQuantity = (item: ICartItem) => {
     const updatedItem = { ...item, quantity: item.quantity + 1 };
     addToCart(updatedItem);
   };
@@ -60,18 +65,18 @@ const OrderSummary = () => {
                 <h3 className="font-semibold">{item.name}</h3>
                 <p className="text-sm text-gray-500">Size: {item.size}</p>
                 <div className="flex items-center space-x-2">
-                  <Button 
-                    variant="outline" 
-                    size="icon" 
+                  <Button
+                    variant="outline"
+                    size="icon"
                     className="h-6 w-6"
                     onClick={() => handleDecreaseQuantity(item)}
                   >
                     <Minus className="h-3 w-3" />
                   </Button>
                   <span>{item.quantity}</span>
-                  <Button 
-                    variant="outline" 
-                    size="icon" 
+                  <Button
+                    variant="outline"
+                    size="icon"
                     className="h-6 w-6"
                     onClick={() => handleIncreaseQuantity(item)}
                   >
@@ -81,7 +86,7 @@ const OrderSummary = () => {
               </div>
               <div className="text-right">
                 <p className="font-semibold">£{item.price}</p>
-                <button 
+                <button
                   className="text-sm text-red-500"
                   onClick={() => removeFromCart(item.id)}
                 >
