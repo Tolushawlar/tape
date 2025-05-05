@@ -50,6 +50,7 @@ interface ProductImage {
 }
 
 interface ProductData {
+  name: string;
   price: number;
   category: string;
   description: string;
@@ -228,6 +229,7 @@ const ProductPage = () => {
   const onSubmit = async (data: ProductFormData) => {
     try {
       const productData: ProductData = {
+        name: data.name,
         price: parseFloat(data.price),
         category: data.category,
         description: data.description || "",
