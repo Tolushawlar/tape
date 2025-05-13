@@ -103,9 +103,10 @@ export const sectionData = [
     image:
       "https://res.cloudinary.com/dtlxunbzr/image/upload/v1726482624/image_15_ujfj1n.png",
     categories: [
-      { label: " Tops", href: "#" },
-      { label: "T-shirts", href: "#" },
-      { label: "Sweaters & Hoodies", href: "#" },
+      // { label: " Tops", href: "#" },
+      // { label: "T-shirts", href: "#" },
+      // { label: "Sweaters & Hoodies", href: "#" },
+      { label: "Coming soon", href: "#" },
     ],
     sectionMapping: "VIEW ALL WOMEN'S PRODUCT",
   },
@@ -115,9 +116,11 @@ export const sectionData = [
     image:
       "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725546251/modal3_mwkwaf.png",
     categories: [
-      { label: " Tops", href: "#" },
-      { label: "T-shirts", href: "#" },
-      { label: "Sweaters & Hoodies", href: "#" },
+      // { label: " Tops", href: "#" },
+      // { label: "T-shirts", href: "#" },
+      // { label: "Sweaters & Hoodies", href: "#" },
+      { label: "Coming soon", href: "#" },
+
     ],
     sectionMapping: "VIEW ALL KID'S PRODUCT",
   },
@@ -127,9 +130,10 @@ export const sectionData = [
     image:
       "https://res.cloudinary.com/dtlxunbzr/image/upload/v1725546254/modal2_txynj6.png",
     categories: [
-      { label: "All Tops", href: "#" },
-      { label: "T-shirts", href: "#" },
-      { label: "Sweaters & Hoodies", href: "#" },
+      // { label: "All Tops", href: "#" },
+      // { label: "T-shirts", href: "#" },
+      // { label: "Sweaters & Hoodies", href: "#" },
+      { label: "Coming soon", href: "#" },
     ],
     sectionMapping: "VIEW ALL ACCESSORIES",
   },

@@ -37,9 +37,9 @@ const OrderSummary = () => {
     (total, item) => total + Number(item.price) * item.quantity,
     0
   );
-  const shipping = 7000;
-  const tax = 4918.60;
-  const total = subtotal + shipping;
+  // const shipping = 7000;
+  // const tax = 4918.60;
+  const total = subtotal ;
 
   return (
     <Card>

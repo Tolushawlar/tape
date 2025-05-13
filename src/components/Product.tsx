@@ -148,10 +148,26 @@ export default function Product({ productName }: ProductProps) {
                   src={mainImageUrl || defaultImage}
                   width={600}
                   height={600}
-                  className="w-full h-auto object-cover rounded-lg shadow-lg"
+                  className="w-full h-auto object-cover rounded-lg shadow-lg cursor-pointer"
                   alt={firstItem?.name || "Product Image"}
-                />
-              </CardContent>
+                  onClick={() => {
+                    const img = document.createElement('div');
+                    img.style.position = 'fixed';
+                    img.style.top = '0';
+                    img.style.left = '0';
+                    img.style.width = '100%';
+                    img.style.height = '100%';
+                    img.style.backgroundColor = 'rgba(0,0,0,0.9)';
+                    img.style.zIndex = '9999';
+                    img.style.backgroundImage = `url(${mainImageUrl || defaultImage})`;
+                    img.style.backgroundSize = 'contain';
+                    img.style.backgroundPosition = 'center';
+                    img.style.backgroundRepeat = 'no-repeat';
+                    img.style.cursor = 'pointer';
+                    img.onclick = () => document.body.removeChild(img);
+                    document.body.appendChild(img);
+                  }}
+                />              </CardContent>
             </Card>
           </div>
 

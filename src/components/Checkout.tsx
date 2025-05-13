@@ -5,12 +5,13 @@ import { CheckCircle2 } from "lucide-react";
 import { useForm, FormProvider } from "react-hook-form";
 import { useRouter } from 'next/navigation';
 import { useCart } from "@/context/cartContext";
+import { useState } from "react";
 
 import OrderSummary from "./OrderSummary";
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardContent,
+  CardContent, 
   CardDescription,
   CardHeader,
   CardTitle,
@@ -24,6 +25,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { CheckoutDto, checkoutSchema, emptyAddress } from "@/schema";
@@ -31,6 +39,7 @@ import AddressForm from "./AddressForm";
 
 export default function CheckoutForm() {
   const { cartItems } = useCart();
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const form = useForm<CheckoutDto>({
     resolver: zodResolver(checkoutSchema),
     defaultValues: {
@@ -93,8 +102,11 @@ export default function CheckoutForm() {
       });
 
       if (response.ok) {
-        alert('Order placed successfully!');
-        router.push('/');
+        setShowSuccessModal(true);
+        setTimeout(() => {
+          setShowSuccessModal(false);
+          router.push('/');
+        }, 5000);
       } else {
         console.error('Failed to place order:', response.statusText);
       }
@@ -105,6 +117,20 @@ export default function CheckoutForm() {
  
   return (
     <FormProvider {...form}>
+      <Dialog open={showSuccessModal} onOpenChange={setShowSuccessModal}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="flex gap-2 items-center text-green-600">
+              <CheckCircle2 className="h-6 w-6" />
+              Order Successful!
+            </DialogTitle>
+            <DialogDescription>
+              Your order has been placed successfully. You will be redirected to the homepage.
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+
       <div className="container mx-auto p-6">
         <div className="flex flex-col lg:flex-row gap-6">
           <div className="lg:w-2/3">

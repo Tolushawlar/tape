@@ -202,7 +202,7 @@ const columns: ColumnDef<Order>[] = [
                               height={60}
                               className="rounded-md"
                             />
-                          )}
+                          )}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
                           <div>
                             <p className="font-medium">{item.name}</p>
                             <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>

@@ -57,8 +57,8 @@ const ImageCard = ({
   // };
 
   const handleSizeClick = (selectedSize: string) => {
-    const item = { id, name, price, defaultImage, color:color1, size: selectedSize };
-    addToCart(item); 
+    const item = { id, name, price, defaultImage, color: color1, size: selectedSize };
+    addToCart(item);
     setIsSizeVisible(false);
     toggleCartSheet();
     setGlobalState(true);
@@ -76,13 +76,30 @@ const ImageCard = ({
         onMouseLeave={() => setIsHovered(false)}
       >
         <div
-          className="absolute inset-0 bg-cover bg-center transition-all duration-500"
+          className="absolute inset-0 bg-cover bg-center transition-all duration-500 hover:scale-110"
           style={{
             backgroundImage: `url(${isHovered ? hoverImage : defaultImage})`,
           }}
+          onClick={() => {
+            const img = document.createElement('div');
+            img.style.position = 'fixed';
+            img.style.top = '0';
+            img.style.left = '0';
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.backgroundColor = 'rgba(0,0,0,0.9)';
+            img.style.zIndex = '9999';
+            img.style.backgroundImage = `url(${isHovered ? hoverImage : defaultImage})`;
+            img.style.backgroundSize = 'contain';
+            img.style.backgroundPosition = 'center';
+            img.style.backgroundRepeat = 'no-repeat';
+            img.style.cursor = 'pointer';
+            img.onclick = () => document.body.removeChild(img);
+            document.body.appendChild(img);
+          }}
         ></div>
 
-        <div
+        {/* <div
           className={`absolute bottom-5 inset-0 flex justify-center items-end transition-opacity duration-500 ${isHovered ? "opacity-100" : "opacity-0"
             }`}
         >
@@ -95,7 +112,7 @@ const ImageCard = ({
             </button>
           )}
 
-          {/* {isSizeVisible && (
+          {isSizeVisible && (
             <div className="flex flex-row items-center justify-center space-x-10 w-[239px] h-[37px] bg-white cursor-pointer py-2 px-4 transition text-black text-[12px] font-Sweet-Regular">
               {availableSizes.map((size) => (
                 <button
@@ -107,7 +124,7 @@ const ImageCard = ({
                 </button>
               ))}
             </div>
-          )} */}
+          )}
           {isSizeVisible && (
             <div className="flex flex-row items-center justify-center space-x-10 w-[239px] h-[37px] bg-white cursor-pointer py-2 px-4 transition text-black text-[12px] font-Sweet-Regular">
               {availableSizes.map((individualSize) => (
@@ -121,12 +138,11 @@ const ImageCard = ({
               ))}
             </div>
           )}
-        </div>
+        </div> */}
       </div>
 
       <div
-        className="mt-5 w-[275px] cursor-pointer"
-        onClick={() => router.push(`/product/${encodeURIComponent(name)}`)}
+        className="mt-5 w-[275px] cursor-pointer hover:scale-105 hover:underline transition-all duration-300"        onClick={() => router.push(`/product/${encodeURIComponent(name)}`)}
       >
         <p className="text-[12px] font-normal">{name}</p>
         <p className="text-[12px] font-normal">£ {price}</p>
