@@ -1,5 +1,5 @@
-import { OrderDetails } from "@/components/dashboard/orders/OrderDetails";
+// import { OrderDetails } from "@/components/dashboard/orders/OrderDetails";
 
-export default function OrderDetailsPage() {
-  return <OrderDetails />;
-}
+// export default function OrderDetailsPage() {
+//   return <OrderDetails />;
+// }
