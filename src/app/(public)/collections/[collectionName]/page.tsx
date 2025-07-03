@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import ImageCard from "@/components/ItemsCard";
 // import { itemsData } from "@/constants";
@@ -12,16 +13,12 @@ interface Item {
   size4: string;
   size5: string;
   category: string;
-  subcategory: string;
-  id: string; // Include _id for potential future use
+  subcategory?: string;
+  id: number;
   name: string;
-  image: {
-    path: string;
-  };
-  image2: {
-    path: string;
-  };
-  price: string;
+  image: string | { path: string };
+  image2: string | { path: string };
+  price: number;
 }
 
 const CollectionPage = ({ params }: { params: { collectionName: string } }) => {
@@ -41,10 +38,18 @@ const CollectionPage = ({ params }: { params: { collectionName: string } }) => {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          `https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product`
+          // `https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product`
+          "http://localhost:3001/api/products"
         );
-        console.log("API Response:", response.data); // Log response
-        setItems(response.data); // Ensure this matches Item[]
+        console.log("API Response:", response.data);
+        // Process the data to match our interface
+        const processedData = response.data.map((item: any) => ({
+          ...item,
+          id: item.id,
+          image: typeof item.image === 'string' ? JSON.parse(item.image) : item.image,
+          image2: typeof item.image2 === 'string' ? JSON.parse(item.image2) : item.image2,
+        }));
+        setItems(processedData);
       } catch (error) {
         console.error("Error fetching items:", error);
       } finally {
@@ -71,6 +76,8 @@ const CollectionPage = ({ params }: { params: { collectionName: string } }) => {
     setItems2(filteredItems);
   }, [items, decodedCollectionName]);
 
+  console.log(items2)
+
   return (
     <div>
       <div className="flex flex-col items-center justify-center gap-5">
@@ -92,8 +99,8 @@ const CollectionPage = ({ params }: { params: { collectionName: string } }) => {
               key={index}
               id={item.id}
               name={item.name}
-              defaultImage={item.image.path}
-              hoverImage={item.image2.path?.[0]}
+              defaultImage={typeof item.image === 'object' ? item.image.path : ''}
+              hoverImage={typeof item.image2 === 'object' ? item.image2.path : ''}
               price={item.price}
               itemName={item.name}
               color1={item.color1}

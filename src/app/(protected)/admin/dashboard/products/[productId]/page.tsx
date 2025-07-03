@@ -26,9 +26,9 @@ const productSchema = z.object({
   price: z.string().min(1, "Price is required"),
   category: z.string().min(1, "Category is required"),
   description: z.string(),
-  productDetails: z.string(),
-  sizeFit: z.string(),
-  lookAtMe: z.string(),
+  product_details: z.string(),
+  size_fit: z.string(),
+  look_at_me: z.string(),
   about: z.string(),
   stock: z.string().min(1, "Stock is required"),
   main: z.string().min(1, "Main image URL is required"),
@@ -55,9 +55,9 @@ interface ProductData {
   category: string;
   description: string;
   brand: string;
-  productDetails: string;
-  sizeFit: string;
-  lookAtMe: string;
+  product_details: string;
+  size_fit: string;
+  look_at_me: string;
   about: string;
   stock: number;
   image: ProductImage;
@@ -103,9 +103,9 @@ const ProductPage = () => {
     resolver: zodResolver(productSchema),
     defaultValues: {
       description: "",
-      productDetails: "",
-      sizeFit: "",
-      lookAtMe: "",
+      product_details: "",
+      size_fit: "",
+      look_at_me: "",
       about: "",
       other: "",
       colors: [],
@@ -117,7 +117,8 @@ const ProductPage = () => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          "https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/category"
+          // "https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/category"
+          "http://localhost:3001/api/categories"
         );
         setCategories(response.data);
       } catch (error) {
@@ -133,7 +134,8 @@ const ProductPage = () => {
       try {
         console.log("Fetching product with ID:", productId);
         const response = await axios.get(
-          `https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product/${productId}`
+          // `https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product/${productId}`
+          `http://localhost:3001/api/products/${productId}`
         );
         console.log("API Response:", response);
         const product = response.data;
@@ -147,9 +149,9 @@ const ProductPage = () => {
         setValue("price", product.price.toString());
         setValue("category", product.category);
         setValue("description", product.description);
-        setValue("productDetails", product.productDetails);
-        setValue("sizeFit", product.sizeFit);
-        setValue("lookAtMe", product.lookAtMe);
+        setValue("product_details", product.product_details);
+        setValue("size_fit", product.size_fit);
+        setValue("look_at_me", product.look_at_me);
         setValue("about", product.about);
         setValue("stock", product.stock.toString());
         setValue("main", product.image.path);
@@ -234,9 +236,9 @@ const ProductPage = () => {
         category: data.category,
         description: data.description || "",
         brand: "string",
-        productDetails: data.productDetails || "",
-        sizeFit: data.sizeFit || "",
-        lookAtMe: data.lookAtMe || "",
+        product_details: data.product_details || "",
+        size_fit: data.size_fit || "",
+        look_at_me: data.look_at_me || "",
         about: data.about || "",
         stock: parseInt(data.stock, 10) || 0,
         image: {
@@ -277,8 +279,9 @@ const ProductPage = () => {
         productData[`size${i}`] = "";
       }
 
-      const response = await axios.patch(
-        `https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product/${productId}`,
+      const response = await axios.put(
+        // `https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product/${productId}`,
+        `http://localhost:3001/api/products/${productId}`,
         productData,
         {
           headers: {
@@ -458,28 +461,28 @@ const ProductPage = () => {
           </div>
 
           <div>
-            <Label htmlFor="productDetails">Product Details</Label>
+            <Label htmlFor="product_details">Product Details</Label>
             <Textarea
-              id="productDetails"
-              {...register("productDetails")}
+              id="product_details"
+              {...register("product_details")}
               rows={3}
             />
           </div>
 
           <div>
-            <Label htmlFor="sizeFit">Size & Fit</Label>
+            <Label htmlFor="size_fit">Size & Fit</Label>
             <Textarea
-              id="sizeFit"
-              {...register("sizeFit")}
+              id="size_fit"
+              {...register("size_fit")}
               rows={3}
             />
           </div>
 
           <div>
-            <Label htmlFor="lookAtMe">Look At Me</Label>
+            <Label htmlFor="look_at_me">Look At Me</Label>
             <Textarea
-              id="lookAtMe"
-              {...register("lookAtMe")}
+              id="look_at_me"
+              {...register("look_at_me")}
               rows={3}
             />
           </div>

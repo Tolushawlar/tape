@@ -30,6 +30,8 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DatePickerWithRange } from "@/components/dashboard/DatePicker";
 import { orders } from "@/constants/orders";
 import { orderColumns } from "@/components/dashboard/orders/Column";
+import { API_ENDPOINTS } from "@/lib/api";
+import axios from "axios";
 
 export default function OrdersPage() {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -42,9 +44,10 @@ export default function OrdersPage() {
     to: undefined,
   });
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [ordersData, setOrdersData] = useState(orders);
 
   const table = useReactTable({
-    data: orders,
+    data: ordersData,
     columns: orderColumns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -89,6 +92,22 @@ export default function OrdersPage() {
       table.getColumn("dateCreated")?.setFilterValue(undefined);
     }
   }, [dateRange, table]);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await axios.get(API_ENDPOINTS.orders);
+        if (Array.isArray(response.data)) {
+          setOrdersData(response.data);
+          console.log(response.data)
+        }
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+      }
+    };
+
+    fetchOrders();
+  }, []);
 
   return (
     <motion.div

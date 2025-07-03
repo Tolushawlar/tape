@@ -45,7 +45,8 @@ export default function ProductCategoriesPage() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch('https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/category');
+        // const response = await fetch('https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/category');
+        const response = await fetch('http://localhost:3001/api/categories');
         const data = await response.json();
         setCategories(data);
       } catch (error) {

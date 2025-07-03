@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { SortableHeader } from "../SortableHeader";
 import { Product } from "@/app/(protected)/admin/dashboard/products/page";
+import { API_ENDPOINTS } from "@/lib/api";
 
 export const productColumns: ColumnDef<Product>[] = [
   // {
@@ -155,12 +156,23 @@ export const productColumns: ColumnDef<Product>[] = [
           <Button
             size={"icon"}
             variant={"ghost"}
-            onClick={() => {
-              fetch(`https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product/${row.original.id}`, {
-                method: 'DELETE',
-              }).then(() => {
-                window.location.reload();
-              });
+            onClick={async () => {
+              if (confirm('Are you sure you want to delete this product?')) {
+                try {
+                  // const response = await fetch(`http://localhost:3001/api/products/${row.original.id}`, {
+                  const response = await fetch(`${API_ENDPOINTS.products}/${row.original.id}`, {
+                    method: 'DELETE',
+                  });
+                  if (response.ok) {
+                    window.location.reload();
+                  } else {
+                    alert('Failed to delete product');
+                  }
+                } catch (error) {
+                  console.error('Error deleting product:', error);
+                  alert('Error deleting product');
+                }
+              }
             }}>
             <Trash2 />
           </Button>

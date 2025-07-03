@@ -50,11 +50,11 @@ interface FiveColumnSectionProps {
     size: string;
     color: string;
     description: string;
-    sizeFit: string,
+    size_fit: string,
     aboutMe: string,
-    productDetails: string,
+    product_details: string,
     about: string,
-    lookAtMe: string;
+    look_at_me: string;
   } | undefined;
 }
 
@@ -93,9 +93,9 @@ export default function FiveColumnSection({ item }: FiveColumnSectionProps) {
 
       <div className="max-w-[500px] mt-1 p-4 font-normal text-[14px] font-Sweet-Regular">
         {selectedSection === 'description' && <p>{item?.description}</p>}
-        {selectedSection === 'productDetails' && <p>{item?.productDetails}</p>}
-        {selectedSection === 'sizeFit' && <p>{item?.sizeFit}</p>}
-        {selectedSection === 'lookAfterMe' && <p>{item?.lookAtMe}</p>}
+        {selectedSection === 'productDetails' && <p>{item?.product_details}</p>}
+        {selectedSection === 'sizeFit' && <p>{item?.size_fit}</p>}
+        {selectedSection === 'lookAfterMe' && <p>{item?.look_at_me}</p>}
         {selectedSection === 'aboutMe' && <p>{item?.about}</p>}
       </div>
     </div>

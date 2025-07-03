@@ -47,11 +47,11 @@ interface Item {
   color4?: string | null;
   color5?: string | null;
   description: string;
-  sizeFit: string;
+  size_fit: string;
   aboutMe: string;
-  productDetails: string;
+  product_details: string;
   about: string;
-  lookAtMe: string;
+  look_at_me: string;
 }
 
 export default function Product({ productName }: ProductProps) {
@@ -69,9 +69,11 @@ export default function Product({ productName }: ProductProps) {
     const fetchItems = async () => {
       try {
         const response = await axios.get(
-          `https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product`
+          // `https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product`
+          "http://localhost:3001/api/products"
         );
         setItems(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error("Error fetching items:", error);
       }
@@ -92,7 +94,21 @@ export default function Product({ productName }: ProductProps) {
   }, [items, productName]);
 
   const firstItem = filteredItems[0];
-  const mainImageUrl = firstItem?.image?.path;
+  console.log(firstItem);
+  
+  // Parse the image JSON string to get the path
+  let mainImageUrl = defaultImage;
+  if (firstItem?.image) {
+    try {
+      const imageData = typeof firstItem.image === 'string' 
+        ? JSON.parse(firstItem.image) 
+        : firstItem.image;
+      mainImageUrl = imageData.path || defaultImage;
+    } catch (error) {
+      console.error('Error parsing image data:', error);
+      mainImageUrl = defaultImage;
+    }
+  }
 
   const availableColors = [
     firstItem?.color1,
@@ -239,11 +255,11 @@ export default function Product({ productName }: ProductProps) {
                     size: selectedSize || '', // Provide a default value
                     color: selectedColor || '', // Provide a default value
                     description: firstItem?.description || '',
-                    sizeFit: firstItem?.sizeFit || '',
+                    size_fit: firstItem?.size_fit || '',
                     aboutMe: firstItem?.aboutMe || '',
-                    productDetails: firstItem?.productDetails || '',
+                    product_details: firstItem?.product_details || '',
                     about: firstItem?.about || '',
-                    lookAtMe: firstItem?.lookAtMe || '',
+                    look_at_me: firstItem?.look_at_me || '',
                   }}
                 />
               </CardContent>

@@ -44,7 +44,8 @@ const CollectionPage = ({ params }: { params: { collectionName: string } }) => {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          `https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product`
+          // `https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product`
+          "http://localhost:3001/api/products"
         );
         console.log("API Response:", response.data); // Log response
         setItems(response.data); // Ensure this matches Item[]

@@ -36,6 +36,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { CheckoutDto, checkoutSchema, emptyAddress } from "@/schema";
 import AddressForm from "./AddressForm";
+import { API_ENDPOINTS } from "@/lib/api";
 
 export default function CheckoutForm() {
   const { cartItems } = useCart();
@@ -68,9 +69,9 @@ export default function CheckoutForm() {
         created_at: Date.now(),
         quantity: cartItems.reduce((sum, item) => sum + item.quantity, 0),
         purchased_at: Date.now(),
-        product_id: cartItems.map(item => item.id),
-        user_id: 0,
-        Total: total,
+        product_id: cartItems.find(item => item.id && item.id !== 'defaultId')?.id || null,
+
+        total: total,
         first_name: delivery.firstName,
         last_name: delivery.lastName,
         email: delivery.email,
@@ -93,7 +94,8 @@ export default function CheckoutForm() {
         cart_items: cartItems
       };
 
-      const response = await fetch('https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/order', {
+      // const response = await fetch('https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/order', {
+      const response = await fetch(API_ENDPOINTS.orders, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -108,10 +110,13 @@ export default function CheckoutForm() {
           router.push('/');
         }, 5000);
       } else {
-        console.error('Failed to place order:', response.statusText);
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        console.error('Failed to place order:', errorData);
+        alert(`Failed to place order: ${errorData.error || response.statusText}`);
       }
     } catch (error) {
       console.error('Error placing order:', error);
+      alert('Failed to place order. Please try again.');
     }
   }
  

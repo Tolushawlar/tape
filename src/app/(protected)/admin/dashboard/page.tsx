@@ -47,6 +47,8 @@ import {
 } from "@/components/ui/table";
 import { Order } from "@/types";
 import { StatCard } from "@/components/dashboard/StatsCard";
+import { API_ENDPOINTS } from "@/lib/api";
+import axios from "axios";
 
 const columns: ColumnDef<Order>[] = [
   {
@@ -75,9 +77,9 @@ const columns: ColumnDef<Order>[] = [
     ),
   },
   {
-    accessorKey: "Total",
-    header: "Total",
-    cell: ({ row }) => `€${row.original.Total}`
+    accessorKey: "total",
+    header: "Totalssss",
+    cell: ({ row }) => `€${row.original.total}`
   },
   {
     accessorKey: "status",
@@ -103,7 +105,8 @@ const columns: ColumnDef<Order>[] = [
 
       const handleDelete = async () => {
         try {
-          const response = await fetch(`https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/order/${row.original.id}`, {
+          // const response = await fetch(`https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/order/${row.original.id}`, {
+          const response = await fetch(`http://localhost:3001/api/orders/${row.original.id}`, {
             method: 'DELETE'
           });
           if (response.ok) {
@@ -116,7 +119,8 @@ const columns: ColumnDef<Order>[] = [
 
       const handleView = async () => {
         try {
-          const response = await fetch(`https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/order/${row.original.id}`);
+          // const response = await fetch(`https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/order/${row.original.id}`);
+          const response = await fetch(`http://localhost:3001/api/orders/${row.original.id}`);
           if (response.ok) {
             const data = await response.json();
             setOrderDetails(data);
@@ -202,7 +206,7 @@ const columns: ColumnDef<Order>[] = [
                               height={60}
                               className="rounded-md"
                             />
-                          )}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+                          )}
                           <div>
                             <p className="font-medium">{item.name}</p>
                             <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>
@@ -216,7 +220,7 @@ const columns: ColumnDef<Order>[] = [
                   </div>
                 </div>
               </div>
-            </div>
+            </div> 
           )}
         </>
       );
@@ -242,9 +246,8 @@ export default function Component() {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch('https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/order');
-      const data = await response.json();
-
+      const response = await axios.get(API_ENDPOINTS.orders);
+      const data = response.data;
       const sortedOrders = data
         .sort((a: Order, b: Order) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
         .slice(0, 10);
@@ -252,9 +255,9 @@ export default function Component() {
       setRecentOrders(sortedOrders);
 
       const revenue = data.reduce((sum: number, order: Order) => {
-        const orderTotal = typeof order.Total === 'string' ?
-          parseFloat(order.Total.replace('£', '')) :
-          Number(order.Total);
+        const orderTotal = typeof order.total === 'string' ?
+          parseFloat(order.total.replace('£', '')) :
+          Number(order.total);
         return sum + (isNaN(orderTotal) ? 0 : orderTotal);
       }, 0);
       setTotalRevenue(Number(revenue.toFixed(2)));
@@ -285,11 +288,18 @@ export default function Component() {
 
   const fetchTopProducts = async () => {
     try {
-      const response = await fetch('https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product');
+      // const response = await fetch('https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product');
+      const response = await fetch('http://localhost:3001/api/products');
       const data = await response.json();
       setTotalProducts(data.length);
 
-      return data
+      // Process the data to parse JSON image fields
+      const processedData = data.map((product: any) => ({
+        ...product,
+        image: typeof product.image === 'string' ? JSON.parse(product.image) : product.image,
+      }));
+
+      return processedData
         .sort((a: Product, b: Product) => b.price - a.price)
         .slice(0, 10);
     } catch (error) {

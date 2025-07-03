@@ -65,7 +65,7 @@ export type Order = {
   additionalProducts?: number;
   customer: string;
   email: string;
-  Total: string;
+  total: string;
   status: "Processing" | "Shipped" | "Delivered";
   cart_items: never;
 };

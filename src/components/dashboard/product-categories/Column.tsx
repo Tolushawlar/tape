@@ -109,7 +109,8 @@ export const productCategoriesColumns: ColumnDef<ProductCategory>[] = [
             onClick={async () => {
               try {
                 // Delete category from database
-                await fetch(`https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/category/${category.id}`, {
+                // await fetch(`https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/category/${category.id}`, {
+                await fetch(`http://localhost:3001/api/categories/${category.id}`, {
                   method: 'DELETE',
                 });
                 // Refresh data after deletion

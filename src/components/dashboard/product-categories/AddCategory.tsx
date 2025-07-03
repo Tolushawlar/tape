@@ -34,7 +34,8 @@ export function AddCategoryForm() {
   const onSubmit = async (data: CategoryDto) => {
     try {
       setIsSubmitting(true);
-      const response = await fetch('https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/category', {
+      // const response = await fetch('https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/category', {
+      const response = await fetch('http://localhost:3001/api/categories', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

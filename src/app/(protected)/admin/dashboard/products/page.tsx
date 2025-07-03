@@ -38,6 +38,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { DatePickerWithRange } from "@/components/dashboard/DatePicker";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { API_ENDPOINTS } from "@/lib/api";
 
 export interface Product {
   id: string;
@@ -151,23 +152,35 @@ export default function ProductsPage() {
       try {
         const response = await axios.get(
           // "https://tapebackend.onrender.com/api/products"
-          "https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product",
+          // "https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product",
+          API_ENDPOINTS.products,
         );
         console.log(response.data)
 
         // Validate and ensure data is an array
         if (Array.isArray(response.data)) {
           setProducts(
-            response.data.map((item) => ({
-              id: item.id,
-              name: item.name,
-              category: item.category || "Unknown", // Handle missing category
-              status: item.status || "Unavailable",
-              dateAdded: item.created_at || new Date().toISOString(),
-              price: item.price,
-              stock: item.stock,
-              image: item.image.path,
-            }))
+            response.data.map((item) => {
+              // Parse the JSON image field
+              let imagePath = '';
+              try {
+                const imageData = typeof item.image === 'string' ? JSON.parse(item.image) : item.image;
+                imagePath = imageData.path || '';
+              } catch (error) {
+                console.error('Error parsing image data:', error);
+              }
+              
+              return {
+                id: item.id,
+                name: item.name,
+                category: item.category || "Unknown",
+                status: item.status || "Unavailable",
+                dateAdded: item.created_at || new Date().toISOString(),
+                price: item.price,
+                stock: item.stock,
+                image: imagePath,
+              };
+            })
           );
         } else {
           console.error("Invalid product data format:", response.data);

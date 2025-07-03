@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import CollectionSection from "@/components/CollectionSection";
@@ -38,7 +39,8 @@ const SingleProductPage = ({ params }: { params: { itemName: string } }) => {
     const fetchItems = async () => {
       try {
         const response = await axios.get(
-          `https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product`
+          // `https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product`
+          "http://localhost:3001/api/products"
         );
         setItems(response.data);
       } catch (error) {
@@ -49,11 +51,11 @@ const SingleProductPage = ({ params }: { params: { itemName: string } }) => {
     fetchItems();
   }, []);
 
-  const allItems: ImageCardProps[] = items.map((item: Item) => ({
+  const allItems: ImageCardProps[] = items.map((item: any) => ({
     id: item.id,
     name: item.name,
-    defaultImage: item.image.path,
-    hoverImage: item.image2.path,
+    defaultImage: JSON.parse(item.image).path,
+    hoverImage: JSON.parse(item.image2).path,
     price: item.price,
     color1: item.color1,
     color2: item.color2,

@@ -1,11 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { motion } from "framer-motion";
 import { ArrowLeft, Copy, Mail, Phone, MapPin } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { API_ENDPOINTS } from "@/lib/api";
 
 const orderDetails = {
   orderId: "302011",
@@ -69,7 +72,37 @@ const orderDetails = {
   },
 };
 
-export function OrderDetails() {
+export function OrderDetails({ orderId }: { orderId: string }) {
+  const [orderDetails, setOrderDetails] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchOrderDetails = async () => {
+      try {
+        const response = await fetch(`${API_ENDPOINTS.orders}/${orderId}`);
+        if (response.ok) {
+          const data = await response.json();
+          setOrderDetails(data);
+        } else {
+          console.error('Failed to fetch order details');
+        }
+      } catch (error) {
+        console.error('Error fetching order details:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrderDetails();
+  }, [orderId]);
+
+  if (loading) {
+    return <div className="flex justify-center items-center min-h-screen">Loading...</div>;
+  }
+
+  if (!orderDetails) {
+    return <div className="flex justify-center items-center min-h-screen">Order not found</div>;
+  }
   return (
     <div className="min-h-screen bg-gray-100">
       <header className="bg-[#1a1f37] text-white">

@@ -15,6 +15,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { API_ENDPOINTS } from "@/lib/api";
 import { useEffect, useState } from "react";
 
 const MAX_COLORS = 5;
@@ -27,9 +28,9 @@ const productSchema = z.object({
     sizes: z.array(z.string()).min(1, "At least one size is required").max(MAX_SIZES, `Maximum ${MAX_SIZES} sizes allowed`),
     category: z.string().min(1, "Category is required"),
     description: z.string().min(1, "Description is required"),
-    productDetails: z.string().min(1, "Product details are required"),
-    sizeFit: z.string().min(1, "Size & fit information is required"),
-    lookAtMe: z.string().min(1, "Look at me section is required"),
+    product_details: z.string().min(1, "Product details are required"),
+    size_fit: z.string().min(1, "Size & fit information is required"),
+    look_at_me: z.string().min(1, "Look at me section is required"),
     about: z.string().min(1, "About section is required"),
     stock: z.string().min(1, "Stock is required").regex(/^\d+$/, "Stock must be a number"),
     main: z.string().min(1, "Main image URL is required").url("Must be a valid URL"),
@@ -64,9 +65,9 @@ export function CreateProductForm() {
         resolver: zodResolver(productSchema),
         defaultValues: {
             description: "",
-            productDetails: "",
-            sizeFit: "",
-            lookAtMe: "",
+            product_details: "",
+            size_fit: "",
+            look_at_me: "",
             about: "",
             other: "",
             colors: [],
@@ -84,7 +85,8 @@ export function CreateProductForm() {
         const fetchCategories = async () => {
             try {
                 const response = await axios.get(
-                    "https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/category"
+                    // "https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/category"
+                    API_ENDPOINTS.categories
                 );
                 setCategories(response.data || []);
             } catch (error) {
@@ -157,9 +159,9 @@ export function CreateProductForm() {
                 category: data.category,
                 description: data.description || "",
                 brand: "string",
-                productDetails: data.productDetails || "",
-                sizeFit: data.sizeFit || "",
-                lookAtMe: data.lookAtMe || "",
+                productDetails: data.product_details || "",
+                sizeFit: data.size_fit || "",
+                lookAtMe: data.look_at_me || "",
                 about: data.about || "",
                 stock: parseInt(data.stock, 10),
                 image: {
@@ -183,16 +185,17 @@ export function CreateProductForm() {
             };
 
             const response = await axios.post(
-                "https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product",
+                // "https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product",
+                API_ENDPOINTS.products,
                 productData,
                 {
                     headers: {
                         "Content-Type": "application/json",
                     },
                 }
-            );
+            ); 
 
-            if (response.status === 200) {
+            if (response.status === 200 || response.status === 201) {
                 console.log("Product data sent:", productData);
                 alert("Product created successfully!");
                 reset();
@@ -202,6 +205,7 @@ export function CreateProductForm() {
                 setValue("sizes", []);
             }
         } catch (error) {
+
             console.error("Error creating product:", error);
             alert("Failed to create product. Please try again.");
         }
@@ -384,11 +388,11 @@ export function CreateProductForm() {
                         <Label htmlFor="productDetails">Product Details</Label>
                         <Textarea
                             id="productDetails"
-                            {...register("productDetails")}
+                            {...register("product_details")}
                             rows={3}
                         />
-                        {errors.productDetails && (
-                            <span className="text-red-500 text-sm">{errors.productDetails?.message}</span>
+                        {errors.product_details && (
+                            <span className="text-red-500 text-sm">{errors.product_details?.message}</span>
                         )}
                     </div>
 
@@ -396,11 +400,11 @@ export function CreateProductForm() {
                         <Label htmlFor="sizeFit">Size & Fit</Label>
                         <Textarea
                             id="sizeFit"
-                            {...register("sizeFit")}
+                            {...register("size_fit")}
                             rows={3}
                         />
-                        {errors.sizeFit && (
-                            <span className="text-red-500 text-sm">{errors.sizeFit?.message}</span>
+                        {errors.size_fit && (
+                            <span className="text-red-500 text-sm">{errors.size_fit?.message}</span>
                         )}
                     </div>
 
@@ -408,11 +412,11 @@ export function CreateProductForm() {
                         <Label htmlFor="lookAtMe">Look At Me</Label>
                         <Textarea
                             id="lookAtMe"
-                            {...register("lookAtMe")}
+                            {...register("look_at_me")}
                             rows={3}
                         />
-                        {errors.lookAtMe && (
-                            <span className="text-red-500 text-sm">{errors.lookAtMe?.message}</span>
+                        {errors.look_at_me && (
+                            <span className="text-red-500 text-sm">{errors.look_at_me?.message}</span>
                         )}
                     </div>
 

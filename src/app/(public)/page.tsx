@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { Carousel2 } from "@/components/Carousel2";
 import CollectionSection from "@/components/CollectionSection";
@@ -38,9 +39,10 @@ const Homepage = () => {
     const fetchItems = async () => {
       try {
         const response = await axios.get(
-          `https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product`
+          // `https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/product`
+          `http://localhost:3001/api/products`
         );
-        // console.log(response.data);
+        console.log(response.data);
         setItems(response.data);
       } catch (error) {
         console.error("Error fetching items:", error);
@@ -51,85 +53,85 @@ const Homepage = () => {
   }, []);
 
   const menItems: ImageCardProps[] = items
-    .filter((item: Item) => item.category?.toLowerCase() === "men")
-    .map((item) => ({
-      id: (item as Item).id,
-      name: (item as Item).name,
-      defaultImage: (item as Item).image.path,
-      hoverImage: (item as Item).image2.path,
-      price: (item as Item).price,
-      color1: (item as Item).color1,
-      color2: (item as Item).color2,
-      color3: (item as Item).color3,
-      color4: (item as Item).color4,
-      color5: (item as Item).color5,
-      size1: (item as Item).size1,
-      size2: (item as Item).size2,
-      size3: (item as Item).size3,
-      size4: (item as Item).size4,
-      size5: (item as Item).size5,
+    .filter((item: any) => item.category?.toLowerCase() === "men")
+    .map((item: any) => ({
+      id: item.id,
+      name: item.name,
+      defaultImage: JSON.parse(item.image).path,
+      hoverImage: JSON.parse(item.image2).path,
+      price: item.price,
+      color1: item.color1,
+      color2: item.color2,
+      color3: item.color3,
+      color4: item.color4,
+      color5: item.color5,
+      size1: item.size1,
+      size2: item.size2,
+      size3: item.size3,
+      size4: item.size4,
+      size5: item.size5,
     }));
 
   const womenItems: ImageCardProps[] = items
-    .filter((item: Item) => item.category?.toLowerCase() === "women")
-    .map((item) => ({
-      id: (item as Item).id,
-      name: (item as Item).name,
-      defaultImage: (item as Item).image.path,
-      hoverImage: (item as Item).image2.path,
-      price: (item as Item).price,
-      color1: (item as Item).color1,
-      color2: (item as Item).color2,
-      color3: (item as Item).color3,
-      color4: (item as Item).color4,
-      color5: (item as Item).color5,
-      size1: (item as Item).size1,
-      size2: (item as Item).size2,
-      size3: (item as Item).size3,
-      size4: (item as Item).size4,
-      size5: (item as Item).size5,
+    .filter((item: any) => item.category?.toLowerCase() === "women")
+    .map((item: any) => ({
+      id: item.id,
+      name: item.name,
+      defaultImage: JSON.parse(item.image).path,
+      hoverImage: JSON.parse(item.image2).path,
+      price: item.price,
+      color1: item.color1,
+      color2: item.color2,
+      color3: item.color3,
+      color4: item.color4,
+      color5: item.color5,
+      size1: item.size1,
+      size2: item.size2,
+      size3: item.size3,
+      size4: item.size4,
+      size5: item.size5,
     }));
 
 
   const kidItems: ImageCardProps[] = items
-    .filter((item: Item) => item.category?.toLowerCase() === "kids")
-    .map((item) => ({
-      id: (item as Item).id,
-      name: (item as Item).name,
-      defaultImage: (item as Item).image.path,
-      hoverImage: (item as Item).image2.path,
-      price: (item as Item).price,
-      color1: (item as Item).color1,
-      color2: (item as Item).color2,
-      color3: (item as Item).color3,
-      color4: (item as Item).color4,
-      color5: (item as Item).color5,
-      size1: (item as Item).size1,
-      size2: (item as Item).size2,
-      size3: (item as Item).size3,
-      size4: (item as Item).size4,
-      size5: (item as Item).size5,
+    .filter((item: any) => item.category?.toLowerCase() === "kids")
+    .map((item: any) => ({
+      id: item.id,
+      name: item.name,
+      defaultImage: JSON.parse(item.image).path,
+      hoverImage: JSON.parse(item.image2).path,
+      price: item.price,
+      color1: item.color1,
+      color2: item.color2,
+      color3: item.color3,
+      color4: item.color4,
+      color5: item.color5,
+      size1: item.size1,
+      size2: item.size2,
+      size3: item.size3,
+      size4: item.size4,
+      size5: item.size5,
     }));
 
 
   const accessoryItems: ImageCardProps[] = items
-    .filter((item: Item) => item.category?.toLowerCase() === "accessories")
-    .map((item) => ({
-      id: (item as Item).id,
-      name: (item as Item).name,
-      defaultImage: (item as Item).image.path,
-      hoverImage: (item as Item).image2.path,
-      price: (item as Item).price,
-      color1: (item as Item).color1,
-      color2: (item as Item).color2,
-      color3: (item as Item).color3,
-      color4: (item as Item).color4,
-      color5: (item as Item).color5,
-      size1: (item as Item).size1,
-      size2: (item as Item).size2,
-      size3: (item as Item).size3,
-      size4: (item as Item).size4,
-      size5: (item as Item).size5,
+    .filter((item: any) => item.category?.toLowerCase() === "accessories")
+    .map((item: any) => ({
+      id: item.id,
+      name: item.name,
+      defaultImage: JSON.parse(item.image).path,
+      hoverImage: JSON.parse(item.image2).path,
+      price: item.price,
+      color1: item.color1,
+      color2: item.color2,
+      color3: item.color3,
+      color4: item.color4,
+      color5: item.color5,
+      size1: item.size1,
+      size2: item.size2,
+      size3: item.size3,
+      size4: item.size4,
+      size5: item.size5,
     }));
 
   console.log(menItems);

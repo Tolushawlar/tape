@@ -47,3 +47,31 @@ export async function POST(request: Request) {
     );
   }
 }
+
+export async function DELETE(request: Request) {
+  try {
+    const url = new URL(request.url);
+    const id = url.pathname.split('/').pop();
+    
+    if (!id) {
+      return NextResponse.json(
+        { error: 'Product ID is required' },
+        { status: 400 }
+      );
+    }
+
+    // Delete product logic here
+    // Replace with your actual database deletion
+    console.log(`Deleting product with ID: ${id}`);
+
+    return NextResponse.json(
+      { message: 'Product deleted successfully' },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Failed to delete product' },
+      { status: 500 }
+    );
+  }
+}

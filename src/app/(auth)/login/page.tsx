@@ -43,7 +43,8 @@ export default function LoginPage() {
       setIsLoading(true);
       setError("");
       
-      const response = await fetch("https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/auth/login", {
+      // const response = await fetch("https://x8ki-letl-twmt.n7.xano.io/api:n8LTdo38/auth/login", {
+      const response = await fetch("http://localhost:3001/api/users/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -56,6 +57,7 @@ export default function LoginPage() {
 
       if (!response.ok) {
         throw new Error(data.message || "Login failed");
+        console.log(values);
       }
 
       // Store user data in localStorage
