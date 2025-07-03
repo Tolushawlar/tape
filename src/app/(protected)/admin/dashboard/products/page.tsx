@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { Filter, Plus, Search } from "lucide-react";
@@ -178,7 +179,7 @@ export default function ProductsPage() {
                 dateAdded: item.created_at || new Date().toISOString(),
                 price: item.price,
                 stock: item.stock,
-                image: imagePath,
+                image: imagePath ? { path: imagePath } : null,
               };
             })
           );
