@@ -14,11 +14,11 @@ interface Item {
   size5: string;
   category: string;
   subcategory?: string;
-  id: number;
+  id: string;
   name: string;
   image: string | { path: string };
   image2: string | { path: string };
-  price: number;
+  price: string;
 }
 
 const CollectionPage = ({ params }: { params: { collectionName: string } }) => {
